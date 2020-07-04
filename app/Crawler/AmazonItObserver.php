@@ -29,7 +29,7 @@ class AmazonItObserver extends AmazonObserver
             $currentPrice = 0;
         }
 
-        $firstPrice = $this->getProduct()->first_price ?? $currentPrice;
+        $firstPrice = $this->getProduct()->first_price ?? ($currentPrice === 0 ? null : $currentPrice);
         $latestPrice = $this->getProduct()->current_price == 0 ? $this->getProduct()->latest_price : $this->getProduct()->current_price;
 
         $this->getProduct()->update([
