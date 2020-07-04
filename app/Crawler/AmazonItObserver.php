@@ -2,6 +2,7 @@
 
 namespace App\Crawler;
 
+use App\Events\PriceLogEvent;
 use App\Models\PriceTraceLog;
 use DOMDocument;
 use GuzzleHttp\Exception\RequestException;
@@ -16,33 +17,40 @@ class AmazonItObserver extends AmazonObserver
      */
     public function crawled(UriInterface $url, ResponseInterface $response, ?UriInterface $foundOnUrl = null)
     {
-        $doc = new DOMDocument();
-        @$doc->loadHTML($response->getBody());
+        if ($response->getStatusCode() == 200) {
+            $doc = new DOMDocument();
+            @$doc->loadHTML($response->getBody());
 
-        $salePrice = optional($doc->getElementById('priceblock_saleprice'))->nodeValue;
-        $ourPrice = optional($doc->getElementById('priceblock_ourprice'))->nodeValue;
+            $salePrice = optional($doc->getElementById('priceblock_saleprice'))->nodeValue;
+            $ourPrice = optional($doc->getElementById('priceblock_ourprice'))->nodeValue;
 
-        if (!is_null($salePrice)) {
-            $currentPrice = (float)str_replace(['€', ' '], '', $salePrice);
-        } elseif (!is_null($ourPrice)) {
-            $currentPrice = (float)str_replace(['€', ' '], '', $ourPrice);
-        } else {
-            $currentPrice = 0;
+            if (!is_null($salePrice)) {
+                $currentPrice = (float)str_replace(['€', ' '], '', $salePrice);
+            } elseif (!is_null($ourPrice)) {
+                $currentPrice = (float)str_replace(['€', ' '], '', $ourPrice);
+            } else {
+                $currentPrice = 0;
+            }
+
+            $firstPrice = $this->getProduct()->first_price ?? ($currentPrice === 0 ? null : $currentPrice);
+            $latestPrice = $this->getProduct()->current_price == 0 ? $this->getProduct()->latest_price : $this->getProduct()->current_price;
+
+            $this->getProduct()->update([
+                'first_price' => $firstPrice,
+                'latest_price' => $latestPrice,
+                'current_price' => $currentPrice,
+            ]);
+
+            PriceTraceLog::query()->create([
+                'price' => $currentPrice,
+                'price_trace_id' => $this->getProduct()->id,
+            ]);
+
+            $event = new PriceLogEvent();
+            $event->setProduct($this->getProduct());
+
+            event($event);
         }
-
-        $firstPrice = $this->getProduct()->first_price ?? ($currentPrice === 0 ? null : $currentPrice);
-        $latestPrice = $this->getProduct()->current_price == 0 ? $this->getProduct()->latest_price : $this->getProduct()->current_price;
-
-        $this->getProduct()->update([
-            'first_price' => $firstPrice,
-            'latest_price' => $latestPrice,
-            'current_price' => $currentPrice,
-        ]);
-
-        PriceTraceLog::query()->create([
-            'price' => $currentPrice,
-            'price_trace_id' => $this->getProduct()->id,
-        ]);
     }
 
     /**

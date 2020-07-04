@@ -14,13 +14,25 @@ namespace App{
 /**
  * App\User
  *
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string $tId
+ * @property int $enabled
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereTId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
  */
-    class User extends \Eloquent implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Contracts\Auth\Access\Authorizable
-    {
-    }
+	class User extends \Eloquent implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Contracts\Auth\Access\Authorizable {}
 }
 
 namespace App\Models{
@@ -34,6 +46,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\OwenIt\Auditing\Models\Audit[] $audits
  * @property-read int|null $audits_count
+ * @property-read \App\Models\PriceTrace $product
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PriceTraceLog newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PriceTraceLog newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PriceTraceLog query()
@@ -43,9 +56,36 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PriceTraceLog wherePriceTraceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PriceTraceLog whereUpdatedAt($value)
  */
-    class PriceTraceLog extends \Eloquent implements \OwenIt\Auditing\Contracts\Auditable
-    {
-    }
+	class PriceTraceLog extends \Eloquent implements \OwenIt\Auditing\Contracts\Auditable {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\User
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string $tId
+ * @property int $enabled
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PriceTrace[] $products
+ * @property-read int|null $products_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereTId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUpdatedAt($value)
+ */
+	class User extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -64,6 +104,10 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\OwenIt\Auditing\Models\Audit[] $audits
  * @property-read int|null $audits_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PriceTraceLog[] $logs
+ * @property-read int|null $logs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PriceTrace newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PriceTrace newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PriceTrace query()
@@ -78,7 +122,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PriceTrace whereStore($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PriceTrace whereUpdatedAt($value)
  */
-    class PriceTrace extends \Eloquent implements \OwenIt\Auditing\Contracts\Auditable
-    {
-    }
+	class PriceTrace extends \Eloquent implements \OwenIt\Auditing\Contracts\Auditable {}
 }
+

@@ -3,9 +3,11 @@
 namespace App\Console;
 
 use App\Console\Commands\DispatchAmzCheckerCommand;
+use App\Console\Commands\TelegramBotCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 use Laravelista\LumenVendorPublish\VendorPublishCommand;
+use Telegram\Bot\Laravel\Artisan\WebhookCommand;
 
 class Kernel extends ConsoleKernel
 {
@@ -18,6 +20,7 @@ class Kernel extends ConsoleKernel
         VendorPublishCommand::class,
 
         DispatchAmzCheckerCommand::class,
+        WebhookCommand::class,
     ];
 
     /**
@@ -42,6 +45,10 @@ class Kernel extends ConsoleKernel
 
     public function daily(Schedule $schedule)
     {
+        $schedule->command(' art telegram:webhook', [
+            'amztracker',
+            '--setup',
+        ])->dailyAt('02:00');
     }
 
     public function weekly(Schedule $schedule)

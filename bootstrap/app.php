@@ -59,9 +59,18 @@ $app->singleton(
 */
 
 $app->configure('app');
-$app->configure('queue');
 $app->configure('audit');
+$app->configure('auth');
+$app->configure('broadcasting');
+$app->configure('cache');
+$app->configure('database');
+$app->configure('filesystem');
 $app->configure('ide-helper');
+$app->configure('logging');
+$app->configure('queue');
+$app->configure('services');
+$app->configure('telegram');
+$app->configure('view');
 
 /*
 |--------------------------------------------------------------------------
@@ -99,6 +108,8 @@ $app->register(App\Providers\EventServiceProvider::class);
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
 $app->register(Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
 $app->register(OwenIt\Auditing\AuditingServiceProvider::class);
+$app->register(Telegram\Bot\Laravel\TelegramServiceProvider::class);
+$app->register(Illuminate\Bus\BusServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

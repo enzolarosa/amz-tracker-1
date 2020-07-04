@@ -17,7 +17,7 @@ class CreatePriceTraceTable extends Migration
             $table->id();
 
             $table->string('name')->nullable();
-            $table->string('product_id')->unique();
+            $table->string('product_id');
             $table->string('store')->default('IT');
 
             $table->decimal('first_price', 10, 4)->nullable();
@@ -26,6 +26,8 @@ class CreatePriceTraceTable extends Migration
 
             $table->boolean('enabled')->default(true);
             $table->timestamps();
+
+            $table->unique(['product_id', 'store']);
         });
     }
 

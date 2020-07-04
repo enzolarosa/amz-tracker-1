@@ -6,6 +6,7 @@ use App\Jobs\AmzChecker;
 use App\Models\PriceTrace;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class DispatchAmzCheckerCommand extends Command
 {
@@ -32,7 +33,7 @@ class DispatchAmzCheckerCommand extends Command
     {
         $pt = PriceTrace::query()
             ->where('enabled', true)
-            ->where('updated_at', '<=', Carbon::now()->subHour())
+      //      ->where('updated_at', '<=', Carbon::now()->subHour())
             ->cursor();
 
         $this->comment("I've {$pt->count()} product to check!");

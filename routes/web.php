@@ -11,6 +11,12 @@
 |
 */
 
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
+});
+
+$router->post('amztracker/telegram', function () {
+    $update = Telegram\Bot\Laravel\Facades\Telegram::commandsHandler(true);
+    return 'ok';
 });
