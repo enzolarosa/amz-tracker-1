@@ -59,6 +59,7 @@ $app->singleton(
 */
 
 $app->configure('app');
+$app->configure('queue');
 $app->configure('audit');
 $app->configure('ide-helper');
 

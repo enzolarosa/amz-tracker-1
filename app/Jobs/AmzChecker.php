@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Crawler\AmazonItObserver;
 use App\Models\PriceTrace;
+use Carbon\CarbonInterval;
 use Exception;
 use Spatie\Crawler\Crawler;
 
@@ -65,6 +66,16 @@ class AmzChecker extends Job
             default:
                 throw new Exception('Not supported');
         }
+    }
+
+    /**
+     * Calculate the number of seconds to wait before retrying the job.
+     *
+     * @return int
+     */
+    public function retryAfter()
+    {
+        return CarbonInterval::minutes(15)->totalSeconds;
     }
 
     /**
