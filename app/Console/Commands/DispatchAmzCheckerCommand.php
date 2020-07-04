@@ -33,7 +33,7 @@ class DispatchAmzCheckerCommand extends Command
     {
         $pt = PriceTrace::query()
             ->where('enabled', true)
-      //      ->where('updated_at', '<=', Carbon::now()->subHour())
+            ->where('updated_at', '<=', Carbon::now()->subHour())
             ->cursor();
 
         $this->comment("I've {$pt->count()} product to check!");
