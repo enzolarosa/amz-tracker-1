@@ -37,7 +37,7 @@ class Kernel extends ConsoleKernel
 
     public function hourly(Schedule $schedule)
     {
-        $schedule->command('amz:check')->everyFiveMinutes();
+        $schedule->command('amz:check')->everyMinute();
     }
 
     public function daily(Schedule $schedule)

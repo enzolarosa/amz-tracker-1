@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\AmzChecker;
 use App\Models\PriceTrace;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class DispatchAmzCheckerCommand extends Command
@@ -29,14 +30,17 @@ class DispatchAmzCheckerCommand extends Command
      */
     public function handle()
     {
-        $pt = PriceTrace::query()->where('enabled', true)->cursor();
+        $pt = PriceTrace::query()
+            ->where('enabled', true)
+            ->where('updated_at', '<=', Carbon::now()->subHour())
+            ->cursor();
 
         $this->comment("I've {$pt->count()} product to check!");
 
         $bar = $this->output->createProgressBar($pt->count());
         $bar->start();
 
-        PriceTrace::query()->where('enabled', true)->cursor()->each(function (PriceTrace $product) use ($bar) {
+        $pt->each(function (PriceTrace $product) use ($bar) {
             $job = new AmzChecker();
             $job->setProduct($product);
             dispatch($job);

@@ -5,7 +5,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2020-07-04 08:49:49.
+    * Generated on 2020-07-04 12:17:12.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -19,6 +19,7 @@ namespace PHPSTORM_META {
         'Illuminate\Contracts\Console\Kernel' => \App\Console\Kernel::class,
         'Illuminate\Contracts\Debug\ExceptionHandler' => \App\Exceptions\Handler::class,
         'Illuminate\Contracts\Queue\EntityResolver' => \Illuminate\Database\Eloquent\QueueEntityResolver::class,
+        'OwenIt\Auditing\Contracts\Auditor' => \OwenIt\Auditing\Auditor::class,
         'auth' => \Illuminate\Auth\AuthManager::class,
         'auth.driver' => \Illuminate\Auth\RequestGuard::class,
         'cache' => \Illuminate\Cache\CacheManager::class,
@@ -79,6 +80,7 @@ namespace PHPSTORM_META {
         'Illuminate\Contracts\Console\Kernel' => \App\Console\Kernel::class,
         'Illuminate\Contracts\Debug\ExceptionHandler' => \App\Exceptions\Handler::class,
         'Illuminate\Contracts\Queue\EntityResolver' => \Illuminate\Database\Eloquent\QueueEntityResolver::class,
+        'OwenIt\Auditing\Contracts\Auditor' => \OwenIt\Auditing\Auditor::class,
         'auth' => \Illuminate\Auth\AuthManager::class,
         'auth.driver' => \Illuminate\Auth\RequestGuard::class,
         'cache' => \Illuminate\Cache\CacheManager::class,
@@ -139,6 +141,7 @@ namespace PHPSTORM_META {
         'Illuminate\Contracts\Console\Kernel' => \App\Console\Kernel::class,
         'Illuminate\Contracts\Debug\ExceptionHandler' => \App\Exceptions\Handler::class,
         'Illuminate\Contracts\Queue\EntityResolver' => \Illuminate\Database\Eloquent\QueueEntityResolver::class,
+        'OwenIt\Auditing\Contracts\Auditor' => \OwenIt\Auditing\Auditor::class,
         'auth' => \Illuminate\Auth\AuthManager::class,
         'auth.driver' => \Illuminate\Auth\RequestGuard::class,
         'cache' => \Illuminate\Cache\CacheManager::class,
@@ -199,6 +202,7 @@ namespace PHPSTORM_META {
         'Illuminate\Contracts\Console\Kernel' => \App\Console\Kernel::class,
         'Illuminate\Contracts\Debug\ExceptionHandler' => \App\Exceptions\Handler::class,
         'Illuminate\Contracts\Queue\EntityResolver' => \Illuminate\Database\Eloquent\QueueEntityResolver::class,
+        'OwenIt\Auditing\Contracts\Auditor' => \OwenIt\Auditing\Auditor::class,
         'auth' => \Illuminate\Auth\AuthManager::class,
         'auth.driver' => \Illuminate\Auth\RequestGuard::class,
         'cache' => \Illuminate\Cache\CacheManager::class,
@@ -259,6 +263,7 @@ namespace PHPSTORM_META {
         'Illuminate\Contracts\Console\Kernel' => \App\Console\Kernel::class,
         'Illuminate\Contracts\Debug\ExceptionHandler' => \App\Exceptions\Handler::class,
         'Illuminate\Contracts\Queue\EntityResolver' => \Illuminate\Database\Eloquent\QueueEntityResolver::class,
+        'OwenIt\Auditing\Contracts\Auditor' => \OwenIt\Auditing\Auditor::class,
         'auth' => \Illuminate\Auth\AuthManager::class,
         'auth.driver' => \Illuminate\Auth\RequestGuard::class,
         'cache' => \Illuminate\Cache\CacheManager::class,
@@ -319,6 +324,7 @@ namespace PHPSTORM_META {
         'Illuminate\Contracts\Console\Kernel' => \App\Console\Kernel::class,
         'Illuminate\Contracts\Debug\ExceptionHandler' => \App\Exceptions\Handler::class,
         'Illuminate\Contracts\Queue\EntityResolver' => \Illuminate\Database\Eloquent\QueueEntityResolver::class,
+        'OwenIt\Auditing\Contracts\Auditor' => \OwenIt\Auditing\Auditor::class,
         'auth' => \Illuminate\Auth\AuthManager::class,
         'auth.driver' => \Illuminate\Auth\RequestGuard::class,
         'cache' => \Illuminate\Cache\CacheManager::class,
@@ -379,6 +385,7 @@ namespace PHPSTORM_META {
         'Illuminate\Contracts\Console\Kernel' => \App\Console\Kernel::class,
         'Illuminate\Contracts\Debug\ExceptionHandler' => \App\Exceptions\Handler::class,
         'Illuminate\Contracts\Queue\EntityResolver' => \Illuminate\Database\Eloquent\QueueEntityResolver::class,
+        'OwenIt\Auditing\Contracts\Auditor' => \OwenIt\Auditing\Auditor::class,
         'auth' => \Illuminate\Auth\AuthManager::class,
         'auth.driver' => \Illuminate\Auth\RequestGuard::class,
         'cache' => \Illuminate\Cache\CacheManager::class,
@@ -439,6 +446,7 @@ namespace PHPSTORM_META {
         'Illuminate\Contracts\Console\Kernel' => \App\Console\Kernel::class,
         'Illuminate\Contracts\Debug\ExceptionHandler' => \App\Exceptions\Handler::class,
         'Illuminate\Contracts\Queue\EntityResolver' => \Illuminate\Database\Eloquent\QueueEntityResolver::class,
+        'OwenIt\Auditing\Contracts\Auditor' => \OwenIt\Auditing\Auditor::class,
         'auth' => \Illuminate\Auth\AuthManager::class,
         'auth.driver' => \Illuminate\Auth\RequestGuard::class,
         'cache' => \Illuminate\Cache\CacheManager::class,

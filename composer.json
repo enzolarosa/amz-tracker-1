@@ -13,7 +13,8 @@
         "laravel/lumen-framework": "^7.0",
         "laravelista/lumen-vendor-publish": "^7.0",
         "owen-it/laravel-auditing": "^10.0",
-        "spatie/crawler": "^4.7"
+        "spatie/crawler": "^4.7",
+        "spatie/laravel-rate-limited-job-middleware": "^1.4"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.9.1",

@@ -4,9 +4,11 @@ namespace App\Jobs;
 
 use App\Crawler\AmazonItObserver;
 use App\Models\PriceTrace;
-use Carbon\CarbonInterval;
+use Carbon\Carbon;
+use DateTime;
 use Exception;
 use Spatie\Crawler\Crawler;
+use Spatie\RateLimitedMiddleware\RateLimited;
 
 class AmzChecker extends Job
 {
@@ -68,14 +70,22 @@ class AmzChecker extends Job
         }
     }
 
-    /**
-     * Calculate the number of seconds to wait before retrying the job.
-     *
-     * @return int
-     */
-    public function retryAfter()
+    public function middleware()
     {
-        return CarbonInterval::minutes(15)->totalSeconds;
+        $rateLimitedMiddleware = (new RateLimited())
+            ->allow(3)
+            ->everySeconds(10)
+            ->releaseAfterSeconds(20);
+
+        return [$rateLimitedMiddleware];
+    }
+
+    /**
+     * Determine the time at which the job should timeout.
+     */
+    public function retryUntil(): DateTime
+    {
+        return Carbon::now()->addDay();
     }
 
     /**

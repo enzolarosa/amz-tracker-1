@@ -2,6 +2,7 @@
 
 namespace App\Crawler;
 
+use App\Models\PriceTraceLog;
 use DOMDocument;
 use GuzzleHttp\Exception\RequestException;
 use Log;
@@ -36,6 +37,11 @@ class AmazonItObserver extends AmazonObserver
             'first_price' => $firstPrice,
             'latest_price' => $latestPrice,
             'current_price' => $currentPrice,
+        ]);
+
+        PriceTraceLog::query()->create([
+            'price' => $currentPrice,
+            'price_trace_id' => $this->getProduct()->id,
         ]);
     }
 
