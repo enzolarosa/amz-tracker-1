@@ -4,6 +4,7 @@ namespace App\Crawler;
 
 use DOMDocument;
 use GuzzleHttp\Exception\RequestException;
+use Log;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 
@@ -16,7 +17,6 @@ class AmazonItObserver extends AmazonObserver
     {
         $doc = new DOMDocument();
         @$doc->loadHTML($response->getBody());
-
 
         $salePrice = optional($doc->getElementById('priceblock_saleprice'))->nodeValue;
         $ourPrice = optional($doc->getElementById('priceblock_ourprice'))->nodeValue;
@@ -44,6 +44,11 @@ class AmazonItObserver extends AmazonObserver
      */
     public function crawlFailed(UriInterface $url, RequestException $requestException, ?UriInterface $foundOnUrl = null)
     {
-        dd("crawlFail", $url, $requestException, $foundOnUrl);
+        Log::error($requestException->getMessage(), [
+            'url' => $url,
+            'foundOnUrl' => $foundOnUrl,
+            'exception' => $requestException,
+        ]);
+        report($requestException);
     }
 }
