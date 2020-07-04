@@ -17,11 +17,20 @@ class AmazonItObserver extends AmazonObserver
         $doc = new DOMDocument();
         @$doc->loadHTML($response->getBody());
 
-        $salePrice = $doc->getElementById('priceblock_saleprice')->nodeValue;
 
-        $currentPrice = (float)str_replace(['€', ' '], '', $salePrice);
+        $salePrice = optional($doc->getElementById('priceblock_saleprice'))->nodeValue;
+        $ourPrice = optional($doc->getElementById('priceblock_ourprice'))->nodeValue;
+
+        if (!is_null($salePrice)) {
+            $currentPrice = (float)str_replace(['€', ' '], '', $salePrice);
+        } elseif (!is_null($ourPrice)) {
+            $currentPrice = (float)str_replace(['€', ' '], '', $ourPrice);
+        } else {
+            $currentPrice = 0;
+        }
+
         $firstPrice = $this->getProduct()->first_price ?? $currentPrice;
-        $latestPrice = $this->getProduct()->current_price;
+        $latestPrice = $this->getProduct()->current_price == 0 ? $this->getProduct()->latest_price : $this->getProduct()->current_price;
 
         $this->getProduct()->update([
             'first_price' => $firstPrice,

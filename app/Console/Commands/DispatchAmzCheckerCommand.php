@@ -29,10 +29,22 @@ class DispatchAmzCheckerCommand extends Command
      */
     public function handle()
     {
-        PriceTrace::query()->where('enabled', true)->cursor()->each(function (PriceTrace $product) {
+        $pt = PriceTrace::query()->where('enabled', true)->cursor();
+
+        $this->comment("I've {$pt->count()} product to check!");
+
+        $bar = $this->output->createProgressBar($pt->count());
+        $bar->start();
+
+        PriceTrace::query()->where('enabled', true)->cursor()->each(function (PriceTrace $product) use ($bar) {
             $job = new AmzChecker();
             $job->setProduct($product);
             dispatch($job);
+
+            $bar->advance();
         });
+
+        $bar->finish();
+        $this->comment("\nDone!");
     }
 }
