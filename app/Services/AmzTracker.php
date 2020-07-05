@@ -8,9 +8,17 @@ use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\PartnerType;
 use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\ProductAdvertisingAPIClientException;
 use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\SearchItemsRequest;
 use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\SearchItemsResource;
+use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\SearchItemsResponse;
 use Amazon\ProductAdvertisingAPI\v1\Configuration;
+use App\Logging\GuzzleLogger;
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Monolog\Logger;
+use Psr\Http\Message\RequestInterface;
 
 class AmzTracker
 {
@@ -19,10 +27,27 @@ class AmzTracker
     protected string $partnerTag;
     protected DefaultApi $api;
 
+    /**
+     * AmzTracker constructor.
+     * @param string $partnerTag
+     */
     public function __construct(string $partnerTag)
     {
+        $handler = HandlerStack::create();
+
+        $handler->push(Middleware::log(new Logger('ExtGuzzleLogger'),
+            (new GuzzleLogger('{req_body} - {res_body}'))->setProvider('amz-api-out')
+        ));
+
+        $handler->push(Middleware::mapRequest(function (RequestInterface $request) {
+            $requestId = Arr::first($request->getHeader('X-Request-ID')) ?? (string)Str::uuid();
+
+            return $request->withAddedHeader('X-Request-ID', $requestId);
+        }));
+
+        $this->client = new Client(['verify' => config('app.env') !== 'local', 'handler' => $handler, 'timeout' => 60]);
+
         $this->partnerTag = $partnerTag;
-        $this->client = new Client();
         $this->config = new Configuration();
         $this->config->setAccessKey(env('AMZ_KEY'));
         $this->config->setSecretKey(env('AMZ_SECRET'));
@@ -31,6 +56,10 @@ class AmzTracker
         $this->api = new DefaultApi($this->client, $this->config);
     }
 
+    /**
+     * @param string $keyword
+     * @return SearchItemsResponse|bool
+     */
     public function search(string $keyword)
     {
         $searchIndex = "All";
