@@ -5,7 +5,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2020-07-05 06:47:04.
+    * Generated on 2020-07-05 06:54:07.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -55,7 +55,6 @@ namespace PHPSTORM_META {
         'Laravel\Horizon\Lock' => \Laravel\Horizon\Lock::class,
         'Laravel\Horizon\Stopwatch' => \Laravel\Horizon\Stopwatch::class,
         'NunoMaduro\Collision\Contracts\Provider' => \NunoMaduro\Collision\Provider::class,
-        'OwenIt\Auditing\Contracts\Auditor' => \OwenIt\Auditing\Auditor::class,
         'Whoops\Handler\HandlerInterface' => \Facade\Ignition\ErrorPage\IgnitionWhoopsHandler::class,
         'auth' => \Illuminate\Auth\AuthManager::class,
         'auth.driver' => \Illuminate\Auth\SessionGuard::class,
@@ -231,7 +230,6 @@ namespace PHPSTORM_META {
         'Laravel\Horizon\Lock' => \Laravel\Horizon\Lock::class,
         'Laravel\Horizon\Stopwatch' => \Laravel\Horizon\Stopwatch::class,
         'NunoMaduro\Collision\Contracts\Provider' => \NunoMaduro\Collision\Provider::class,
-        'OwenIt\Auditing\Contracts\Auditor' => \OwenIt\Auditing\Auditor::class,
         'Whoops\Handler\HandlerInterface' => \Facade\Ignition\ErrorPage\IgnitionWhoopsHandler::class,
         'auth' => \Illuminate\Auth\AuthManager::class,
         'auth.driver' => \Illuminate\Auth\SessionGuard::class,
@@ -407,7 +405,6 @@ namespace PHPSTORM_META {
         'Laravel\Horizon\Lock' => \Laravel\Horizon\Lock::class,
         'Laravel\Horizon\Stopwatch' => \Laravel\Horizon\Stopwatch::class,
         'NunoMaduro\Collision\Contracts\Provider' => \NunoMaduro\Collision\Provider::class,
-        'OwenIt\Auditing\Contracts\Auditor' => \OwenIt\Auditing\Auditor::class,
         'Whoops\Handler\HandlerInterface' => \Facade\Ignition\ErrorPage\IgnitionWhoopsHandler::class,
         'auth' => \Illuminate\Auth\AuthManager::class,
         'auth.driver' => \Illuminate\Auth\SessionGuard::class,
@@ -583,7 +580,6 @@ namespace PHPSTORM_META {
         'Laravel\Horizon\Lock' => \Laravel\Horizon\Lock::class,
         'Laravel\Horizon\Stopwatch' => \Laravel\Horizon\Stopwatch::class,
         'NunoMaduro\Collision\Contracts\Provider' => \NunoMaduro\Collision\Provider::class,
-        'OwenIt\Auditing\Contracts\Auditor' => \OwenIt\Auditing\Auditor::class,
         'Whoops\Handler\HandlerInterface' => \Facade\Ignition\ErrorPage\IgnitionWhoopsHandler::class,
         'auth' => \Illuminate\Auth\AuthManager::class,
         'auth.driver' => \Illuminate\Auth\SessionGuard::class,
@@ -759,7 +755,6 @@ namespace PHPSTORM_META {
         'Laravel\Horizon\Lock' => \Laravel\Horizon\Lock::class,
         'Laravel\Horizon\Stopwatch' => \Laravel\Horizon\Stopwatch::class,
         'NunoMaduro\Collision\Contracts\Provider' => \NunoMaduro\Collision\Provider::class,
-        'OwenIt\Auditing\Contracts\Auditor' => \OwenIt\Auditing\Auditor::class,
         'Whoops\Handler\HandlerInterface' => \Facade\Ignition\ErrorPage\IgnitionWhoopsHandler::class,
         'auth' => \Illuminate\Auth\AuthManager::class,
         'auth.driver' => \Illuminate\Auth\SessionGuard::class,
@@ -935,7 +930,6 @@ namespace PHPSTORM_META {
         'Laravel\Horizon\Lock' => \Laravel\Horizon\Lock::class,
         'Laravel\Horizon\Stopwatch' => \Laravel\Horizon\Stopwatch::class,
         'NunoMaduro\Collision\Contracts\Provider' => \NunoMaduro\Collision\Provider::class,
-        'OwenIt\Auditing\Contracts\Auditor' => \OwenIt\Auditing\Auditor::class,
         'Whoops\Handler\HandlerInterface' => \Facade\Ignition\ErrorPage\IgnitionWhoopsHandler::class,
         'auth' => \Illuminate\Auth\AuthManager::class,
         'auth.driver' => \Illuminate\Auth\SessionGuard::class,
@@ -1111,7 +1105,6 @@ namespace PHPSTORM_META {
         'Laravel\Horizon\Lock' => \Laravel\Horizon\Lock::class,
         'Laravel\Horizon\Stopwatch' => \Laravel\Horizon\Stopwatch::class,
         'NunoMaduro\Collision\Contracts\Provider' => \NunoMaduro\Collision\Provider::class,
-        'OwenIt\Auditing\Contracts\Auditor' => \OwenIt\Auditing\Auditor::class,
         'Whoops\Handler\HandlerInterface' => \Facade\Ignition\ErrorPage\IgnitionWhoopsHandler::class,
         'auth' => \Illuminate\Auth\AuthManager::class,
         'auth.driver' => \Illuminate\Auth\SessionGuard::class,
@@ -1287,7 +1280,6 @@ namespace PHPSTORM_META {
         'Laravel\Horizon\Lock' => \Laravel\Horizon\Lock::class,
         'Laravel\Horizon\Stopwatch' => \Laravel\Horizon\Stopwatch::class,
         'NunoMaduro\Collision\Contracts\Provider' => \NunoMaduro\Collision\Provider::class,
-        'OwenIt\Auditing\Contracts\Auditor' => \OwenIt\Auditing\Auditor::class,
         'Whoops\Handler\HandlerInterface' => \Facade\Ignition\ErrorPage\IgnitionWhoopsHandler::class,
         'auth' => \Illuminate\Auth\AuthManager::class,
         'auth.driver' => \Illuminate\Auth\SessionGuard::class,

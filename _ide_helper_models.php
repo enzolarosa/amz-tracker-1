@@ -12,22 +12,6 @@
 
 namespace App\Models{
 /**
- * App\Models\PriceTraceLog
- *
- * @property-read \Illuminate\Database\Eloquent\Collection|\OwenIt\Auditing\Models\Audit[] $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\PriceTrace $product
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PriceTraceLog newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PriceTraceLog newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PriceTraceLog query()
- */
-    class PriceTraceLog extends \Eloquent implements \OwenIt\Auditing\Contracts\Auditable
-    {
-    }
-}
-
-namespace App\Models{
-/**
  * App\Models\User
  *
  * @property int $id
@@ -63,25 +47,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUsername($value)
  */
     class User extends \Eloquent
-    {
-    }
-}
-
-namespace App\Models{
-/**
- * App\Models\PriceTrace
- *
- * @property-read \Illuminate\Database\Eloquent\Collection|\OwenIt\Auditing\Models\Audit[] $audits
- * @property-read int|null $audits_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PriceTraceLog[] $logs
- * @property-read int|null $logs_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
- * @property-read int|null $users_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PriceTrace newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PriceTrace newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PriceTrace query()
- */
-    class PriceTrace extends \Eloquent implements \OwenIt\Auditing\Contracts\Auditable
     {
     }
 }
