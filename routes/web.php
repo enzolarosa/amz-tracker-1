@@ -20,4 +20,4 @@ Route::get('/', function () {
 Route::post('amztracker/telegram', function () {
     $update = Telegram\Bot\Laravel\Facades\Telegram::commandsHandler(true);
     return 'ok';
-});
+})->withoutMiddleware('log-request:web-in')->middleware('log-request:telegram-in');

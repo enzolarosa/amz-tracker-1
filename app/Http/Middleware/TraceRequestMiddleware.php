@@ -23,9 +23,10 @@ class TraceRequestMiddleware
      * @param Request $request
      * @param Closure $next
      *
+     * @param string $provider
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, string $provider = 'api-in')
     {
         $startTime = microtime(true);
         if (!$request->hasHeader(self::X_REQUEST_ID)) {
@@ -35,6 +36,7 @@ class TraceRequestMiddleware
 
         $log = RequestLog::query()->where('request_id', $reqId)->first();
         session(["request_{$reqId}_start" => $startTime]);
+        session(["request_{$reqId}_provider" => $provider]);
 
         if (!$log) {
             return $next($request);
@@ -56,6 +58,7 @@ class TraceRequestMiddleware
         $reqId = $request->header(self::X_REQUEST_ID);
         $startTime = session("request_{$reqId}_start");
         $endTime = microtime(true);
+        $provider = session("request_{$reqId}_provider");
 
         $dataToLog = [
             'time' => gmdate("F j, Y, g:i a"),
@@ -68,7 +71,7 @@ class TraceRequestMiddleware
 
         RequestLog::log([
             'request_id' => $reqId,
-            'provider' => 'api-in',
+            'provider' => $provider,
             'request' => (string)json_encode($dataToLog),
             'response' => (string)json_encode($response),
         ]);

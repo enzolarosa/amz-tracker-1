@@ -43,7 +43,7 @@ class Kernel extends HttpKernel
         ValidatePostSize::class,
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
-        TraceRequestMiddleware::class,
+
     ];
 
     /**
@@ -60,10 +60,12 @@ class Kernel extends HttpKernel
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,
+            'log-request:web-in',
         ],
 
         'api' => [
             'throttle:60,1',
+            'log-request:api-in',
             SubstituteBindings::class,
         ],
     ];
@@ -86,5 +88,6 @@ class Kernel extends HttpKernel
         'signed' => ValidateSignature::class,
         'throttle' => ThrottleRequests::class,
         'verified' => EnsureEmailIsVerified::class,
+        'log-request' => TraceRequestMiddleware::class,
     ];
 }
