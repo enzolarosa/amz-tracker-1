@@ -37,13 +37,13 @@ return [
             'app_id' => env('PUSHER_APP_ID'),
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
-                'encrypted' => true,
+                'useTLS' => true,
             ],
         ],
 
         'redis' => [
             'driver' => 'redis',
-            'connection' => env('BROADCAST_REDIS_CONNECTION', 'default'),
+            'connection' => 'default',
         ],
 
         'log' => [

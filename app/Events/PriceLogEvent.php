@@ -15,7 +15,6 @@ class PriceLogEvent extends Event
      */
     public function __construct()
     {
-
     }
 
     /**

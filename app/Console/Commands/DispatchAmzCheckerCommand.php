@@ -6,7 +6,6 @@ use App\Jobs\AmzChecker;
 use App\Models\PriceTrace;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Telegram\Bot\Laravel\Facades\Telegram;
 
 class DispatchAmzCheckerCommand extends Command
 {
@@ -44,7 +43,7 @@ class DispatchAmzCheckerCommand extends Command
         $pt->each(function (PriceTrace $product) use ($bar) {
             $job = new AmzChecker();
             $job->setProduct($product);
-            dispatch($job);
+            dispatch_now($job);
 
             $bar->advance();
         });

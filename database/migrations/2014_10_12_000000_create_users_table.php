@@ -21,12 +21,15 @@ class CreateUsersTable extends Migration
             $table->string('username')->nullable();
             $table->string('language_code')->nullable();
 
-
             $table->string('email')->unique()->nullable();
             $table->string('tId')->unique()->nullable();
 
-            $table->boolean('enabled')->default(true);
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password')->nullable();
 
+            $table->boolean('active')->default(true);
+
+            $table->rememberToken();
             $table->timestamps();
         });
     }

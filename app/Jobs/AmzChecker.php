@@ -4,11 +4,22 @@ namespace App\Jobs;
 
 use App\Crawler\AmazonItObserver;
 use App\Models\PriceTrace;
+use App\Services\AmzTracker;
 use Carbon\Carbon;
 use DateTime;
 use Exception;
+use GuzzleHttp\Client;
 use Spatie\Crawler\Crawler;
 use Spatie\RateLimitedMiddleware\RateLimited;
+
+
+use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\api\DefaultApi;
+use Amazon\ProductAdvertisingAPI\v1\ApiException;
+use Amazon\ProductAdvertisingAPI\v1\Configuration;
+use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\SearchItemsRequest;
+use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\SearchItemsResource;
+use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\PartnerType;
+use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\ProductAdvertisingAPIClientException;
 
 class AmzChecker extends Job
 {
@@ -32,41 +43,32 @@ class AmzChecker extends Job
      */
     public function handle()
     {
-        $observer = $this->getObserver();
-        $observer->setProduct($this->getProduct());
+        $amz = new AmzTracker(env('AMZ_PARTNER'));
+        $searchItemsResponse = $amz->search($key = $this->getProduct()->product_id);
 
-        Crawler::create()
-            ->setCrawlObserver($observer)
-            ->ignoreRobots()
-            ->setMaximumCrawlCount(1)
-            ->startCrawling($this->getProductUrl());
-    }
-
-    /**
-     * @return AmazonItObserver
-     * @throws Exception
-     */
-    protected function getObserver()
-    {
-        switch ($this->getProduct()->store) {
-            case 'IT':
-                return new AmazonItObserver();
-            default:
-                throw new Exception('Not supported');
+        # Parsing the response
+        if ($searchItemsResponse && $searchItemsResponse->getSearchResult() != null) {
+            echo 'Printing first item information in SearchResult:', PHP_EOL;
+            $item = $searchItemsResponse->getSearchResult()->getItems()[0];
+            if ($item != null) {
+                if ($item->getASIN() != null) {
+                    echo "ASIN: ", $item->getASIN(), PHP_EOL;
+                }
+                if ($item->getDetailPageURL() != null) {
+                    echo "DetailPageURL: ", $item->getDetailPageURL(), PHP_EOL;
+                }
+                if ($item->getItemInfo() != null && $item->getItemInfo()->getTitle() != null && $item->getItemInfo()->getTitle()->getDisplayValue() != null) {
+                    echo "Title: ", $item->getItemInfo()->getTitle()->getDisplayValue(), PHP_EOL;
+                }
+                if ($item->getOffers() != null && $item->getOffers() != null && $item->getOffers()->getListings() != null && $item->getOffers()->getListings()[0]->getPrice() != null && $item->getOffers()->getListings()[0]->getPrice()->getDisplayAmount() != null) {
+                    echo "Buying price: ", $item->getOffers()->getListings()[0]->getPrice()->getDisplayAmount(), PHP_EOL;
+                }
+            }
         }
-    }
-
-    /**
-     * @return string
-     * @throws Exception
-     */
-    protected function getProductUrl(): string
-    {
-        switch ($this->getProduct()->store) {
-            case 'IT':
-                return "https://www.amazon.it/dp/" . $this->getProduct()->product_id;
-            default:
-                throw new Exception('Not supported');
+        if ($searchItemsResponse && $searchItemsResponse->getErrors() != null) {
+            echo PHP_EOL, 'Printing Errors:', PHP_EOL, 'Printing first error object from list of errors', PHP_EOL;
+            echo 'Error code: ', $searchItemsResponse->getErrors()[0]->getCode(), PHP_EOL;
+            echo 'Error message: ', $searchItemsResponse->getErrors()[0]->getMessage(), PHP_EOL;
         }
     }
 

@@ -2,17 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Lumen\Auth\Authorizable;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract
+class User extends Authenticatable
 {
-    use Authenticatable, Authorizable, Notifiable;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -25,15 +21,25 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'username',
         'language_code',
         'email',
-        'tId'
+        'tId',
+        'active',
     ];
 
     /**
-     * @return BelongsToMany
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
      */
-    public function products(): BelongsToMany
-    {
-        return $this->belongsToMany(PriceTrace::class);
-    }
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 }

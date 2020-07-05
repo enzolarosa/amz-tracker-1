@@ -2,12 +2,10 @@
 
 namespace App\Console;
 
-use App\Console\Commands\DispatchAmzCheckerCommand;
-use App\Console\Commands\TelegramBotCommand;
 use Illuminate\Console\Scheduling\Schedule;
-use Laravel\Lumen\Console\Kernel as ConsoleKernel;
-use Laravelista\LumenVendorPublish\VendorPublishCommand;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Telegram\Bot\Laravel\Artisan\WebhookCommand;
+use App\Console\Commands\DispatchAmzCheckerCommand;
 
 class Kernel extends ConsoleKernel
 {
@@ -17,10 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        VendorPublishCommand::class,
-
         DispatchAmzCheckerCommand::class,
-        WebhookCommand::class,
+   //     WebhookCommand::class,
     ];
 
     /**
@@ -61,5 +57,17 @@ class Kernel extends ConsoleKernel
 
     public function yearly(Schedule $schedule)
     {
+    }
+
+    /**
+     * Register the commands for the application.
+     *
+     * @return void
+     */
+    protected function commands()
+    {
+        $this->load(__DIR__ . '/Commands');
+
+        require base_path('routes/console.php');
     }
 }

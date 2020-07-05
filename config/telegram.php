@@ -38,7 +38,9 @@ return [
             'certificate_path' => env('TELEGRAM_CERTIFICATE_PATH', null),
             'webhook_url' => env('TELEGRAM_WEBHOOK_URL', null),
             'commands' => [
-                App\Telegram\Commands\StartCommand::class,
+                'start',
+                'help',
+                'stop',
             ],
         ],
 
@@ -116,7 +118,7 @@ return [
     |
     */
     'commands' => [
-        Telegram\Bot\Commands\HelpCommand::class,
+
     ],
 
     /*
@@ -197,8 +199,9 @@ return [
     |
     */
     'shared_commands' => [
-        // 'start' => Acme\Project\Commands\StartCommand::class,
-        // 'stop' => Acme\Project\Commands\StopCommand::class,
+        'start' => App\Telegram\Commands\StartCommand::class,
+        'help' => Telegram\Bot\Commands\HelpCommand::class,
+        'stop' => App\Telegram\Commands\StopCommand::class,
         // 'status' => Acme\Project\Commands\StatusCommand::class,
     ],
 ];
