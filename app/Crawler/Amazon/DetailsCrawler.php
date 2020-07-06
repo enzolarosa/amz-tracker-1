@@ -60,7 +60,6 @@ class DetailsCrawler extends Amazon
         }*/
 
         $doc = $this->doc;
-
         Storage::disk('local')->put('amz-detail.txt', $this->response->getBody());
 
         $review = trim(optional($doc->getElementById('acrCustomerReviewText'))->nodeValue);
@@ -79,6 +78,7 @@ class DetailsCrawler extends Amazon
             'stars' => $stars,
             'review' => $review,
             'images' => [],
+            'currency' => 'EUR',
         ];
     }
 

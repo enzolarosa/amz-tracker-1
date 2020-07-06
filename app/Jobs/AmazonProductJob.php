@@ -66,13 +66,13 @@ class AmazonProductJob extends Job
         $offerUrl = $this->getProductUrl('offer');
 
         // Get Product Details
-        /*      $observer = new DetailsCrawler();
+        /*$observer = new DetailsCrawler();
               Crawler::create($this->clientOptions())
                   ->setCrawlObserver($observer)
                   ->ignoreRobots()
                   ->setMaximumCrawlCount(1)
                   ->startCrawling($detailUrl);
-      */
+        */
         // Get Product Price
         $observer = new OffersCrawler();
         Crawler::create($this->clientOptions())

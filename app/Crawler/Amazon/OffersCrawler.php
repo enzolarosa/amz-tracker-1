@@ -61,10 +61,22 @@ class OffersCrawler extends Amazon
         $sellerNameEle = optional($this->getElementsByClassName('olpSellerName', 'h3'))->nodeValue;
 
 
-
         dd($priceElem, $pricePerUnitElem, $sellerNameEle);
+
         $review = trim(optional($doc->getElementById('acrCustomerReviewText'))->nodeValue);
-
+        return [
+            'sellers' => [
+                [
+                    'price' => "$399.99",
+                    'priceParsed' => 399.99,
+                    'condition' => "New",
+                    'sellerName' => "TTP Retail",
+                    'prime' => true,
+                    'shippingInfo' => "",
+                    'shopUrl' => "www.amazon.com/gp/aag/main/ref=olp_merch_name_1/131-4745621-4725555/?seller=ANIVUW1SREVVT",
+                    'pricePerUnit' => null
+                ]
+            ],
+        ];
     }
-
 }
