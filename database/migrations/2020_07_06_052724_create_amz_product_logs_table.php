@@ -15,7 +15,13 @@ class CreateAmzProductLogsTable extends Migration
     {
         Schema::create('amz_product_logs', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('amz_product_id');
+
+            $table->jsonb('history');
+
             $table->timestamps();
+
+            $table->foreign('amz_product_id')->on('amz_products')->references('id');
         });
     }
 

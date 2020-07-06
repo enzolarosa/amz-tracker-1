@@ -11,18 +11,6 @@ class DetailsCrawler extends Amazon
         /*{
           "title": "GoPro HERO8 Black + PNY Elite-X 128GB U3 microSDHC Card (Bundle)",
           "thumbnailImage": "https://images-na.ssl-images-amazon.com/images/I/31fbysMcYFL.jpg",
-          "sellers": [
-            {
-              "price": "$399.99",
-              "priceParsed": 399.99,
-              "condition": "New",
-              "sellerName": "TTP Retail",
-              "prime": true,
-              "shippingInfo": "",
-              "shopUrl": "www.amazon.com/gp/aag/main/ref=olp_merch_name_1/131-4745621-4725555/?seller=ANIVUW1SREVVT",
-              "pricePerUnit": null
-            }
-          ],
           "asin": "B07XZMHTL5",
           "itemDetailUrl": "https://www.amazon.com/dp/B07XZMHTL5",
           "sellerOffersUrl": "https://www.amazon.com/gp/offer-listing/B07XZMHTL5",
@@ -60,17 +48,17 @@ class DetailsCrawler extends Amazon
         }*/
 
         $doc = $this->doc;
-        Storage::disk('local')->put('amz-detail.txt', $this->response->getBody());
 
         $review = trim(optional($doc->getElementById('acrCustomerReviewText'))->nodeValue);
         $stars = trim(optional($doc->getElementById('acrPopover'))->getAttribute('title'));
-        $featureDesc = trim(optional($doc->getElementById('featurebullets_feature_div'))->nodeValue);
+        $featureDesc = preg_replace('/\s\s+/', '', trim(optional($doc->getElementById('featurebullets_feature_div'))->nodeValue));
         $desc = trim(optional($doc->getElementById('productDescription'))->nodeValue);
         $title = optional($doc->getElementById('productTitle'))->nodeValue;
         $authors = optional($doc->getElementById('bylineInfo'))->nodeValue;
         // $images = $this->getImages($doc);
 
         return [
+            'asin' => $this->getAsin(),
             'title' => $title,
             'description' => $desc,
             'featureDescription' => $featureDesc,
@@ -79,7 +67,8 @@ class DetailsCrawler extends Amazon
             'review' => $review,
             'images' => [],
             'currency' => 'EUR',
+            'itemDetailUrl'=> $this->getShopUrl(),
+            //'sellerOffersUrl'=> "https://www.amazon.com/gp/offer-listing/B07XZMHTL5",
         ];
     }
-
 }
