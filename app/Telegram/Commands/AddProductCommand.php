@@ -47,7 +47,7 @@ class AddProductCommand extends Command
             'active' => true,
         ]);
 
-        $asin = '';// $args['asin'];
+        $asin = 'B01J7QLSB2';// $args['asin'];
         $product = AmzProduct::query()->firstOrCreate(['asin' => $asin]);
         $product->users()->save($user);
         $job = new AmazonProductJob($asin);
