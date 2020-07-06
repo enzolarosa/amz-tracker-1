@@ -27,7 +27,7 @@ class AmzProductObserver
         if ($product->current_price) {
             $product->preview_price = $product->current_price;
         }
-        
+
         if (!is_null($product->sellers) && $product->sellers->count() > 0) {
             $product->current_price = Arr::first($product->sellers)['priceParsed'];
         }

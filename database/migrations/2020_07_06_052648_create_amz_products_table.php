@@ -32,6 +32,7 @@ class CreateAmzProductsTable extends Migration
             $table->decimal('preview_price', 10, 4)->nullable();
             $table->decimal('current_price', 10, 4)->nullable();
 
+            $table->boolean('enabled')->default(true);
             $table->timestamps();
         });
     }
