@@ -13,9 +13,13 @@ class CreateAmzProductUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('amz_product_users', function (Blueprint $table) {
+        Schema::create('amz_product_user', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('amz_product_id');
+
+            $table->foreign('user_id')->on('users')->references('id');
+            $table->foreign('amz_product_id')->on('amz_products')->references('id');
         });
     }
 
@@ -26,6 +30,6 @@ class CreateAmzProductUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('amz_product_users');
+        Schema::dropIfExists('amz_product_user');
     }
 }

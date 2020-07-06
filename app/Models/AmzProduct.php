@@ -32,4 +32,8 @@ class AmzProduct extends Model
     {
         return $this->hasMany(AmzProductLog::class);
     }
+
+    public function users(){
+        return $this->belongsToMany(User::class);
+    }
 }
