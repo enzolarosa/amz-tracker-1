@@ -36,7 +36,7 @@ class AddProductCommand extends Command
 
         $tUser = $this->getUpdate()->getMessage()->getFrom();
         $args = $this->getArguments();
-        Log::debug($args);
+        //Log::debug($args);
 
         $user = User::query()->updateOrCreate([
             'tId' => $tUser->id
@@ -60,7 +60,7 @@ class AddProductCommand extends Command
         ]);
         $job = new AmazonProductJob($asin);
         dispatch($job);
-        
+
         $this->replyWithMessage(['text' => sprintf('Your product: *%s* added to tracker list.', $asin)]);
     }
 }
