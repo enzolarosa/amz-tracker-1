@@ -2,18 +2,18 @@
 
 namespace App\Charts;
 
-use App\Models\User;
+use App\Models\AmzProductLog;
 use Carbon\Carbon;
 use Chartisan\PHP\Chartisan;
 use Fidum\ChartTile\Charts\Chart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class DailyUsersChart extends Chart
+class DailyProductAnalyzeChart extends Chart
 {
     public function handler(Request $request): Chartisan
     {
-        $users = User::query()
+        $prod = AmzProductLog::query()
             ->select([
                 DB::Raw('count(id) as count'),
                 DB::Raw('date(created_at) as creation_date'),
@@ -21,16 +21,16 @@ class DailyUsersChart extends Chart
             ->groupBy('creation_date')
             ->where('created_at', '>=', now()->subWeek()->startOfDay())
             ->get()
-            ->map(function (User $user) {
+            ->map(function (AmzProductLog $product) {
                 return [
-                    'x' => Carbon::parse($user->creation_date)->toDateString(),
-                    'y' => $user->count,
+                    'x' => Carbon::parse($product->creation_date)->toDateString(),
+                    'y' => $product->count,
                 ];
             });
 
         return Chartisan::build()
-            ->labels($users->pluck('x')->toArray())
-            ->dataset('Users', $users->toArray());
+            ->labels($prod->pluck('x')->toArray())
+            ->dataset('Product Checks', $prod->toArray());
     }
 
     public function type(): string

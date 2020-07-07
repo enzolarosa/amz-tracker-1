@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Charts\DailyProductAnalyzeChart;
+use App\Charts\DailyProductsChart;
 use App\Charts\DailyUsersChart;
 use App\Models\AmzProduct;
 use App\Observers\AmzProductObserver;
@@ -40,6 +42,8 @@ class AppServiceProvider extends ServiceProvider
     {
         app(Registrar::class)->register([
             DailyUsersChart::class,
+            DailyProductsChart::class,
+            DailyProductAnalyzeChart::class,
         ]);
     }
 }

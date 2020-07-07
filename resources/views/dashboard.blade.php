@@ -9,4 +9,8 @@
     <livewire:forge-server-tile position="a3:a10"/>
     <livewire:forge-recent-events-tile position="b5:b10"/>
 
+    <livewire:chart-tile chartClass="{{\App\Charts\DailyProductsChart::class}}" position="c5:d6"/>
+    <livewire:chart-tile chartClass="{{\App\Charts\DailyProductAnalyzeChart::class}}" position="c7:d8"/>
+
+
 </x-dashboard>
