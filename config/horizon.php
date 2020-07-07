@@ -170,11 +170,11 @@ return [
                 'connection' => 'redis',
                 'queue' => [
                     'default',
-                    'logging'
+                    'logging',
                 ],
                 'balance' => 'simple',
                 'min-processes' => 0,
-                'max-processes' => 5,
+                'max-processes' => 2,
                 'tries' => 3,
                 'timeout' => 60,
             ],
@@ -182,6 +182,17 @@ return [
                 'connection' => 'redis',
                 'queue' => [
                     'amz-product',
+                ],
+                'balance' => 'simple',
+                'min-processes' => 0,
+                'max-processes' => 5,
+                'tries' => 3,
+                'timeout' => 60,
+            ],
+            'notification' => [
+                'connection' => 'redis',
+                'queue' => [
+                    'notify-telegram',
                 ],
                 'balance' => 'simple',
                 'min-processes' => 0,
@@ -196,11 +207,11 @@ return [
                 'connection' => 'redis',
                 'queue' => [
                     'default',
-                    'logging'
+                    'logging',
                 ],
                 'balance' => 'simple',
                 'min-processes' => 0,
-                'max-processes' => 5,
+                'max-processes' => 2,
                 'tries' => 3,
                 'timeout' => 60,
             ],
@@ -208,6 +219,17 @@ return [
                 'connection' => 'redis',
                 'queue' => [
                     'amz-product',
+                ],
+                'balance' => 'simple',
+                'min-processes' => 0,
+                'max-processes' => 5,
+                'tries' => 3,
+                'timeout' => 60,
+            ],
+            'notification' => [
+                'connection' => 'redis',
+                'queue' => [
+                    'notify-telegram',
                 ],
                 'balance' => 'simple',
                 'min-processes' => 0,

@@ -2,10 +2,10 @@
 
 namespace App\Console;
 
+use App\Console\Commands\DispatchAmzCheckerCommand;
+use App\Console\Commands\UpdateProductCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Telegram\Bot\Laravel\Artisan\WebhookCommand;
-use App\Console\Commands\DispatchAmzCheckerCommand;
 
 class Kernel extends ConsoleKernel
 {
@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         DispatchAmzCheckerCommand::class,
-   //     WebhookCommand::class,
+        UpdateProductCommand::class,
     ];
 
     /**
@@ -36,15 +36,12 @@ class Kernel extends ConsoleKernel
 
     public function hourly(Schedule $schedule)
     {
-        $schedule->command('amz:check')->everyMinute();
+        $schedule->command('amz:update-product')->everyTenMinutes();
     }
 
     public function daily(Schedule $schedule)
     {
-        $schedule->command(' art telegram:webhook', [
-            'amztracker',
-            '--setup',
-        ])->dailyAt('02:00');
+        $schedule->command(' art telegram:webhook', ['amztracker', '--setup'])->dailyAt('02:00');
     }
 
     public function weekly(Schedule $schedule)

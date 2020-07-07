@@ -96,16 +96,13 @@ class AmazonProductJob extends Job
     protected function getProductUrl(string $type = ''): string
     {
         switch ($type) {
-            case 'detail':
-                $url = "dp";
-                break;
+            case 'shop':
             case 'offer':
                 $url = 'gp/offer-listing';
                 break;
-            case 'shop':
-                return "{$this->baseUrls[Arr::first($this->countries)]}/gp/{$this->asin}?tag=" . env('AMZ_PARTNER');
+            case 'detail':
             default:
-                $url = 'gp';
+                $url = 'dp';
                 break;
         }
         return "{$this->baseUrls[Arr::first($this->countries)]}/$url/{$this->asin}";
@@ -124,6 +121,14 @@ class AmazonProductJob extends Job
             return $request->withAddedHeader('X-Request-ID', $requestId);
         }));
 
-        return ['verify' => config('app.env') !== 'local', 'handler' => $handler, 'timeout' => 60];
+        return [
+            'verify' => config('app.env') !== 'local',
+            //'handler' => $handler,
+            'timeout' => 60,
+            'headers' => [
+                'Accept-Encoding' => 'gzip, deflate, br',
+                'User-Agent' => 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Safari/605.1.15'
+            ]
+        ];
     }
 }

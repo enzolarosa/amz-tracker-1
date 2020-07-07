@@ -3,34 +3,32 @@
 namespace App\Crawler\Amazon;
 
 use DOMElement;
-use Illuminate\Support\Arr;
+use PHPHtmlParser\Dom;
+use Storage;
 
 class OffersCrawler extends Amazon
 {
     protected function parsePage()
     {
-        $offers = $this->getElementsByClassName('olpOffer', 'div');
+        $jquery = new Dom();
+        $jquery->load($this->doc->saveHTML());
+
+        $offers = $jquery->find('div.olpOffer');
         $sellers = [];
-        /** @var DOMElement $offer */
-        foreach ($offers as $offer) {
-            $price = trim(optional($this->getElementsByClassName('olpOfferPrice', 'span', $offer)[0])->nodeValue);
+
+        foreach ($offers as $k => $offer) {
+            $price = optional($offer->find('span.olpOfferPrice')[0])->text;
             $priceParsed = (float)str_replace([$this->getCurrency(), ','], ['', '.'], $price);
+            $pricePerUnit = trim(optional($offer->find('span.olpOfferPrice')[0])->text);
+            $offerCondition = trim(preg_replace('/\s\s+/', '', optional($offer->find('span.olpCondition')[0])->text));
+            $shippingInfo = trim(preg_replace('/\s\s+/', '', optional($offer->find('a.olpFbaPopoverTrigger')[0])->text));
+            $prime = optional($offer->find('i.a-icon-prime')[0]) ? true : false;
+            $sellerNameEl = optional($offer->find('h3.olpSellerName')[0]);
 
-            $pricePerUnit = trim(optional($this->getElementsByClassName('olpOfferPrice', 'span', $offer)[0])->nodeValue);
-            $offerCondition = preg_replace('/\s\s+/', '', optional($this->getElementsByClassName('olpCondition', 'span', $offer)[0])->nodeValue);
-
-            $shippingInfo = preg_replace('/\s\s+/', '', optional($this->getElementsByClassName('olpShippingInfo', 'p', $offer)[0])->nodeValue);
-
-            $prime = optional($this->getElementsByClassName('a-icon-prime', 'i', $offer)) ? true : false;
-            /** @var DOMElement $sellerNameEl */
-            $sellerNameEl = $this->getElementsByClassName('olpSellerName', 'h3', $offer)[0];
-            /** @var DOMElement $img */
-            $img = $sellerNameEl->getElementsByTagName('img')->item(0);
-            /** @var DOMElement $a */
-            $a = $sellerNameEl->getElementsByTagName('a')->item(0);
-
-            $sellerName = $img->getAttribute('alt');
-            $shopUrl = $a->getAttribute('href');
+            if ($sellerNameEl) {
+                $sellerName = optional($sellerNameEl->find('a')[0])->text;
+                $shopUrl = optional($sellerNameEl->find('a')[0])->href;
+            }
 
             if (empty($shippingInfo) || $shippingInfo == '') {
                 //$shippingInfos = $this->getElementsByClassName('olpPriceColumn', 'div', $offer);
@@ -44,10 +42,10 @@ class OffersCrawler extends Amazon
                 'price' => $price,
                 'priceParsed' => $priceParsed,
                 'condition' => $offerCondition,
-                'sellerName' => $sellerName,
+                'sellerName' => $sellerName ?? 'seller unknown',
                 'prime' => $prime,
                 'shippingInfo' => $shippingInfo,
-                'shopUrl' => $shopUrl . '?tag=' . env('AMZ_PARTNER'),
+                'shopUrl' => $shopUrl ?? 'seller unknown',
                 'pricePerUnit' => $pricePerUnit
             ];
         }

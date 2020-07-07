@@ -46,4 +46,15 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(AmzProduct::class);
     }
+
+    /**
+     * Route notifications for the Telegram channel.
+     *
+     * @return int
+     */
+    public function routeNotificationForTelegram()
+    {
+        return $this->tId;
+    }
+
 }

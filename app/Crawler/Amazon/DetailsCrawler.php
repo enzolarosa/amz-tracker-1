@@ -2,8 +2,6 @@
 
 namespace App\Crawler\Amazon;
 
-use Storage;
-
 class DetailsCrawler extends Amazon
 {
     protected function parsePage()
@@ -53,7 +51,7 @@ class DetailsCrawler extends Amazon
         $stars = trim(optional($doc->getElementById('acrPopover'))->getAttribute('title'));
         $featureDesc = preg_replace('/\s\s+/', '', trim(optional($doc->getElementById('featurebullets_feature_div'))->nodeValue));
         $desc = trim(optional($doc->getElementById('productDescription'))->nodeValue);
-        $title = optional($doc->getElementById('productTitle'))->nodeValue;
+        $title = str_replace(PHP_EOL, '', optional($doc->getElementById('productTitle'))->nodeValue);
         $authors = optional($doc->getElementById('bylineInfo'))->nodeValue;
         // $images = $this->getImages($doc);
 
@@ -67,7 +65,7 @@ class DetailsCrawler extends Amazon
             'review' => $review,
             'images' => [],
             'currency' => 'EUR',
-            'itemDetailUrl'=> $this->getShopUrl(),
+            'itemDetailUrl' => $this->getShopUrl(),
             //'sellerOffersUrl'=> "https://www.amazon.com/gp/offer-listing/B07XZMHTL5",
         ];
     }

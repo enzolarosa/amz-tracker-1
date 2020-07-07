@@ -4,6 +4,7 @@ namespace App\Telegram\Commands;
 
 use App\Jobs\AmazonProductJob;
 use App\Models\AmzProduct;
+use App\Models\AmzProductUser;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Actions;
@@ -48,11 +49,18 @@ class AddProductCommand extends Command
         ]);
 
         $asin = 'B01J7QLSB2';// $args['asin'];
+
         $product = AmzProduct::query()->firstOrCreate(['asin' => $asin]);
-        $product->users()->save($user);
+
+        AmzProductUser::query()->updateOrCreate([
+            'user_id' => $user->id,
+            'amz_product_id' => $product->id
+        ], [
+            'enabled' => true
+        ]);
         $job = new AmazonProductJob($asin);
         dispatch($job);
-
-        $this->replyWithMessage(['text' => sprintf('Your product: %s added to tracker list.', $asin)]);
+        
+        $this->replyWithMessage(['text' => sprintf('Your product: *%s* added to tracker list.', $asin)]);
     }
 }

@@ -135,30 +135,4 @@ class Amazon extends CrawlObserver
         dd("done");
         return [];
     }
-
-    /**
-     * @param $className
-     * @param null $tagName
-     * @param DOMDocument|DOMElement| null $doc
-     * @return array
-     */
-    protected function getElementsByClassName($className, $tagName = null, $doc = null)
-    {
-        if (is_null($doc)) {
-            $doc = $this->doc;
-        }
-        if ($tagName) {
-            $elements = $doc->getElementsByTagName($tagName);
-        } else {
-            $elements = $doc->getElementsByTagName("*");
-        }
-        $matched = [];
-        foreach ($elements as $element) {
-            $class = $element->getAttribute('class');
-            if (Str::contains($class, $className)) {
-                $matched[] = $element;
-            }
-        }
-        return $matched;
-    }
 }

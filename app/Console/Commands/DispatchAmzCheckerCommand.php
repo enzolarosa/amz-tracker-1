@@ -3,6 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Jobs\AmazonProductJob;
+use App\Models\AmzProduct;
+use App\Models\User;
+use App\Notifications\ProductPriceChangedNotification;
 use Illuminate\Console\Command;
 
 class DispatchAmzCheckerCommand extends Command
@@ -29,18 +32,15 @@ class DispatchAmzCheckerCommand extends Command
     public function handle()
     {
         $asin = "B07N73J58V";
+        $asin = "B01J7QLSB2";
         $job = new AmazonProductJob($asin);
         dispatch_now($job);
-        // $this->comment("I've {$pt->count()} product to check!");
-
-        // $bar = $this->output->createProgressBar($pt->count());
-        //  $bar->start();
-
-        //   $pt->each(function (PriceTrace $product) use ($bar) {
-        //      $bar->advance();
-        //  });
-
-        // $bar->finish();
         $this->comment("\nDone!");
+
+        $user = User::findOrFail(1);
+        $prod = AmzProduct::query()->where('asin', $asin)->first();
+        $not = new ProductPriceChangedNotification();
+        $not->setProduct($prod);
+        $user->notify($not);
     }
 }

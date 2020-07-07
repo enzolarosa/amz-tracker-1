@@ -33,7 +33,10 @@ class AmzProduct extends Model
         return $this->hasMany(AmzProductLog::class);
     }
 
-    public function users(){
-        return $this->belongsToMany(User::class);
+    public function users($enabled = true)
+    {
+        return $this->belongsToMany(User::class)->using(AmzProductUser::class)->withPivot([
+            'enabled',
+        ])->wherePivot('enabled', $enabled);
     }
 }
