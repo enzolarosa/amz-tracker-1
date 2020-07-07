@@ -23,7 +23,7 @@ class DailyUsersChart extends Chart
             ->get()
             ->map(function (User $user) {
                 return [
-                    'x' => Carbon::parse($user->creation_date)->toDateString(),
+                    'x' => Carbon::parse($user->creation_date)->format('d M'),
                     'y' => $user->count,
                 ];
             });

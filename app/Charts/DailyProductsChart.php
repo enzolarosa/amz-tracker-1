@@ -24,7 +24,7 @@ class DailyProductsChart extends Chart
             ->get()
             ->map(function (AmzProduct $product) {
                 return [
-                    'x' => Carbon::parse($product->creation_date)->toDateString(),
+                    'x' => Carbon::parse($product->creation_date)->format('d M'),
                     'y' => $product->count,
                 ];
             });
