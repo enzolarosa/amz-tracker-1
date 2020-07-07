@@ -24,3 +24,4 @@ Route::post('amztracker/telegram', function () {
 })->withoutMiddleware('log-request:web-in')->middleware('log-request:telegram-in');
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');

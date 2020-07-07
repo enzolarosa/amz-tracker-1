@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use aglipanci\ForgeTile\Commands\FetchForgeRecentEventsCommand;
+use aglipanci\ForgeTile\Commands\FetchForgeServersCommand;
 use App\Console\Commands\DispatchAmzCheckerCommand;
 use App\Console\Commands\UpdateProductCommand;
 use Illuminate\Console\Scheduling\Schedule;
@@ -32,6 +34,8 @@ class Kernel extends ConsoleKernel
         $this->weekly($schedule);
         $this->monthly($schedule);
         $this->yearly($schedule);
+
+        $this->dashboard($schedule);
     }
 
     public function hourly(Schedule $schedule)
@@ -54,6 +58,15 @@ class Kernel extends ConsoleKernel
 
     public function yearly(Schedule $schedule)
     {
+    }
+
+    public function dashboard(Schedule $schedule)
+    {
+        $schedule->command(\MarcusMyers\AccuWeatherTile\Commands\FetchAccuWeatherCurrentConditionsCommand::class)->hourly();
+        $schedule->command(\MarcusMyers\AccuWeatherTile\Commands\FetchAccuWeatherFiveDayForecastCommand::class)->daily();
+
+        $schedule->command(FetchForgeServersCommand::class)->hourly();
+        $schedule->command(FetchForgeRecentEventsCommand::class)->everyMinute();
     }
 
     /**

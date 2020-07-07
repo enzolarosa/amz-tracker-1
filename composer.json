@@ -10,8 +10,10 @@
     "require": {
         "php": "^7.4",
         "ext-dom": "*",
+        "aglipanci/laravel-dashboard-forge-tile": "^1.0",
         "barryvdh/laravel-ide-helper": "^2.7",
         "fideloper/proxy": "^4.2",
+        "fidum/laravel-dashboard-chart-tile": "^3.0",
         "friendsofphp/php-cs-fixer": "^2.16",
         "fruitcake/laravel-cors": "^1.0",
         "guzzlehttp/guzzle": "^6.3",
@@ -21,9 +23,11 @@
         "laravel/horizon": "^4.3",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.1",
+        "marcusmyers/laravel-dashboard-accuweather-tile": "^1.1",
         "paquettg/php-html-parser": "^2.2",
         "php-webdriver/webdriver": "^1.8",
         "spatie/crawler": "^4.7",
+        "spatie/laravel-dashboard": "^1.2",
         "thewirecutter/paapi5-php-sdk": "^1.0"
     },
     "require-dev": {
