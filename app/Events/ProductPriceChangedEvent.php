@@ -32,5 +32,4 @@ class ProductPriceChangedEvent
     {
         $this->product = $product;
     }
-
 }

@@ -16,7 +16,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $amz_product_id
- * @property mixed $history
+ * @property \Illuminate\Support\Collection $history
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\AmzProduct $product
@@ -53,6 +53,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AmzProduct[] $products
+ * @property-read int|null $products_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User query()
@@ -80,14 +82,22 @@ namespace App\Models{
  * App\Models\AmzProductUser
  *
  * @property int $id
+ * @property int $user_id
+ * @property int $amz_product_id
+ * @property int $enabled
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\AmzProduct $product
+ * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser whereAmzProductId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser whereEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser whereUserId($value)
  */
     class AmzProductUser extends \Eloquent
     {
@@ -140,6 +150,7 @@ namespace App\Models{
  * @property float|null $start_price
  * @property float|null $preview_price
  * @property float|null $current_price
+ * @property int $enabled
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AmzProductLog[] $logs
@@ -153,6 +164,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereCurrency($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereCurrentPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereFeatureDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereImages($value)

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes(['register' => false]);
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,3 +22,5 @@ Route::post('amztracker/telegram', function () {
     $update = Telegram\Bot\Laravel\Facades\Telegram::commandsHandler(true);
     return 'ok';
 })->withoutMiddleware('log-request:web-in')->middleware('log-request:telegram-in');
+
+Route::get('/home', 'HomeController@index')->name('home');
