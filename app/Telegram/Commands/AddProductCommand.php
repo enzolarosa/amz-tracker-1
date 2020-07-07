@@ -6,7 +6,6 @@ use App\Jobs\AmazonProductJob;
 use App\Models\AmzProduct;
 use App\Models\AmzProductUser;
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
@@ -20,7 +19,7 @@ class AddProductCommand extends Command
     /**
      * @var string Command Argument Pattern
      */
-    protected $pattern = '{asin?}';
+    protected $pattern = '{asin}';
 
     /**
      * @var string Command Description
@@ -35,8 +34,7 @@ class AddProductCommand extends Command
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $tUser = $this->getUpdate()->getMessage()->getFrom();
-        $args = $this->getArguments();
-        //Log::debug($args);
+        $args = $this->arguments;
 
         $user = User::query()->updateOrCreate([
             'tId' => $tUser->id
@@ -48,8 +46,7 @@ class AddProductCommand extends Command
             'active' => true,
         ]);
 
-        $asin = 'B01J7QLSB2';// $args['asin'];
-
+        $asin = $args['asin'];
         $product = AmzProduct::query()->firstOrCreate(['asin' => $asin]);
 
         AmzProductUser::query()->updateOrCreate([
@@ -58,9 +55,10 @@ class AddProductCommand extends Command
         ], [
             'enabled' => true
         ]);
+
         $job = new AmazonProductJob($asin);
         dispatch($job);
 
-        $this->replyWithMessage(['text' => sprintf('Your product: *%s* added to tracker list.', $asin)]);
+        $this->replyWithMessage(['text' => sprintf('Your product: %s added to tracker list.', $asin)]);
     }
 }

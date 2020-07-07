@@ -2,14 +2,18 @@
 
 namespace App\Crawler\Amazon;
 
-use DOMElement;
+use App\Models\AmzProduct;
 use PHPHtmlParser\Dom;
-use Storage;
 
 class OffersCrawler extends Amazon
 {
     protected function parsePage()
     {
+        $prod = AmzProduct::query()->where('asin', $this->getAsin())->first();
+        if (is_null($prod)) {
+            return null;
+        }
+
         $jquery = new Dom();
         $jquery->load($this->doc->saveHTML());
 

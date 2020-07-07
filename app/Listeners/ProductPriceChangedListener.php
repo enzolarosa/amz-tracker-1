@@ -20,9 +20,7 @@ class ProductPriceChangedListener
         $prod = $event->getProduct();
         /** @var User $users */
         $users = $prod->users()->where('active', true)->get();
-        dump($users->count(),'users');
         $users->each(function (User $user) use ($prod) {
-            dump("can notify?");
             if ($this->shouldNotify($user, $prod)) {
                 $notification = new ProductPriceChangedNotification();
                 $notification->setProduct($prod);

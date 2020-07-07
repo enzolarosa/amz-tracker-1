@@ -40,7 +40,7 @@ return [
             'commands' => [
                 'start',
                 'help',
-                // App\Telegram\Commands\AddProductCommand::class,
+                App\Telegram\Commands\AddProductCommand::class,
                 'stop',
             ],
         ],

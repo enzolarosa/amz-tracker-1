@@ -21,8 +21,52 @@ class AmzProductObserver
      */
     public function saving(AmzProduct $product)
     {
+        $this->onSaving($product);
+    }
+
+    /**
+     * Handle the file sequence "updating" event.
+     *
+     * @param AmzProduct $product
+     *
+     * @return void
+     */
+    public function updating(AmzProduct $product)
+    {
+        $this->onSaving($product);
+    }
+
+    /**
+     * Handle the file sequence "saved" event.
+     *
+     * @param AmzProduct $product
+     *
+     * @return void
+     */
+    public function saved(AmzProduct $product)
+    {
+        $this->onSaved($product);
+    }
+
+    /**
+     * Handle the file sequence "updated" event.
+     *
+     * @param AmzProduct $product
+     *
+     * @return void
+     */
+    public function updated(AmzProduct $product)
+    {
+        $this->onSaved($product);
+    }
+
+    /**
+     * @param AmzProduct $product
+     */
+    protected function onSaving(AmzProduct $product)
+    {
         if (!is_null($product->sellers) && $product->sellers->count() > 0) {
-            $product->current_price = Arr::first($product->sellers)['priceParsed'];
+            $product->current_price = Arr::first($product->sellers)['priceParsed']; // get the minium price
         }
 
         if (is_null($product->start_price) && !is_null($product->sellers) && $product->sellers->count() > 0) {
@@ -35,16 +79,11 @@ class AmzProductObserver
     }
 
     /**
-     * Handle the file sequence "saved" event.
-     *
      * @param AmzProduct $product
-     *
-     * @return void
      */
-    public function saved(AmzProduct $product)
+    protected function onSaved(AmzProduct $product)
     {
         if ($product->current_price < $product->preview_price) {
-            dump("notify!");
             $event = new ProductPriceChangedEvent();
             $event->setProduct($product);
             event($event);

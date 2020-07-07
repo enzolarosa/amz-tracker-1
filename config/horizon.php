@@ -187,7 +187,7 @@ return [
                 'min-processes' => 0,
                 'max-processes' => 5,
                 'tries' => 3,
-                'timeout' => 60 * 5,
+                'timeout' => 60 * 9,
             ],
             'notification' => [
                 'connection' => 'redis',
@@ -224,7 +224,7 @@ return [
                 'min-processes' => 0,
                 'max-processes' => 5,
                 'tries' => 3,
-                'timeout' => 60 * 5,
+                'timeout' => 60 * 9,
             ],
             'notification' => [
                 'connection' => 'redis',

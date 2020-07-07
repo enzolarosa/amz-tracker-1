@@ -2,10 +2,16 @@
 
 namespace App\Crawler\Amazon;
 
+use App\Models\AmzProduct;
+
 class DetailsCrawler extends Amazon
 {
     protected function parsePage()
     {
+        $prod = AmzProduct::query()->where('asin', $this->getAsin())->first();
+        if (is_null($prod)) {
+            return null;
+        }
         /*{
           "title": "GoPro HERO8 Black + PNY Elite-X 128GB U3 microSDHC Card (Bundle)",
           "thumbnailImage": "https://images-na.ssl-images-amazon.com/images/I/31fbysMcYFL.jpg",

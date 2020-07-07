@@ -4,9 +4,10 @@ namespace App\Crawler\Amazon;
 
 use App\Models\AmzProduct;
 use DOMDocument;
-use DOMElement;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
+use PHPHtmlParser\Dom;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Spatie\Crawler\CrawlObserver;
@@ -92,14 +93,21 @@ class Amazon extends CrawlObserver
         $this->response = $response;
 
         $data = $this->parsePage();
-        $prod = AmzProduct::query()->updateOrCreate([
-            'asin' => $this->getAsin()
-        ], $data);
+        if (!is_null($data)) {
+            $prod = AmzProduct::query()->updateOrCreate([
+                'asin' => $this->getAsin()
+            ], $data);
+        }
     }
 
     public function crawlFailed(UriInterface $url, RequestException $requestException, ?UriInterface $foundOnUrl = null)
     {
         // TODO: Implement crawlFailed() method.
+        $status = $requestException->getResponse()->getStatusCode();
+        if ($status == Response::HTTP_NOT_FOUND) {
+            $prod = AmzProduct::query()->where('asin', $this->getAsin())->update(['enabled' => false]);
+        }
+
         dd("crawlFail", $url, $requestException, $foundOnUrl);
     }
 
@@ -110,6 +118,9 @@ class Amazon extends CrawlObserver
 
     protected function getImages(DOMDocument $doc): array
     {
+        $jquery = new Dom();
+        $jquery->load($doc->saveHTML());
+        
         //todo need complete it
         $elements = $doc->getElementsByTagName('script');
         /** @var DOMDocument $element */
