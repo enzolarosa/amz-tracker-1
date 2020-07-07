@@ -12,6 +12,30 @@
 
 namespace App\Models{
 /**
+ * App\Models\AmzProductLog
+ *
+ * @property int $id
+ * @property int $amz_product_id
+ * @property mixed $history
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\AmzProduct $product
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductLog newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductLog newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductLog query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductLog whereAmzProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductLog whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductLog whereHistory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductLog whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductLog whereUpdatedAt($value)
+ */
+    class AmzProductLog extends \Eloquent
+    {
+    }
+}
+
+namespace App\Models{
+/**
  * App\Models\User
  *
  * @property int $id
@@ -47,6 +71,101 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUsername($value)
  */
     class User extends \Eloquent
+    {
+    }
+}
+
+namespace App\Models{
+/**
+ * App\Models\AmzProductUser
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser whereUpdatedAt($value)
+ */
+    class AmzProductUser extends \Eloquent
+    {
+    }
+}
+
+namespace App\Models{
+/**
+ * App\Models\RequestLog
+ *
+ * @property int $id
+ * @property string $provider
+ * @property string $request_id
+ * @property string $request
+ * @property string $response
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RequestLog newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RequestLog newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RequestLog query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RequestLog whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RequestLog whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RequestLog whereProvider($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RequestLog whereRequest($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RequestLog whereRequestId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RequestLog whereResponse($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RequestLog whereUpdatedAt($value)
+ */
+    class RequestLog extends \Eloquent
+    {
+    }
+}
+
+namespace App\Models{
+/**
+ * App\Models\AmzProduct
+ *
+ * @property int $id
+ * @property string $asin
+ * @property string|null $title
+ * @property string|null $description
+ * @property string|null $featureDescription
+ * @property string|null $author
+ * @property string|null $stars
+ * @property string|null $review
+ * @property \Illuminate\Support\Collection|null $images
+ * @property string|null $currency
+ * @property string|null $itemDetailUrl
+ * @property \Illuminate\Support\Collection|null $sellers
+ * @property float|null $start_price
+ * @property float|null $preview_price
+ * @property float|null $current_price
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AmzProductLog[] $logs
+ * @property-read int|null $logs_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereAsin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereAuthor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereCurrentPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereFeatureDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereImages($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereItemDetailUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct wherePreviewPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereReview($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereSellers($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereStars($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereStartPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereUpdatedAt($value)
+ */
+    class AmzProduct extends \Eloquent
     {
     }
 }

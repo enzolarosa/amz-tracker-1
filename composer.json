@@ -16,10 +16,11 @@
         "fruitcake/laravel-cors": "^1.0",
         "guzzlehttp/guzzle": "^6.3",
         "irazasyed/telegram-bot-sdk": "^3.1",
-        "laravel-notification-channels/telegram": "^0.4.0",
+        "laravel-notification-channels/telegram": "^0.4.1",
         "laravel/framework": "^7.0",
         "laravel/horizon": "^4.3",
         "laravel/tinker": "^2.0",
+        "paquettg/php-html-parser": "^2.2",
         "php-webdriver/webdriver": "^1.8",
         "spatie/crawler": "^4.7",
         "thewirecutter/paapi5-php-sdk": "^1.0"

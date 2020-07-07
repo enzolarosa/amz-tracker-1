@@ -2,9 +2,9 @@
 
 namespace App\Crawler\Amazon;
 
+use App\Models\AmzProduct;
 use DOMDocument;
 use DOMElement;
-use DOMXPath;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
@@ -15,19 +15,86 @@ class Amazon extends CrawlObserver
 {
     protected DOMDocument $doc;
     protected ResponseInterface $response;
+    protected string $currency;
+    protected string $asin;
+    protected string $country;
+    protected string $shopUrl;
+
+    /**
+     * @return string
+     */
+    public function getShopUrl(): string
+    {
+        return $this->shopUrl;
+    }
+
+    /**
+     * @param string $shopUrl
+     */
+    public function setShopUrl(string $shopUrl): void
+    {
+        $this->shopUrl = $shopUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountry(): string
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param string $country
+     */
+    public function setCountry(string $country): void
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAsin(): string
+    {
+        return $this->asin;
+    }
+
+    /**
+     * @param string $asin
+     */
+    public function setAsin(string $asin): void
+    {
+        $this->asin = $asin;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency(): string
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @param string $currency
+     */
+    public function setCurrency(string $currency): void
+    {
+        $this->currency = $currency;
+    }
 
     public function crawled(UriInterface $url, ResponseInterface $response, ?UriInterface $foundOnUrl = null)
     {
         $doc = new DOMDocument();
-        $finder = new DomXPath($doc);
-
         @$doc->loadHTML($response->getBody());
-
         $this->doc = $doc;
         $this->response = $response;
 
         $data = $this->parsePage();
-        dd(get_class(), $data);
+        $prod = AmzProduct::query()->updateOrCreate([
+            'asin' => $this->getAsin()
+        ], $data);
     }
 
     public function crawlFailed(UriInterface $url, RequestException $requestException, ?UriInterface $foundOnUrl = null)
@@ -68,28 +135,4 @@ class Amazon extends CrawlObserver
         dd("done");
         return [];
     }
-
-    /**
-     * @param $className
-     * @param null $tagName
-     * @return array
-     */
-    protected function getElementsByClassName($className, $tagName = null)
-    {
-        if ($tagName) {
-            $elements = $this->doc->getElementsByTagName($tagName);
-        } else {
-            $elements = $this->doc->getElementsByTagName("*");
-        }
-        $matched = [];
-        /** @var DOMElement $element */
-        foreach ($elements as $element) {
-            $class = $element->getAttribute('class');
-            if (Str::contains($class, $className)) {
-                $matched[] = $element;
-            }
-        }
-        return $matched;
-    }
-
 }

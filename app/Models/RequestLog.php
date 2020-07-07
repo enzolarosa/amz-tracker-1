@@ -20,5 +20,4 @@ class RequestLog extends Model
     {
         event(new WriteLogEvent($attributes));
     }
-
 }

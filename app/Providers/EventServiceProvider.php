@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Events\Common\WriteLogEvent;
+use App\Events\ProductPriceChangedEvent;
 use App\Listeners\Common\WriteLogListener;
+use App\Listeners\ProductPriceChangedListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -28,6 +30,11 @@ class EventServiceProvider extends ServiceProvider
         WriteLogEvent::class => [
             WriteLogListener::class,
         ],
+
+        // Product Price changed
+        ProductPriceChangedEvent::class => [
+            ProductPriceChangedListener::class,
+        ]
     ];
 
     /**

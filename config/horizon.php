@@ -167,31 +167,75 @@ return [
     'environments' => [
         'production' => [
             'default' => [
-                'connection'    => 'redis',
-                'queue'         => [
+                'connection' => 'redis',
+                'queue' => [
                     'default',
-                    'logging'
+                    'logging',
                 ],
-                'balance'       => 'simple',
+                'balance' => 'simple',
+                'min-processes' => 0,
+                'max-processes' => 2,
+                'tries' => 3,
+                'timeout' => 60,
+            ],
+            'amz' => [
+                'connection' => 'redis',
+                'queue' => [
+                    'amz-product',
+                ],
+                'balance' => 'simple',
                 'min-processes' => 0,
                 'max-processes' => 5,
-                'tries'         => 3,
-                'timeout'       => 60,
+                'tries' => 3,
+                'timeout' => 60,
+            ],
+            'notification' => [
+                'connection' => 'redis',
+                'queue' => [
+                    'notify-telegram',
+                ],
+                'balance' => 'simple',
+                'min-processes' => 0,
+                'max-processes' => 5,
+                'tries' => 3,
+                'timeout' => 60,
             ],
         ],
 
         'local' => [
             'default' => [
-                'connection'    => 'redis',
-                'queue'         => [
+                'connection' => 'redis',
+                'queue' => [
                     'default',
-                    'logging'
+                    'logging',
                 ],
-                'balance'       => 'simple',
+                'balance' => 'simple',
+                'min-processes' => 0,
+                'max-processes' => 2,
+                'tries' => 3,
+                'timeout' => 60,
+            ],
+            'amz' => [
+                'connection' => 'redis',
+                'queue' => [
+                    'amz-product',
+                ],
+                'balance' => 'simple',
                 'min-processes' => 0,
                 'max-processes' => 5,
-                'tries'         => 3,
-                'timeout'       => 60,
+                'tries' => 3,
+                'timeout' => 60,
+            ],
+            'notification' => [
+                'connection' => 'redis',
+                'queue' => [
+                    'notify-telegram',
+                ],
+                'balance' => 'simple',
+                'min-processes' => 0,
+                'max-processes' => 5,
+                'tries' => 3,
+                'timeout' => 60,
             ],
         ],
     ],

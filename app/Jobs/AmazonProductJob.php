@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Crawler\Amazon\DetailsCrawler;
 use App\Crawler\Amazon\OffersCrawler;
 use App\Logging\GuzzleLogger;
 use GuzzleHttp\HandlerStack;
@@ -28,7 +29,6 @@ class AmazonProductJob extends Job
         'CA' => 'https://www.amazon.ca',
         'JP' => 'https://www.amazon.co.jp',
     ];
-
     protected array $currency = [
         'US' => 'USD',
         'UK' => 'GBP',
@@ -64,17 +64,28 @@ class AmazonProductJob extends Job
     {
         $detailUrl = $this->getProductUrl('detail');
         $offerUrl = $this->getProductUrl('offer');
+        $shopUrl = $this->getProductUrl('shop');
 
         // Get Product Details
-        /*      $observer = new DetailsCrawler();
-              Crawler::create($this->clientOptions())
-                  ->setCrawlObserver($observer)
-                  ->ignoreRobots()
-                  ->setMaximumCrawlCount(1)
-                  ->startCrawling($detailUrl);
-      */
+        $observer = new DetailsCrawler();
+        $observer->setCurrency($this->currency[Arr::first($this->countries)]);
+        $observer->setAsin($this->asin);
+        $observer->setCountry(Arr::first($this->countries));
+        $observer->setShopUrl($shopUrl);
+
+        Crawler::create($this->clientOptions())
+            ->setCrawlObserver($observer)
+            ->ignoreRobots()
+            ->setMaximumCrawlCount(1)
+            ->startCrawling($detailUrl);
+
         // Get Product Price
         $observer = new OffersCrawler();
+        $observer->setCurrency($this->currency[Arr::first($this->countries)]);
+        $observer->setAsin($this->asin);
+        $observer->setCountry(Arr::first($this->countries));
+        $observer->setShopUrl($shopUrl);
+
         Crawler::create($this->clientOptions())
             ->setCrawlObserver($observer)
             ->ignoreRobots()
@@ -85,14 +96,13 @@ class AmazonProductJob extends Job
     protected function getProductUrl(string $type = ''): string
     {
         switch ($type) {
-            case 'detail':
-                $url = "dp";
-                break;
+            case 'shop':
             case 'offer':
                 $url = 'gp/offer-listing';
                 break;
+            case 'detail':
             default:
-                $url = 'gp';
+                $url = 'dp';
                 break;
         }
         return "{$this->baseUrls[Arr::first($this->countries)]}/$url/{$this->asin}";
@@ -101,7 +111,8 @@ class AmazonProductJob extends Job
     protected function clientOptions(): array
     {
         $handler = HandlerStack::create();
-        $handler->push(Middleware::log(new Logger('ExtGuzzleLogger'),
+        $handler->push(Middleware::log(
+            new Logger('ExtGuzzleLogger'),
             (new GuzzleLogger('{req_body} - {res_body}'))->setProvider('amz-crawler')
         ));
 
@@ -110,6 +121,14 @@ class AmazonProductJob extends Job
             return $request->withAddedHeader('X-Request-ID', $requestId);
         }));
 
-        return ['verify' => config('app.env') !== 'local', 'handler' => $handler, 'timeout' => 60];
+        return [
+            'verify' => config('app.env') !== 'local',
+            //'handler' => $handler,
+            'timeout' => 60,
+            'headers' => [
+                'Accept-Encoding' => 'gzip, deflate, br',
+                'User-Agent' => 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Safari/605.1.15'
+            ]
+        ];
     }
 }

@@ -35,7 +35,8 @@ class AmzTracker
     {
         $handler = HandlerStack::create();
 
-        $handler->push(Middleware::log(new Logger('ExtGuzzleLogger'),
+        $handler->push(Middleware::log(
+            new Logger('ExtGuzzleLogger'),
             (new GuzzleLogger('{req_body} - {res_body}'))->setProvider('amz-api-out')
         ));
 

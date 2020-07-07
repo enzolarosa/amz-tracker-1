@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\AmzProduct;
+use App\Observers\AmzProductObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->modelObserver();
+    }
+
+    protected function modelObserver(): void
+    {
+        AmzProduct::observe(AmzProductObserver::class);
     }
 }
