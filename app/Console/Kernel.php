@@ -42,12 +42,12 @@ class Kernel extends ConsoleKernel
 
     public function hourly(Schedule $schedule)
     {
-        //    $schedule->command('amz:update-product')->everyTenMinutes();
+        $schedule->command('amz:update-product')->everyThirtyMinutes();
     }
 
     public function daily(Schedule $schedule)
     {
-        $schedule->command(' art telegram:webhook', ['amztracker', '--setup'])->dailyAt('02:00');
+        $schedule->command('telegram:webhook', ['amztracker', '--setup'])->dailyAt('02:00');
     }
 
     public function weekly(Schedule $schedule)
@@ -64,11 +64,12 @@ class Kernel extends ConsoleKernel
 
     public function dashboard(Schedule $schedule)
     {
-        $schedule->command(FetchAccuWeatherCurrentConditionsCommand::class)->hourly();
-        $schedule->command(FetchAccuWeatherFiveDayForecastCommand::class)->daily();
-
-        $schedule->command(FetchForgeServersCommand::class)->hourly();
         $schedule->command(FetchForgeRecentEventsCommand::class)->everyMinute();
+
+        $schedule->command(FetchAccuWeatherCurrentConditionsCommand::class)->hourly();
+        $schedule->command(FetchForgeServersCommand::class)->hourly();
+
+        $schedule->command(FetchAccuWeatherFiveDayForecastCommand::class)->daily();
     }
 
     /**
