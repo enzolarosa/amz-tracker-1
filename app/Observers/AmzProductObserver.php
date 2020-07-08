@@ -73,7 +73,7 @@ class AmzProductObserver
             $product->start_price = $product->current_price;
         }
 
-        if ($product->current_price < $product->preview_price) {
+        if (!is_null($product->current_price) && !is_null($product->preview_price) && !is_null($product->start_price) && $product->current_price < $product->preview_price) {
             $event = new ProductPriceChangedEvent();
             $event->setProduct($product);
             event($event);

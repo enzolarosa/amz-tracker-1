@@ -68,7 +68,6 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
     {
         return [
            TelegramChannel::class => 'notify-telegram',
-            'slack' => 'slack-queue',
         ];
     }
 }
