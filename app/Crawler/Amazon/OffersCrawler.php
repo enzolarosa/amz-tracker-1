@@ -58,9 +58,7 @@ class OffersCrawler extends Amazon
                 'pricePerUnit' => $pricePerUnit
             ];
         }
-
-        dump($sellers, $offers->count());
-
+        
         return [
             'asin' => $this->getAsin(),
             'sellers' => $sellers,
