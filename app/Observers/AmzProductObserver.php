@@ -99,7 +99,8 @@ class AmzProductObserver
     {
         $min = 0;
         $sellers->each(function ($seller, $index) use (&$min) {
-            if ($index == 0 || $seller['priceParsed'] < $min) {
+            if ($index == 0 ||
+                ($seller['priceParsed'] < $min && in_array(strtolower($seller['condition']), ['nuovo', 'new']))) {
                 $min = $seller['priceParsed'];
                 return;
             }
