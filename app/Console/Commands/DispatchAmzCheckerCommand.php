@@ -33,14 +33,16 @@ class DispatchAmzCheckerCommand extends Command
     {
         $asin = "B07N73J58V";
         $asin = "B01J7QLSB2";
+
         $job = new AmazonProductJob($asin);
         dispatch_now($job);
         $this->comment("\nDone!");
 
-        $user = User::findOrFail(1);
+      /*  $user = User::findOrFail(1);
         $prod = AmzProduct::query()->where('asin', $asin)->first();
+
         $not = new ProductPriceChangedNotification();
         $not->setProduct($prod);
-        $user->notify($not);
+        $user->notify($not);*/
     }
 }

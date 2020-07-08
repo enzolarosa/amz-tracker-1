@@ -28,6 +28,7 @@
         "php-webdriver/webdriver": "^1.8",
         "spatie/crawler": "^4.7",
         "spatie/laravel-dashboard": "^1.2",
+        "spatie/laravel-rate-limited-job-middleware": "^1.4",
         "thewirecutter/paapi5-php-sdk": "^1.0"
     },
     "require-dev": {

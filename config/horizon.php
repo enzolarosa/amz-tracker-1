@@ -226,7 +226,7 @@ return [
                 'balance' => 'simple',
                 'min-processes' => 0,
                 'max-processes' => 5,
-                'tries' => 1,
+                'tries' => 3,
                 'timeout' => 60 * 9,
             ],
             'notification' => [

@@ -2,9 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Common\UserAgent;
 use App\Crawler\Amazon\DetailsCrawler;
 use App\Crawler\Amazon\OffersCrawler;
 use App\Logging\GuzzleLogger;
+use DateTime;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Arr;
@@ -12,6 +14,7 @@ use Illuminate\Support\Str;
 use Monolog\Logger;
 use Psr\Http\Message\RequestInterface;
 use Spatie\Crawler\Crawler;
+use Spatie\RateLimitedMiddleware\RateLimited;
 
 class AmazonProductJob extends Job
 {
@@ -40,6 +43,14 @@ class AmazonProductJob extends Job
         'CA' => 'CAD',
         'JP' => 'JPY',
     ];
+
+    /**
+     * @return array
+     */
+    public function tags()
+    {
+        return [get_class($this), 'asin:' . $this->asin];
+    }
 
     /**
      * Create a new job instance.
@@ -128,42 +139,27 @@ class AmazonProductJob extends Job
             'headers' => [
                 'Accept-Encoding' => 'gzip, deflate, br',
                 'Connection' => 'keep-alive',
-                'User-Agent' => Arr::random($this->userAgent()),
+                'User-Agent' => Arr::random(UserAgent::get()),
             ]
         ];
     }
 
     /**
-     * @return array|string[]
+     * Determine the time at which the job should timeout.
      */
-    protected function userAgent(): array
+    public function retryUntil(): DateTime
     {
-        return [
-            #Chrome
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 5.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
-            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36',
-            #Firefox
-            'Mozilla/4.0 (compatible; MSIE 9.0; Windows NT 6.1)',
-            'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko',
-            'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)',
-            'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko',
-            'Mozilla/5.0 (Windows NT 6.2; WOW64; Trident/7.0; rv:11.0) like Gecko',
-            'Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko',
-            'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0; Trident/5.0)',
-            'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko',
-            'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)',
-            'Mozilla/5.0 (Windows NT 6.1; Win64; x64; Trident/7.0; rv:11.0) like Gecko',
-            'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)',
-            'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)',
-            'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729)'
-        ];
+        return now()->addDay();
+    }
+
+    public function middleware()
+    {
+        $rateLimitedMiddleware = (new RateLimited())
+            ->allow(10)
+            ->everySeconds(60)
+            ->releaseAfterMinute()
+            ->releaseAfterBackoff($this->attempts());
+
+        return [$rateLimitedMiddleware];
     }
 }

@@ -33,7 +33,7 @@ class WriteLogJob extends Job
      */
     public function tags()
     {
-        return ['write-log', get_class($this), 'provider:' . $this->attributes['provider']];
+        return [get_class($this), 'provider:' . $this->attributes['provider']];
     }
 
     public function handle()

@@ -11,6 +11,7 @@ use PHPHtmlParser\Dom;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Spatie\Crawler\CrawlObserver;
+use stringEncode\Exception;
 
 class Amazon extends CrawlObserver
 {
@@ -92,11 +93,14 @@ class Amazon extends CrawlObserver
         $this->doc = $doc;
         $this->response = $response;
 
+        $prod = AmzProduct::query()->firstOrCreate(['asin' => $this->getAsin()]);
+
         $data = $this->parsePage();
         if (!is_null($data)) {
-            $prod = AmzProduct::query()->updateOrCreate([
-                'asin' => $this->getAsin()
-            ], $data);
+            if (!is_null($prod->current_price)) {
+                $prod->update(['preview_price' => $prod->current_price]);
+            }
+            $prod->update($data);
         }
     }
 
@@ -107,8 +111,11 @@ class Amazon extends CrawlObserver
         if ($status == Response::HTTP_NOT_FOUND) {
             $prod = AmzProduct::query()->where('asin', $this->getAsin())->update(['enabled' => false]);
         }
-
-        dd("crawlFail", $url, $requestException, $foundOnUrl);
+        $msg = sprintf(
+            'The `%s` link have some issues: status code `%s` message: %s',
+            $requestException->getRequest()->getUri(), $status, $requestException->getMessage(),
+        );
+        throw new Exception($msg);
     }
 
     protected function parsePage()
@@ -120,7 +127,7 @@ class Amazon extends CrawlObserver
     {
         $jquery = new Dom();
         $jquery->load($doc->saveHTML());
-        
+
         //todo need complete it
         $elements = $doc->getElementsByTagName('script');
         /** @var DOMDocument $element */
