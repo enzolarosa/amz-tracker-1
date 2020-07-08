@@ -60,19 +60,37 @@ class DetailsCrawler extends Amazon
         $title = str_replace(PHP_EOL, '', optional($doc->getElementById('productTitle'))->nodeValue);
         $authors = optional($doc->getElementById('bylineInfo'))->nodeValue;
         // $images = $this->getImages($doc);
+        $images = null;
 
-        return [
+        $data = [
             'asin' => $this->getAsin(),
-            'title' => $title,
-            'description' => $desc,
-            'featureDescription' => $featureDesc,
-            'author' => $authors,
-            'stars' => $stars,
-            'review' => $review,
-            'images' => [],
             'currency' => 'EUR',
             'itemDetailUrl' => $this->getShopUrl(),
             //'sellerOffersUrl'=> "https://www.amazon.com/gp/offer-listing/B07XZMHTL5",
         ];
+
+        if ($title) {
+            $data['title'] = $title;
+        }
+        if ($desc) {
+            $data['description'] = $desc;
+        }
+        if ($featureDesc) {
+            $data['featureDescription'] = $featureDesc;
+        }
+        if ($authors) {
+            $data['authors'] = $authors;
+        }
+        if ($stars) {
+            $data['stars'] = $stars;
+        }
+        if ($review) {
+            $data['review'] = $review;
+        }
+        if ($images) {
+            $data['images'] = $images;
+        }
+        
+        return $data;
     }
 }
