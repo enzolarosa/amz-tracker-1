@@ -22,7 +22,7 @@ class OffersCrawler extends Amazon
 
         foreach ($offers as $k => $offer) {
             $price = trim(optional($offer->find('span.olpOfferPrice')[0])->text);
-            $priceParsed = (float)str_replace([$this->getCurrency(), ',', '.'], ['', '.', ''], $price);
+            $priceParsed = (float)str_replace([$this->getCurrency(), '.', ','], ['', '', '.'], $price);
             $pricePerUnit = trim(optional($offer->find('span.olpOfferPrice')[0])->text);
             $offerCondition = trim(preg_replace('/\s\s+/', '', optional($offer->find('span.olpCondition')[0])->text));
             $shippingPrice = optional($offer->find('span.olpShippingPrice')[0])->text;
