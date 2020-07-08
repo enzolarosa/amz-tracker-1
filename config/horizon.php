@@ -85,6 +85,9 @@ return [
 
     'waits' => [
         'redis:default' => 60,
+        'redis:logging' => 60,
+        'redis:notify-telegram' => 60,
+        'redis:amz-product' => 60 * 9,
     ],
 
     /*
@@ -223,7 +226,7 @@ return [
                 'balance' => 'simple',
                 'min-processes' => 0,
                 'max-processes' => 5,
-                'tries' => 3,
+                'tries' => 1,
                 'timeout' => 60 * 9,
             ],
             'notification' => [
