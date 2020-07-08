@@ -9,6 +9,7 @@ use App\Logging\GuzzleLogger;
 use DateTime;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Monolog\Logger;
@@ -74,6 +75,9 @@ class AmazonProductJob extends Job
      */
     public function handle()
     {
+        $concurrency = 32;
+        $delayBtwRequest = 15; //seconds
+
         $detailUrl = $this->getProductUrl('detail');
         $offerUrl = $this->getProductUrl('offer');
         $shopUrl = $this->getProductUrl('shop');
@@ -86,8 +90,11 @@ class AmazonProductJob extends Job
         $observer->setShopUrl($shopUrl);
 
         Crawler::create($this->clientOptions())
-            ->setCrawlObserver($observer)
             ->ignoreRobots()
+            ->setUserAgent(Arr::random(UserAgent::get()))
+            ->setConcurrency($concurrency)
+            ->setDelayBetweenRequests($delayBtwRequest)
+            ->setCrawlObserver($observer)
             ->setMaximumCrawlCount(1)
             ->startCrawling($detailUrl);
 
@@ -99,8 +106,11 @@ class AmazonProductJob extends Job
         $observer->setShopUrl($shopUrl);
 
         Crawler::create($this->clientOptions())
-            ->setCrawlObserver($observer)
             ->ignoreRobots()
+            ->setUserAgent(Arr::random(UserAgent::get()))
+            ->setConcurrency($concurrency)
+            ->setDelayBetweenRequests($delayBtwRequest)
+            ->setCrawlObserver($observer)
             ->setMaximumCrawlCount(1)
             ->startCrawling($offerUrl);
     }
@@ -134,14 +144,13 @@ class AmazonProductJob extends Job
         }));
 
         return [
-            'verify' => config('app.env') !== 'local',
             'handler' => $handler,
-            'timeout' => 60 * 8,
-            'headers' => [
-                'Accept-Encoding' => 'gzip, deflate, br',
-                'Connection' => 'keep-alive',
+            RequestOptions::VERIFY => config('app.env') !== 'local',
+            RequestOptions::CONNECT_TIMEOUT => 60 * 8,
+            RequestOptions::TIMEOUT => 60 * 8,
+            RequestOptions::HEADERS => [
                 'User-Agent' => Arr::random(UserAgent::get()),
-            ]
+            ],
         ];
     }
 

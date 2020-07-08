@@ -8,6 +8,8 @@ use App\Console\Commands\DispatchAmzCheckerCommand;
 use App\Console\Commands\UpdateProductCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use MarcusMyers\AccuWeatherTile\Commands\FetchAccuWeatherCurrentConditionsCommand;
+use MarcusMyers\AccuWeatherTile\Commands\FetchAccuWeatherFiveDayForecastCommand;
 
 class Kernel extends ConsoleKernel
 {
@@ -40,7 +42,7 @@ class Kernel extends ConsoleKernel
 
     public function hourly(Schedule $schedule)
     {
-    //    $schedule->command('amz:update-product')->everyTenMinutes();
+        //    $schedule->command('amz:update-product')->everyTenMinutes();
     }
 
     public function daily(Schedule $schedule)
@@ -62,8 +64,8 @@ class Kernel extends ConsoleKernel
 
     public function dashboard(Schedule $schedule)
     {
-        $schedule->command(\MarcusMyers\AccuWeatherTile\Commands\FetchAccuWeatherCurrentConditionsCommand::class)->hourly();
-        $schedule->command(\MarcusMyers\AccuWeatherTile\Commands\FetchAccuWeatherFiveDayForecastCommand::class)->daily();
+        $schedule->command(FetchAccuWeatherCurrentConditionsCommand::class)->hourly();
+        $schedule->command(FetchAccuWeatherFiveDayForecastCommand::class)->daily();
 
         $schedule->command(FetchForgeServersCommand::class)->hourly();
         $schedule->command(FetchForgeRecentEventsCommand::class)->everyMinute();
