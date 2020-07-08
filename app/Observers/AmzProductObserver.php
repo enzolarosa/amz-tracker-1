@@ -65,7 +65,6 @@ class AmzProductObserver
      */
     protected function onSaving(AmzProduct $product)
     {
-        dump("sellers changed? " . $product->isDirty('sellers'));
         if ($product->isDirty('sellers') && !is_null($product->sellers) && $product->sellers->count() > 0) {
             $product->current_price = Arr::first($product->sellers)['priceParsed']; // get the minium price
         }
@@ -80,14 +79,7 @@ class AmzProductObserver
      */
     protected function onSaved(AmzProduct $product)
     {
-        dump("notify?" .
-            $product->wasChanged('current_price') && $product->current_price < $product->preview_price,
-            $product->current_price, $product->preview_price,
-            "current price changed? " . $product->wasChanged('current_price')
-        );
-
         if ($product->wasChanged('current_price') && $product->current_price < $product->preview_price) {
-            dump('changes', $product->getChanges());
             $event = new ProductPriceChangedEvent();
             $event->setProduct($product);
             event($event);
