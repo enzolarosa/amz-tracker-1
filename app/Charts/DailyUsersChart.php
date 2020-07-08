@@ -35,7 +35,7 @@ class DailyUsersChart extends Chart
 
     public function type(): string
     {
-        return 'bar';
+        return 'line';
     }
 
     public function options(): array

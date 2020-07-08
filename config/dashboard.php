@@ -44,8 +44,7 @@ return [
             'date_format' => 'd/m',
         ],
         'charts' => [
-            'refresh_interval_in_seconds' => 60*5,
+            'refresh_interval_in_seconds' => 60 * 5,
         ],
-
     ],
 ];
