@@ -135,7 +135,7 @@ class AmazonProductJob extends Job
 
         return [
             'verify' => config('app.env') !== 'local',
-            //'handler' => $handler,
+            'handler' => $handler,
             'timeout' => 60 * 8,
             'headers' => [
                 'Accept-Encoding' => 'gzip, deflate, br',
