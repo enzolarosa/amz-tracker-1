@@ -35,6 +35,7 @@ class TraceRequestMiddleware
         $reqId = $request->header(self::X_REQUEST_ID);
 
         $log = RequestLog::query()->where('request_id', $reqId)->first();
+
         session(["request_{$reqId}_start" => $startTime]);
         session(["request_{$reqId}_provider" => $provider]);
 

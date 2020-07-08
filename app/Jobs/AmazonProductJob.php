@@ -32,6 +32,7 @@ class AmazonProductJob extends Job
         'CA' => 'https://www.amazon.ca',
         'JP' => 'https://www.amazon.co.jp',
     ];
+
     protected array $currency = [
         'US' => 'USD',
         'UK' => 'GBP',
