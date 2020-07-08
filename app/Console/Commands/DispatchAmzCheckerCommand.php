@@ -3,9 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Jobs\AmazonProductJob;
-use App\Models\AmzProduct;
-use App\Models\User;
-use App\Notifications\ProductPriceChangedNotification;
 use Illuminate\Console\Command;
 
 class DispatchAmzCheckerCommand extends Command
@@ -33,16 +30,17 @@ class DispatchAmzCheckerCommand extends Command
     {
         $asin = "B07N73J58V";
         $asin = "B01J7QLSB2";
+      //  $asin = 'B07QNZ3XT3'; // focusrite 2i2;
 
         $job = new AmazonProductJob($asin);
         dispatch_now($job);
         $this->comment("\nDone!");
 
-      /*  $user = User::findOrFail(1);
-        $prod = AmzProduct::query()->where('asin', $asin)->first();
+        /*  $user = User::findOrFail(1);
+          $prod = AmzProduct::query()->where('asin', $asin)->first();
 
-        $not = new ProductPriceChangedNotification();
-        $not->setProduct($prod);
-        $user->notify($not);*/
+          $not = new ProductPriceChangedNotification();
+          $not->setProduct($prod);
+          $user->notify($not);*/
     }
 }

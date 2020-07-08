@@ -21,38 +21,45 @@ class OffersCrawler extends Amazon
         $sellers = [];
 
         foreach ($offers as $k => $offer) {
-            $price = optional($offer->find('span.olpOfferPrice')[0])->text;
+            $price = trim(optional($offer->find('span.olpOfferPrice')[0])->text);
             $priceParsed = (float)str_replace([$this->getCurrency(), ','], ['', '.'], $price);
             $pricePerUnit = trim(optional($offer->find('span.olpOfferPrice')[0])->text);
             $offerCondition = trim(preg_replace('/\s\s+/', '', optional($offer->find('span.olpCondition')[0])->text));
-            $shippingInfo = trim(preg_replace('/\s\s+/', '', optional($offer->find('a.olpFbaPopoverTrigger')[0])->text));
+            $shippingPrice = optional($offer->find('span.olpShippingPrice')[0])->text;
+            $shippingInfo = optional($offer->find('span.olpShippingPriceText')[0])->text;
+
             $prime = optional($offer->find('i.a-icon-prime')[0]) ? true : false;
             $sellerNameEl = optional($offer->find('h3.olpSellerName')[0]);
 
             if ($sellerNameEl) {
-                $sellerName = optional($sellerNameEl->find('a')[0])->text;
-                $shopUrl = optional($sellerNameEl->find('a')[0])->href;
+                $sellerName = trim(optional($sellerNameEl->find('a')[0])->text);
+                $shopUrl = trim(optional($sellerNameEl->find('a')[0])->href);
             }
 
             if (empty($shippingInfo) || $shippingInfo == '') {
-                //$shippingInfos = $this->getElementsByClassName('olpPriceColumn', 'div', $offer);
-                $shippingInfo = 'shipping info not included';
+                $shippingInfo = trim(preg_replace('/\s\s+/', '', optional($offer->find('a.olpFbaPopoverTrigger')[0])->text));
+                if (empty($shippingInfo) || $shippingInfo == '') {
+                    $shippingInfo = 'shipping info not included';
+                }
             }
             if (!$offerCondition) {
                 $offerCondition = 'condition unknown';
             }
 
-            $sellers[] = [
+            $sellers[$k] = [
                 'price' => $price,
                 'priceParsed' => $priceParsed,
                 'condition' => $offerCondition,
                 'sellerName' => $sellerName ?? 'seller unknown',
                 'prime' => $prime,
+                'shippingPrice' => $shippingPrice ?? 0.00,
                 'shippingInfo' => $shippingInfo,
                 'shopUrl' => $shopUrl ?? 'seller unknown',
                 'pricePerUnit' => $pricePerUnit
             ];
         }
+
+        dump($sellers, $offers->count());
 
         return [
             'asin' => $this->getAsin(),

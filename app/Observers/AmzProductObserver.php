@@ -6,7 +6,7 @@ use App\Events\ProductPriceChangedEvent;
 use App\Models\AmzProduct;
 use App\Models\AmzProductLog;
 use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class AmzProductObserver
 {
@@ -65,8 +65,8 @@ class AmzProductObserver
      */
     protected function onSaving(AmzProduct $product)
     {
-        if ($product->isDirty('sellers') && !is_null($product->sellers) && $product->sellers->count() > 0) {
-            $product->current_price = Arr::first($product->sellers)['priceParsed']; // get the minium price
+        if (!is_null($product->sellers) && $product->sellers->count() > 0) {
+            $product->current_price = $this->minPrice($product->sellers);
         }
 
         if (is_null($product->start_price) && !is_null($product->sellers) && $product->sellers->count() > 0) {
@@ -91,5 +91,20 @@ class AmzProductObserver
         ]);
     }
 
+    /**
+     * @param Collection $sellers
+     * @return float
+     */
+    protected function minPrice(Collection $sellers): float
+    {
+        $min = 0;
+        $sellers->each(function ($seller, $index) use (&$min) {
+            if ($index == 0 || $seller['priceParsed'] < $min) {
+                $min = $seller['priceParsed'];
+                return;
+            }
+        });
+        return $min;
+    }
 
 }

@@ -4,6 +4,7 @@ namespace App\Crawler\Amazon;
 
 use App\Models\AmzProduct;
 use DOMDocument;
+use Exception;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
@@ -11,7 +12,6 @@ use PHPHtmlParser\Dom;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Spatie\Crawler\CrawlObserver;
-use stringEncode\Exception;
 
 class Amazon extends CrawlObserver
 {
@@ -121,36 +121,5 @@ class Amazon extends CrawlObserver
     protected function parsePage()
     {
         // TODO: Implement parsePage() method.
-    }
-
-    protected function getImages(DOMDocument $doc): array
-    {
-        $jquery = new Dom();
-        $jquery->load($doc->saveHTML());
-
-        //todo need complete it
-        $elements = $doc->getElementsByTagName('script');
-        /** @var DOMDocument $element */
-        foreach ($elements as $element) {
-            $str = $element->nodeValue;
-            if (Str::contains($str, 'ImageBlockATF')) {
-                $str = str_replace(['\\n', '\\r', PHP_EOL], '', $str);
-                $str = str_replace([
-                    'P.when(\'A\').register("ImageBlockATF", function(A){var data = ',
-                    '\')};A.trigger(\'P.AboveTheFold\'); // trigger ATF event.return data;});',
-                ], '', $str);
-                $json = str_replace([
-                    '\'initial\'',
-                    '\'holderRatio\'',
-                ], [
-                    '"initial"',
-                    '"holderRatio"',
-                ], $str);
-
-                dd($json, json_decode($json), json_last_error(), json_last_error_msg());
-            }
-        }
-        dd("done");
-        return [];
     }
 }

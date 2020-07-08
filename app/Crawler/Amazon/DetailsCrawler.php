@@ -3,6 +3,9 @@
 namespace App\Crawler\Amazon;
 
 use App\Models\AmzProduct;
+use DOMDocument;
+use Illuminate\Support\Str;
+use PHPHtmlParser\Dom;
 
 class DetailsCrawler extends Amazon
 {
@@ -59,7 +62,7 @@ class DetailsCrawler extends Amazon
         $desc = trim(optional($doc->getElementById('productDescription'))->nodeValue);
         $title = str_replace(PHP_EOL, '', optional($doc->getElementById('productTitle'))->nodeValue);
         $authors = optional($doc->getElementById('bylineInfo'))->nodeValue;
-        // $images = $this->getImages($doc);
+        //$images = $this->getImages($doc);
         $images = null;
 
         $data = [
@@ -90,7 +93,41 @@ class DetailsCrawler extends Amazon
         if ($images) {
             $data['images'] = $images;
         }
-        
+
         return $data;
     }
+
+
+    protected function getImages(DOMDocument $doc): array
+    {
+        $elements = $doc->getElementsByTagName('script');
+        /** @var DOMDocument $element */
+        foreach ($elements as $element) {
+            $str = $element->nodeValue;
+            if (Str::contains($str, 'ImageBlockATF')) {
+                /*$jquery = new Dom();$jquery->load($doc->saveHTML($element));*/
+
+                $jquery = new Dom();
+                $jquery->load($doc->saveHTML($element));
+
+                $str = str_replace(['\\n', '\\r', PHP_EOL], '', $str);
+                $str = str_replace([
+                    'P.when(\'A\').register("ImageBlockATF", function(A){var data = ',
+                    '\')};A.trigger(\'P.AboveTheFold\'); // trigger ATF event.return data;});',
+                ], '', $str);
+                $json = str_replace([
+                    '\'initial\'',
+                    '\'holderRatio\'',
+                ], [
+                    '"initial"',
+                    '"holderRatio"',
+                ], $str);
+
+                dd($json, json_decode($json), json_last_error(), json_last_error_msg());
+            }
+        }
+        dd("done");
+        return [];
+    }
+
 }

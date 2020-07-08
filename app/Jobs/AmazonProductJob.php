@@ -75,9 +75,6 @@ class AmazonProductJob extends Job
      */
     public function handle()
     {
-        $concurrency = 32;
-        $delayBtwRequest = 15; //seconds
-
         $detailUrl = $this->getProductUrl('detail');
         $offerUrl = $this->getProductUrl('offer');
         $shopUrl = $this->getProductUrl('shop');
@@ -91,9 +88,8 @@ class AmazonProductJob extends Job
 
         Crawler::create($this->clientOptions())
             ->ignoreRobots()
-            ->setUserAgent(Arr::random(UserAgent::get()))
-            ->setConcurrency($concurrency)
-            ->setDelayBetweenRequests($delayBtwRequest)
+            //   ->setUserAgent(Arr::random(UserAgent::get()))
+            //  ->setConcurrency($concurrency)
             ->setCrawlObserver($observer)
             ->setMaximumCrawlCount(1)
             ->startCrawling($detailUrl);
@@ -107,9 +103,9 @@ class AmazonProductJob extends Job
 
         Crawler::create($this->clientOptions())
             ->ignoreRobots()
-            ->setUserAgent(Arr::random(UserAgent::get()))
-            ->setConcurrency($concurrency)
-            ->setDelayBetweenRequests($delayBtwRequest)
+            //  ->setUserAgent(Arr::random(UserAgent::get()))
+            // ->setConcurrency($concurrency)
+            //   ->setDelayBetweenRequests($delayBtwRequest)
             ->setCrawlObserver($observer)
             ->setMaximumCrawlCount(1)
             ->startCrawling($offerUrl);
@@ -145,11 +141,15 @@ class AmazonProductJob extends Job
 
         return [
             'handler' => $handler,
+            RequestOptions::COOKIES => true,
             RequestOptions::VERIFY => config('app.env') !== 'local',
             RequestOptions::CONNECT_TIMEOUT => 60 * 8,
             RequestOptions::TIMEOUT => 60 * 8,
             RequestOptions::HEADERS => [
                 'User-Agent' => Arr::random(UserAgent::get()),
+                'Accept-Encoding' => 'gzip, deflate, br',
+                'Connection' => 'keep-alive',
+                'X-Requested-With' => 'XMLHttpRequest',
             ],
         ];
     }
