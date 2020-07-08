@@ -166,8 +166,8 @@ class AmazonProductJob extends Job
     {
         $rateLimitedMiddleware = (new RateLimited())
             ->allow(10)
-            ->everySeconds(60)
-            ->releaseAfterOneMinute()
+            ->everyMinutes(2)
+            ->releaseAfterMinutes(5)
             ->releaseAfterBackoff($this->attempts());
 
         return [$rateLimitedMiddleware];
