@@ -41,6 +41,7 @@ return [
                 'start',
                 'help',
                 App\Telegram\Commands\AddProductCommand::class,
+                App\Telegram\Commands\ListProductCommand::class,
                 'stop',
             ],
         ],
