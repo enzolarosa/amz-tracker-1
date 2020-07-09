@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Events\Common\WriteLogEvent;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class RequestLog extends Model
@@ -14,6 +13,11 @@ class RequestLog extends Model
         'response',
         'provider',
         'timing'
+    ];
+    
+    protected $casts = [
+        'response' => 'collection',
+        'request' => 'collection',
     ];
 
     public static function log(array $attributes): void
