@@ -14,7 +14,7 @@ class RequestLog extends Model
         'provider',
         'timing'
     ];
-    
+
     protected $casts = [
         'response' => 'collection',
         'request' => 'collection',

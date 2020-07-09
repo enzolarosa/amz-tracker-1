@@ -57,8 +57,6 @@ class AmazonProductJob extends Job
      */
     protected function needDetails(AmzProduct $product): bool
     {
-        return is_null($product->title) || is_null($product->description) ||
-            is_null($product->featureDescription) || is_null($product->author) ||
-            $product->created_at <= now()->subWeek();
+        return is_null($product->title) || $product->created_at <= now()->subWeek();
     }
 }
