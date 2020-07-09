@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\RequestLog;
 use Closure;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
@@ -71,10 +72,10 @@ class TraceRequestMiddleware
         ];
 
         RequestLog::log([
-            'request_id' => $reqId,
+            'request_id' => $request->header(self::X_REQUEST_ID),
             'provider' => $provider,
-            'request' => (string)json_encode($dataToLog),
-            'response' => (string)json_encode($response),
+            'request' => $dataToLog,
+            'response' => $response instanceof RedirectResponse ? ['class' => get_class($response)] : $response,
         ]);
     }
 }

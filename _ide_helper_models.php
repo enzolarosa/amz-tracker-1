@@ -36,6 +36,31 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\ShortUrl
+ *
+ * @property int $id
+ * @property string $code
+ * @property string $link
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ShortUrl newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ShortUrl newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ShortUrl query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ShortUrl whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ShortUrl whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ShortUrl whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ShortUrl whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ShortUrl whereLink($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ShortUrl whereUpdatedAt($value)
+ */
+    class ShortUrl extends \Eloquent
+    {
+    }
+}
+
+namespace App\Models{
+/**
  * App\Models\User
  *
  * @property int $id

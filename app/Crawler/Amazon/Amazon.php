@@ -113,7 +113,9 @@ class Amazon extends CrawlObserver
         }
         $msg = sprintf(
             'The `%s` link have some issues: status code `%s` message: %s',
-            $requestException->getRequest()->getUri(), $status, $requestException->getMessage(),
+            $requestException->getRequest()->getUri(),
+            $status,
+            $requestException->getMessage(),
         );
         throw new Exception($msg);
     }

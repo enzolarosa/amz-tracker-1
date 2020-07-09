@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\AmzProduct;
+use App\Models\ShortUrl;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -16,16 +17,6 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
     protected AmzProduct $product;
 
     /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->onQueue('notification');
-    }
-
-    /**
      * Get the notification's delivery channels.
      *
      * @param mixed $notifiable
@@ -36,11 +27,30 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
         return [TelegramChannel::class];
     }
 
+    /**
+     * Determine which queues should be used for each notification channel.
+     *
+     * @return array
+     */
+    public function viaQueues()
+    {
+        return [
+            TelegramChannel::class => 'notify-telegram',
+        ];
+    }
+
     public function toTelegram($notifiable)
     {
         return TelegramMessage::create()
-            ->content(sprintf("Hi I've good new\nYour product '*%s*' price now is *%s* (preview: %s)", $this->getProduct()->title, $this->getProduct()->current_price, $this->getProduct()->preview_price))
-            ->button('Buy product', $this->getProduct()->itemDetailUrl . '?tag=' . env('AMZ_PARTNER'));
+            ->content(
+                sprintf(
+                    "Hi I've good new\nYour product '*%s*' price now is *%s* (preview: %s)\n\nLink: %s",
+                    $this->getProduct()->title,
+                    $this->getProduct()->current_price,
+                    $this->getProduct()->preview_price,
+                    ShortUrl::hideLink($this->getProduct()->itemDetailUrl . '?tag=' . env('AMZ_PARTNER'))
+                )
+            );
     }
 
     /**
@@ -57,17 +67,5 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
     public function setProduct(AmzProduct $product): void
     {
         $this->product = $product;
-    }
-
-    /**
-     * Determine which queues should be used for each notification channel.
-     *
-     * @return array
-     */
-    public function viaQueues()
-    {
-        return [
-           TelegramChannel::class => 'notify-telegram',
-        ];
     }
 }

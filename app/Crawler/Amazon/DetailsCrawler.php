@@ -129,5 +129,4 @@ class DetailsCrawler extends Amazon
         dd("done");
         return [];
     }
-
 }

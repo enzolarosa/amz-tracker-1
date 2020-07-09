@@ -30,7 +30,7 @@ class DispatchAmzCheckerCommand extends Command
     {
         $asin = "B07N73J58V";
         $asin = "B01J7QLSB2";
-      //  $asin = 'B07QNZ3XT3'; // focusrite 2i2;
+        //  $asin = 'B07QNZ3XT3'; // focusrite 2i2;
 
         $job = new AmazonProductJob($asin);
         dispatch_now($job);

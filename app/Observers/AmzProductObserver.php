@@ -107,5 +107,4 @@ class AmzProductObserver
         });
         return $min;
     }
-
 }

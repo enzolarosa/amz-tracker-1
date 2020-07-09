@@ -25,3 +25,8 @@ Route::post('amztracker/telegram', function () {
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard')->withoutMiddleware('log-request:web-in');
+
+
+Route::get('/go/{shortUrl}', 'ShortUrlController@go')->name('short-url-go')
+    ->withoutMiddleware('log-request:web-in')
+    ->middleware('log-request:short-url-in');
