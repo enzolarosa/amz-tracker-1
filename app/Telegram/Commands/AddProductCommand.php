@@ -47,6 +47,11 @@ class AddProductCommand extends Command
         ]);
 
         $asin = $args['asin'];
+        if (empty($asin) || $asin = '') {
+            $this->replyWithMessage(['text' => 'Please give me a valid `asin` string']);
+            return;
+        }
+
         $product = AmzProduct::query()->firstOrCreate(['asin' => $asin]);
 
         AmzProductUser::query()->updateOrCreate([
