@@ -46,8 +46,8 @@ class AddProductCommand extends Command
             'active' => true,
         ]);
 
-        $asin = $args['asin'];
-        if (empty($asin) || $asin = '') {
+        $asin = $args['asin'] ?? null;
+        if (is_null($asin) || empty($asin)) {
             $this->replyWithMessage(['text' => 'Please give me a valid `asin` string']);
             return;
         }
