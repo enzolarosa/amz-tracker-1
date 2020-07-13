@@ -3,6 +3,7 @@
 namespace App\Jobs\Amazon;
 
 use App\Crawler\Amazon\OffersCrawler;
+use GuzzleHttp\Cookie\CookieJar;
 use Illuminate\Support\Arr;
 use Spatie\Crawler\Crawler;
 
@@ -37,12 +38,14 @@ class ProductOffersJob extends Amazon
         $observer->setCountry(Arr::first($this->countries));
         $observer->setShopUrl($shopUrl);
 
-        Crawler::create($this->clientOptions())
+        $jar = session('amz_cookies', new CookieJar);
+        Crawler::create($this->clientOptions($jar))
             ->ignoreRobots()
             ->setConcurrency($this->concurrency)
             ->setCrawlObserver($observer)
             ->setMaximumCrawlCount(1)
             ->setDelayBetweenRequests($this->delayBtwRequest)
             ->startCrawling($offerUrl);
+        session(['amz_cookies' => $jar]);
     }
 }

@@ -33,7 +33,7 @@ class DispatchAmzCheckerCommand extends Command
         //  $asin = 'B07QNZ3XT3'; // focusrite 2i2;
 
         $job = new AmazonProductJob($asin);
-        dispatch_now($job);
+        dispatch($job);
         $this->comment("\nDone!");
 
         /*  $user = User::findOrFail(1);

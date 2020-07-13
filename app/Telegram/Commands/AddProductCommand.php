@@ -51,7 +51,7 @@ class AddProductCommand extends Command
             $this->replyWithMessage(['text' => 'Please give me a valid `asin` string']);
             return;
         }
-        
+
         preg_match('/([A-Z0-9]{10})/', $str, $prod, PREG_OFFSET_CAPTURE);
         $asin = $prod[0][0];
 

@@ -6,6 +6,7 @@ use App\Common\UserAgent;
 use App\Jobs\Job;
 use App\Logging\GuzzleLogger;
 use DateTime;
+use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\RequestOptions;
@@ -95,7 +96,7 @@ class Amazon extends Job
         return "{$this->baseUrls[Arr::first($this->countries)]}/$url/{$this->asin}";
     }
 
-    protected function clientOptions(): array
+    protected function clientOptions(CookieJar &$cookieJar): array
     {
         $handler = HandlerStack::create();
         $handler->push(Middleware::log(
@@ -110,7 +111,7 @@ class Amazon extends Job
 
         return [
             'handler' => $handler,
-            RequestOptions::COOKIES => true,
+            RequestOptions::COOKIES => $cookieJar,
             RequestOptions::VERIFY => config('app.env') !== 'local',
             RequestOptions::CONNECT_TIMEOUT => 60 * 8,
             RequestOptions::TIMEOUT => 60 * 8,
