@@ -21,7 +21,7 @@ class Amazon extends Job
     protected int $concurrency = 5;
     protected int $delayBtwRequest = 10;
 
-    protected string $asin;
+    protected ?string $asin = null;
     protected array $countries;
 
     protected array $baseUrls = [

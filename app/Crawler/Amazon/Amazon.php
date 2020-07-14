@@ -7,8 +7,6 @@ use DOMDocument;
 use Exception;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Response;
-use Illuminate\Support\Str;
-use PHPHtmlParser\Dom;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Spatie\Crawler\CrawlObserver;
@@ -17,6 +15,8 @@ class Amazon extends CrawlObserver
 {
     protected DOMDocument $doc;
     protected ResponseInterface $response;
+    protected UriInterface $uri;
+
     protected string $currency;
     protected string $asin;
     protected string $country;
@@ -92,6 +92,7 @@ class Amazon extends CrawlObserver
         @$doc->loadHTML($response->getBody());
         $this->doc = $doc;
         $this->response = $response;
+        $this->uri = $url;
 
         $prod = AmzProduct::query()->firstOrCreate(['asin' => $this->getAsin()]);
 

@@ -9,7 +9,7 @@ class OffersCrawler extends Amazon
 {
     protected function parsePage()
     {
-        $prod = AmzProduct::query()->where('asin', $this->getAsin())->first();
+        $prod = AmzProduct::query()->firstOrCreate(['asin'=> $this->getAsin()]);
         if (is_null($prod)) {
             return null;
         }

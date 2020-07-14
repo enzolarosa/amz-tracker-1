@@ -5,6 +5,7 @@ namespace App\Console;
 use aglipanci\ForgeTile\Commands\FetchForgeRecentEventsCommand;
 use aglipanci\ForgeTile\Commands\FetchForgeServersCommand;
 use App\Console\Commands\DispatchAmzCheckerCommand;
+use App\Console\Commands\SearchProductCommand;
 use App\Console\Commands\UpdateProductCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -21,6 +22,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         DispatchAmzCheckerCommand::class,
         UpdateProductCommand::class,
+        SearchProductCommand::class,
     ];
 
     /**

@@ -2,7 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\AmazonProductJob;
+use App\Jobs\Amazon\SearchJob;
+use App\Models\User;
 use Illuminate\Console\Command;
 
 class DispatchAmzCheckerCommand extends Command
@@ -28,13 +29,16 @@ class DispatchAmzCheckerCommand extends Command
      */
     public function handle()
     {
-        $asin = "B07N73J58V";
-        $asin = "B01J7QLSB2";
         //  $asin = 'B07QNZ3XT3'; // focusrite 2i2;
 
-        $job = new AmazonProductJob($asin);
-        dispatch($job);
-        $this->comment("\nDone!");
+        /*$job = new AmazonProductJob($asin);
+      dispatch($job);
+      $this->comment("\nDone!");*/
+
+        $user = User::find(1);
+        $job = new SearchJob("smart working");
+        $job->setUser($user);
+        dispatch_now($job);
 
         /*  $user = User::findOrFail(1);
           $prod = AmzProduct::query()->where('asin', $asin)->first();

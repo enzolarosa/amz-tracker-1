@@ -185,6 +185,7 @@ return [
                 'connection' => 'redis',
                 'queue' => [
                     'amz-product',
+                    'amz-search',
                 ],
                 'balance' => 'auto',
                 'min-processes' => 0,
@@ -234,6 +235,7 @@ return [
                 'connection' => 'redis',
                 'queue' => [
                     'amz-product',
+                    'amz-search',
                 ],
                 'balance' => 'auto',
                 'min-processes' => 0,
