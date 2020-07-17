@@ -44,8 +44,8 @@ class Kernel extends ConsoleKernel
 
     public function hourly(Schedule $schedule)
     {
-        $schedule->command('amz:notify')->everyMinute()->withoutOverlapping();
-        $schedule->command('amz:update-product')->everyMinute()->withoutOverlapping();
+        $schedule->command('amz:notify')->everyMinute();
+        $schedule->command('amz:update-product')->everyTenMinutes();
     }
 
     public function daily(Schedule $schedule)
