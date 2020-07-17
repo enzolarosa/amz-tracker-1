@@ -65,3 +65,4 @@ class ProcessNotificationCommand extends Command
         $this->comment("\nDone!");
     }
 }
+
