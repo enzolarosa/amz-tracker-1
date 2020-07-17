@@ -38,8 +38,10 @@ class ProductDetailsJob extends Amazon
         $observer->setAsin($this->asin);
         $observer->setCountry(Arr::first($this->countries));
         $observer->setShopUrl($shopUrl);
-        $browsershot = new Browsershot();
 
+        $browsershot = new Browsershot();
+        $browsershot->setNodeBinary(env('NODE_PATH'));
+        $browsershot->setNpmBinary(env('NPM_PATH'));
         $jar = session('amz_cookies', new CookieJar);
         Crawler::create($this->clientOptions($jar))
             ->ignoreRobots()

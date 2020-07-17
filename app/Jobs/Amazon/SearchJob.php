@@ -55,6 +55,9 @@ class SearchJob extends Amazon
         $observer->setUser($this->getUser());
 
         $browsershot = new Browsershot();
+        $browsershot->setNodeBinary(env('NODE_PATH'));
+        $browsershot->setNpmBinary(env('NPM_PATH'));
+
         $jar = session('amz_cookies', new CookieJar);
         Crawler::create($this->clientOptions($jar))
             ->ignoreRobots()
