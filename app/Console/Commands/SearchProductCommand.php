@@ -32,6 +32,6 @@ class SearchProductCommand extends Command
         $this->comment("I'll search $keyword product!");
 
         $job = new SearchJob($keyword);
-        dispatch_now($job);
+        dispatch($job);
     }
 }

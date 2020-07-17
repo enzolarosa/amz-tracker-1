@@ -18,8 +18,8 @@ use Spatie\RateLimitedMiddleware\RateLimited;
 
 class Amazon extends Job
 {
-    protected int $concurrency = 5;
-    protected int $delayBtwRequest = 10;
+    protected int $concurrency = 1;
+    protected int $delayBtwRequest = 25;
 
     protected ?string $asin = null;
     protected array $countries;

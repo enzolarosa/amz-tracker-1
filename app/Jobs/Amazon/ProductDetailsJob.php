@@ -44,6 +44,7 @@ class ProductDetailsJob extends Amazon
         $browsershot->setNpmBinary(env('NPM_PATH'));
         Crawler::create($this->clientOptions())
             ->ignoreRobots()
+            ->acceptNofollowLinks()
             ->setConcurrency($this->concurrency)
             ->setCrawlObserver($observer)
             ->setMaximumCrawlCount(1)

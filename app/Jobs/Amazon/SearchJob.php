@@ -4,7 +4,6 @@ namespace App\Jobs\Amazon;
 
 use App\Crawler\Amazon\SearchCrawler;
 use App\Models\User;
-use GuzzleHttp\Cookie\CookieJar;
 use Illuminate\Support\Arr;
 use Spatie\Browsershot\Browsershot;
 use Spatie\Crawler\Crawler;
@@ -59,6 +58,7 @@ class SearchJob extends Amazon
         $browsershot->setNpmBinary(env('NPM_PATH'));
         Crawler::create($this->clientOptions())
             ->ignoreRobots()
+            ->acceptNofollowLinks()
             ->setConcurrency($this->concurrency)
             ->setCrawlObserver($observer)
             ->setMaximumCrawlCount(1)
