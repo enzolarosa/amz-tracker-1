@@ -5,6 +5,7 @@ namespace App\Jobs\Amazon;
 use App\Crawler\Amazon\DetailsCrawler;
 use GuzzleHttp\Cookie\CookieJar;
 use Illuminate\Support\Arr;
+use Spatie\Browsershot\Browsershot;
 use Spatie\Crawler\Crawler;
 
 class ProductDetailsJob extends Amazon
@@ -37,6 +38,7 @@ class ProductDetailsJob extends Amazon
         $observer->setAsin($this->asin);
         $observer->setCountry(Arr::first($this->countries));
         $observer->setShopUrl($shopUrl);
+        $browsershot = new Browsershot();
 
         $jar = session('amz_cookies', new CookieJar);
         Crawler::create($this->clientOptions($jar))
@@ -45,6 +47,7 @@ class ProductDetailsJob extends Amazon
             ->setCrawlObserver($observer)
             ->setMaximumCrawlCount(1)
             ->setDelayBetweenRequests($this->delayBtwRequest)
+            ->setBrowsershot($browsershot)->executeJavaScript()
             ->startCrawling($detailUrl);
         session(['amz_cookies' => $jar]);
     }

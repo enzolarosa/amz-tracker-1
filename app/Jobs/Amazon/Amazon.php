@@ -60,9 +60,7 @@ class Amazon extends Job
     {
         $rateLimitedMiddleware = (new RateLimited())
             ->allow(10)
-            ->everyMinutes(2)
-            ->releaseAfterMinutes(5)
-            ->releaseAfterBackoff($this->attempts());
+            ->everyMinutes(2);
 
         return [$rateLimitedMiddleware];
     }

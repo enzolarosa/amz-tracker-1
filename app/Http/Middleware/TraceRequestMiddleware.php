@@ -71,11 +71,15 @@ class TraceRequestMiddleware
             'input' => (string)$request->getContent(),
         ];
 
+        if ($response instanceof RedirectResponse || $response instanceof Closure) {
+            $response = get_class($response);
+        }
+
         RequestLog::log([
             'request_id' => $request->header(self::X_REQUEST_ID),
             'provider' => $provider,
             'request' => $dataToLog,
-            'response' => $response instanceof RedirectResponse ? ['class' => get_class($response)] : $response,
+            'response' => $response,
         ]);
     }
 }

@@ -56,4 +56,9 @@ class User extends Authenticatable
     {
         return $this->tId;
     }
+
+    public function notifications($enabled = true)
+    {
+        return $this->hasMany(Notification::class);
+    }
 }

@@ -76,8 +76,6 @@ namespace App\Models{
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AmzProduct[] $products
  * @property-read int|null $products_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newModelQuery()
@@ -131,13 +129,40 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Notification
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $amz_product_id
+ * @property bool $sent
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\AmzProduct $product
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereAmzProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereSent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereUserId($value)
+ */
+    class Notification extends \Eloquent
+    {
+    }
+}
+
+namespace App\Models{
+/**
  * App\Models\RequestLog
  *
  * @property int $id
  * @property string $provider
  * @property string $request_id
- * @property string $request
- * @property string $response
+ * @property \Illuminate\Support\Collection $request
+ * @property \Illuminate\Support\Collection $response
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RequestLog newModelQuery()

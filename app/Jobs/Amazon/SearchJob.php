@@ -6,6 +6,7 @@ use App\Crawler\Amazon\SearchCrawler;
 use App\Models\User;
 use GuzzleHttp\Cookie\CookieJar;
 use Illuminate\Support\Arr;
+use Spatie\Browsershot\Browsershot;
 use Spatie\Crawler\Crawler;
 
 class SearchJob extends Amazon
@@ -53,6 +54,7 @@ class SearchJob extends Amazon
         $observer->setCountry(Arr::first($this->countries));
         $observer->setUser($this->getUser());
 
+        $browsershot = new Browsershot();
         $jar = session('amz_cookies', new CookieJar);
         Crawler::create($this->clientOptions($jar))
             ->ignoreRobots()
@@ -60,6 +62,7 @@ class SearchJob extends Amazon
             ->setCrawlObserver($observer)
             ->setMaximumCrawlCount(1)
             ->setDelayBetweenRequests($this->delayBtwRequest)
+            ->setBrowsershot($browsershot)->executeJavaScript()
             ->startCrawling($search);
 
         session(['amz_cookies' => $jar]);

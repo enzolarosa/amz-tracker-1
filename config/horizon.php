@@ -88,6 +88,7 @@ return [
         'redis:logging' => 60,
         'redis:notify-telegram' => 60,
         'redis:amz-product' => 60 * 9,
+        'redis:amz-search' => 60 * 9,
     ],
 
     /*
@@ -185,7 +186,6 @@ return [
                 'connection' => 'redis',
                 'queue' => [
                     'amz-product',
-                    'amz-search',
                 ],
                 'balance' => 'auto',
                 'min-processes' => 0,
@@ -198,6 +198,7 @@ return [
                 'queue' => [
                     'amz-product-details',
                     'amz-product-offers',
+                    'amz-search',
                 ],
                 'balance' => 'auto',
                 'min-processes' => 0,
@@ -235,7 +236,6 @@ return [
                 'connection' => 'redis',
                 'queue' => [
                     'amz-product',
-                    'amz-search',
                 ],
                 'balance' => 'auto',
                 'min-processes' => 0,
@@ -248,6 +248,7 @@ return [
                 'queue' => [
                     'amz-product-details',
                     'amz-product-offers',
+                    'amz-search',
                 ],
                 'balance' => 'auto',
                 'min-processes' => 0,

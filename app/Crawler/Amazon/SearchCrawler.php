@@ -62,9 +62,8 @@ class SearchCrawler extends CrawlObserver
                     'enabled' => true
                 ]);
             }
-
             $job = new AmazonProductJob($asin);
-            dispatch($job);
+            dispatch($job)->delay(now()->addSeconds(45));
         }
 
         $pagination = $jquery->find('ul.a-pagination');
@@ -75,12 +74,13 @@ class SearchCrawler extends CrawlObserver
             $url = "{$url->getScheme()}://{$url->getHost()}$href";
             $job = new SearchJob('amz-crawler', ['IT'], $url);
             $job->setUser($this->getUser());
-            dispatch($job);
+            dispatch($job)->delay(now()->addMinutes(2));
         }
     }
 
     public function crawlFailed(UriInterface $url, RequestException $requestException, ?UriInterface $foundOnUrl = null)
     {
+        session(['amz_cookies' => null]);
         $status = $requestException->getResponse()->getStatusCode();
         $msg = sprintf(
             'The `%s` link have some issues: status code `%s` message: %s',

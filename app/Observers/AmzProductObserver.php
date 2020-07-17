@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Events\ProductPriceChangedEvent;
 use App\Models\AmzProduct;
 use App\Models\AmzProductLog;
+use App\Models\Notification;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Support\Collection;
 

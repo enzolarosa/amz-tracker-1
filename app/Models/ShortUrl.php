@@ -30,7 +30,7 @@ class ShortUrl extends Model
      * @return string
      */
     public static function hideLink(string $link)
-   {
+    {
         $short = self::query()->create([
             'code' => Str::random(6),
             'link' => $link

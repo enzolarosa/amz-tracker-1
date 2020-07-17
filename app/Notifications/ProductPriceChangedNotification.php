@@ -44,10 +44,10 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
         return TelegramMessage::create()
             ->content(
                 sprintf(
-                    "Hi I've good new\nYour product '*%s*' price now is *%s* (preview: %s)\n\nLink: %s",
+                    "Good news for you!\n\nThe product '*%s*' price now is *%s* (preview: %s)\n\nLink: %s",
                     $this->getProduct()->title,
-                    $this->getProduct()->current_price,
-                    $this->getProduct()->preview_price,
+                    number_format($this->getProduct()->current_price, 2, ',', '.') . "€",
+                    number_format($this->getProduct()->preview_price, 2, ',', '.') . "€",
                     ShortUrl::hideLink($this->getProduct()->itemDetailUrl . '?tag=' . env('AMZ_PARTNER'))
                 )
             );

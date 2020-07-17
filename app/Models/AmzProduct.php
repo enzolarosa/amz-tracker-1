@@ -39,4 +39,9 @@ class AmzProduct extends Model
             'enabled',
         ])->wherePivot('enabled', $enabled);
     }
+
+    public function notifications($enabled = true)
+    {
+        return $this->hasMany(Notification::class);
+    }
 }

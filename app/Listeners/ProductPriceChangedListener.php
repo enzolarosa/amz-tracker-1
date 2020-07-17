@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\ProductPriceChangedEvent;
 use App\Models\AmzProduct;
+use App\Models\Notification;
 use App\Models\User;
 use App\Notifications\ProductPriceChangedNotification;
 
@@ -22,9 +23,11 @@ class ProductPriceChangedListener
         $users = $prod->users()->where('active', true)->get();
         $users->each(function (User $user) use ($prod) {
             if ($this->shouldNotify($user, $prod)) {
-                $notification = new ProductPriceChangedNotification();
-                $notification->setProduct($prod);
-                $user->notify($notification);
+                Notification::query()->firstOrCreate([
+                    'user_id' => $user->id,
+                    'amz_product_id' => $prod->id,
+                    'sent' => false
+                ]);
             }
         });
     }
