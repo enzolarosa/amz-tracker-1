@@ -94,7 +94,7 @@ class Amazon extends Job
         return "{$this->baseUrls[Arr::first($this->countries)]}/$url/{$this->asin}";
     }
 
-    protected function clientOptions(CookieJar &$cookieJar): array
+    protected function clientOptions(?CookieJar &$cookieJar = null): array
     {
         $handler = HandlerStack::create();
         $handler->push(Middleware::log(
@@ -107,9 +107,8 @@ class Amazon extends Job
             return $request->withAddedHeader('X-Request-ID', $requestId);
         }));
 
-        return [
+        $opt = [
             'handler' => $handler,
-            RequestOptions::COOKIES => $cookieJar,
             RequestOptions::VERIFY => config('app.env') !== 'local',
             RequestOptions::CONNECT_TIMEOUT => 60 * 8,
             RequestOptions::TIMEOUT => 60 * 8,
@@ -118,8 +117,15 @@ class Amazon extends Job
                 'Accept-Encoding' => 'gzip, deflate, br',
                 'Connection' => 'keep-alive',
                 'X-Requested-With' => 'XMLHttpRequest',
+                'Accept' => 'text/html,*/*',
+                'Content-Type' => 'application/x-www-form-urlencoded',
             ],
         ];
+        if (!is_null($cookieJar)) {
+            $opt[RequestOptions::COOKIES] = $cookieJar;
+        }
+
+        return $opt;
     }
 
     /**

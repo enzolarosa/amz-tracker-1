@@ -80,7 +80,6 @@ class SearchCrawler extends CrawlObserver
 
     public function crawlFailed(UriInterface $url, RequestException $requestException, ?UriInterface $foundOnUrl = null)
     {
-        session(['amz_cookies' => null]);
         $status = $requestException->getResponse()->getStatusCode();
         $msg = sprintf(
             'The `%s` link have some issues: status code `%s` message: %s',

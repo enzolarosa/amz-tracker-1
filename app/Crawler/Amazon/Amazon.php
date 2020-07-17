@@ -107,7 +107,6 @@ class Amazon extends CrawlObserver
 
     public function crawlFailed(UriInterface $url, RequestException $requestException, ?UriInterface $foundOnUrl = null)
     {
-        session(['amz_cookies' => null]);
         // TODO: Implement crawlFailed() method.
         $status = $requestException->getResponse()->getStatusCode();
         if ($status == Response::HTTP_NOT_FOUND) {

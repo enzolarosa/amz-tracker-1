@@ -42,8 +42,7 @@ class ProductDetailsJob extends Amazon
         $browsershot = new Browsershot();
         $browsershot->setNodeBinary(env('NODE_PATH'));
         $browsershot->setNpmBinary(env('NPM_PATH'));
-        $jar = session('amz_cookies', new CookieJar);
-        Crawler::create($this->clientOptions($jar))
+        Crawler::create($this->clientOptions())
             ->ignoreRobots()
             ->setConcurrency($this->concurrency)
             ->setCrawlObserver($observer)
@@ -51,6 +50,5 @@ class ProductDetailsJob extends Amazon
             ->setDelayBetweenRequests($this->delayBtwRequest)
             ->setBrowsershot($browsershot)->executeJavaScript()
             ->startCrawling($detailUrl);
-        session(['amz_cookies' => $jar]);
     }
 }
