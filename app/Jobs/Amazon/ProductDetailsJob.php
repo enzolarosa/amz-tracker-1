@@ -3,7 +3,6 @@
 namespace App\Jobs\Amazon;
 
 use App\Crawler\Amazon\DetailsCrawler;
-use GuzzleHttp\Cookie\CookieJar;
 use Illuminate\Support\Arr;
 use Spatie\Browsershot\Browsershot;
 use Spatie\Crawler\Crawler;
@@ -42,6 +41,8 @@ class ProductDetailsJob extends Amazon
         $browsershot = new Browsershot();
         $browsershot->setNodeBinary(env('NODE_PATH'));
         $browsershot->setNpmBinary(env('NPM_PATH'));
+        $browsershot->setBinPath(app_path('Crawler/bin/browser.js'));
+
         Crawler::create($this->clientOptions())
             ->ignoreRobots()
             ->acceptNofollowLinks()

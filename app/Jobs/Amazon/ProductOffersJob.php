@@ -42,6 +42,8 @@ class ProductOffersJob extends Amazon
         $browsershot = new Browsershot();
         $browsershot->setNodeBinary(env('NODE_PATH'));
         $browsershot->setNpmBinary(env('NPM_PATH'));
+        $browsershot->setBinPath(app_path('Crawler/bin/browser.js'));
+
         Crawler::create($this->clientOptions())
             ->ignoreRobots()
             ->acceptNofollowLinks()

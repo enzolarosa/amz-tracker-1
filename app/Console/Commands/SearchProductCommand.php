@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\Amazon\SearchJob;
+use App\Models\User;
 use Illuminate\Console\Command;
 
 class SearchProductCommand extends Command
@@ -12,7 +13,7 @@ class SearchProductCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'amz:search {keyword}';
+    protected $signature = 'amz:search {keyword} {--user=}';
 
     /**
      * The console command description.
@@ -30,8 +31,12 @@ class SearchProductCommand extends Command
     {
         $keyword = $this->argument('keyword');
         $this->comment("I'll search $keyword product!");
+        $user = $this->option('user');
 
         $job = new SearchJob($keyword);
-        dispatch($job);
+        if ($user) {
+            $job->setUser(User::findOrFail($user));
+        }
+        dispatch_now($job);
     }
 }
