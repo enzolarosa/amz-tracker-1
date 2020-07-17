@@ -37,6 +37,6 @@ class SearchProductCommand extends Command
         if ($user) {
             $job->setUser(User::findOrFail($user));
         }
-        dispatch_now($job);
+        dispatch($job);
     }
 }
