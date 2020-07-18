@@ -54,24 +54,25 @@ const callChrome = async () => {
     let remoteInstance;
 
     try {
-        if (request.options.remoteInstanceUrl || request.options.browserWSEndpoint ) {
+        if (request.options.remoteInstanceUrl || request.options.browserWSEndpoint) {
             // default options
             let options = {
                 ignoreHTTPSErrors: request.options.ignoreHttpsErrors
             };
 
             // choose only one method to connect to the browser instance
-            if ( request.options.remoteInstanceUrl ) {
+            if (request.options.remoteInstanceUrl) {
                 options.browserURL = request.options.remoteInstanceUrl;
-            } else if ( request.options.browserWSEndpoint ) {
+            } else if (request.options.browserWSEndpoint) {
                 options.browserWSEndpoint = request.options.browserWSEndpoint;
             }
 
             try {
-                browser = await puppeteer.connect( options );
+                browser = await puppeteer.connect(options);
 
                 remoteInstance = true;
-            } catch (exception) { /** does nothing. fallbacks to launching a chromium instance */}
+            } catch (exception) { /** does nothing. fallbacks to launching a chromium instance */
+            }
         }
 
         if (!browser) {
@@ -110,7 +111,7 @@ const callChrome = async () => {
             var domainsArray = JSON.parse(request.options.blockDomains);
             page.on('request', request => {
                 const hostname = URLParse(request.url()).hostname;
-                domainsArray.forEach(function(value){
+                domainsArray.forEach(function (value) {
                     if (hostname.indexOf(value) >= 0) request.abort();
                 });
                 request.continue();
@@ -120,7 +121,7 @@ const callChrome = async () => {
         if (request.options && request.options.blockUrls) {
             var urlsArray = JSON.parse(request.options.blockUrls);
             page.on('request', request => {
-                urlsArray.forEach(function(value){
+                urlsArray.forEach(function (value) {
                     if (request.url().indexOf(value) >= 0) request.abort();
                 });
                 request.continue();
