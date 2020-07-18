@@ -32,4 +32,3 @@ class CrawlRequestFulfilled extends CrawlRequest
         return Setting::read(self::COOKIES_KEY)->value;
     }
 }
-
