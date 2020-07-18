@@ -27,8 +27,10 @@
         "paquettg/php-html-parser": "^2.2",
         "php-webdriver/webdriver": "^1.8",
         "spatie/crawler": "^4.7",
+        "spatie/laravel-csp": "^2.6",
         "spatie/laravel-dashboard": "^1.2",
         "spatie/laravel-rate-limited-job-middleware": "^1.4",
+        "spatie/laravel-server-monitor": "^1.9",
         "stechstudio/laravel-ssh-tunnel": "^2.1",
         "thewirecutter/paapi5-php-sdk": "^1.0"
     },

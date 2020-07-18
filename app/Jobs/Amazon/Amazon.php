@@ -3,6 +3,7 @@
 namespace App\Jobs\Amazon;
 
 use App\Common\UserAgent;
+use App\Crawler\Browsershot;
 use App\Jobs\Job;
 use App\Logging\GuzzleLogger;
 use DateTime;
@@ -18,6 +19,8 @@ use Spatie\RateLimitedMiddleware\RateLimited;
 
 class Amazon extends Job
 {
+    const WAIT_CRAWLER = 30;
+
     protected int $concurrency = 1;
     protected int $delayBtwRequest = 25;
 
@@ -60,7 +63,9 @@ class Amazon extends Job
     {
         $rateLimitedMiddleware = (new RateLimited())
             ->allow(10)
-            ->everyMinutes(2);
+            ->everyMinutes(2)
+            ->releaseAfterMinutes(10)
+            ->releaseAfterBackoff($this->attempts());
 
         return [$rateLimitedMiddleware];
     }
@@ -126,6 +131,26 @@ class Amazon extends Job
         }
 
         return $opt;
+    }
+
+    /**
+     * @return Browsershot
+     */
+    protected function browsershot(): Browsershot
+    {
+        $browsershot = new Browsershot();
+        $browsershot->setNodeBinary(env('NODE_PATH'));
+        $browsershot->setNpmBinary(env('NPM_PATH'));
+        $browsershot->setBinPath(app_path('Crawler/bin/browser.js'));
+        $browsershot->userAgent(Arr::random(UserAgent::get()));
+        $browsershot->setExtraHttpHeaders([
+            'Accept-Encoding' => 'gzip, deflate, br',
+            'Connection' => 'keep-alive',
+            'X-Requested-With' => 'XMLHttpRequest',
+            'Accept' => 'text/html,*/*',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ]);
+        return $browsershot;
     }
 
     /**

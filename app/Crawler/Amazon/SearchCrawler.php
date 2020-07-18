@@ -17,6 +17,8 @@ use Spatie\Crawler\CrawlObserver;
 
 class SearchCrawler extends CrawlObserver
 {
+    const WAIT_CRAWLER = 30;
+
     protected DOMDocument $doc;
     protected ResponseInterface $response;
     protected UriInterface $uri;
@@ -51,6 +53,8 @@ class SearchCrawler extends CrawlObserver
         $jquery->load($doc->saveHTML());
 
         $asins = $jquery->find('div.s-asin');
+        $waitSec = self::WAIT_CRAWLER;
+
         foreach ($asins as $k => $asin) {
             $asin = $asin->{'data-asin'};
             if ($this->getUser()) {
@@ -63,7 +67,9 @@ class SearchCrawler extends CrawlObserver
                 ]);
             }
             $job = new AmazonProductJob($asin);
-            dispatch($job)->delay(now()->addSeconds(45));
+            dispatch($job)->delay(now()->addSeconds($waitSec));
+
+            $waitSec += self::WAIT_CRAWLER;
         }
 
         $pagination = $jquery->find('ul.a-pagination');
@@ -71,10 +77,10 @@ class SearchCrawler extends CrawlObserver
         $href = optional($next->find('a'))->href;
 
         if ($href) {
-            $url = "{$url->getScheme()}://{$url->getHost()}$href";
-            $job = new SearchJob('amz-crawler', ['IT'], $url);
+            $link = "{$url->getScheme()}://{$url->getHost()}$href";
+            $job = new SearchJob('amz-crawler', ['IT'], $link);
             $job->setUser($this->getUser());
-            dispatch($job)->delay(now()->addMinutes(2));
+            dispatch($job)->delay(now()->addSeconds($waitSec * 2));
         }
     }
 
@@ -87,6 +93,12 @@ class SearchCrawler extends CrawlObserver
             $status,
             $requestException->getMessage(),
         );
+
+        $link = "{$url->getScheme()}://{$url->getHost()}{$url->getPath()}?{$url->getQuery()}";
+        $job = new SearchJob('amz-crawler', ['IT'], $link);
+        $job->setUser($this->getUser());
+        dispatch($job)->delay(now()->addHours(4));
+
         throw new Exception($msg);
     }
 

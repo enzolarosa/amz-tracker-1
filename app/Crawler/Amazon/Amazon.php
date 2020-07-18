@@ -2,6 +2,8 @@
 
 namespace App\Crawler\Amazon;
 
+use App\Jobs\Amazon\ProductDetailsJob;
+use App\Jobs\Amazon\ProductOffersJob;
 use App\Models\AmzProduct;
 use DOMDocument;
 use Exception;
@@ -13,6 +15,8 @@ use Spatie\Crawler\CrawlObserver;
 
 class Amazon extends CrawlObserver
 {
+    const WAIT_CRAWLER = 30;
+
     protected DOMDocument $doc;
     protected ResponseInterface $response;
     protected UriInterface $uri;
@@ -109,15 +113,28 @@ class Amazon extends CrawlObserver
     {
         // TODO: Implement crawlFailed() method.
         $status = $requestException->getResponse()->getStatusCode();
-        if ($status == Response::HTTP_NOT_FOUND) {
-            $prod = AmzProduct::query()->where('asin', $this->getAsin())->update(['enabled' => false]);
-        }
+
         $msg = sprintf(
             'The `%s` link have some issues: status code `%s` message: %s',
             $requestException->getRequest()->getUri(),
             $status,
             $requestException->getMessage(),
         );
+
+        if ($status !== Response::HTTP_NOT_FOUND) {
+            if ($this instanceof DetailsCrawler) {
+                $details = new ProductDetailsJob($this->asin);
+                dispatch($details)->delay(now()->addHours(2)->addMinutes(30));
+            }
+
+            if ($this instanceof OffersCrawler) {
+                $offers = new ProductOffersJob($this->asin);
+                dispatch($offers)->delay(now()->addHours(2)->addMinutes(30));
+            }
+        } else {
+            AmzProduct::query()->where('asin', $this->getAsin())->update(['enabled' => false]);
+        }
+
         throw new Exception($msg);
     }
 

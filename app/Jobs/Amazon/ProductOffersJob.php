@@ -3,9 +3,7 @@
 namespace App\Jobs\Amazon;
 
 use App\Crawler\Amazon\OffersCrawler;
-use GuzzleHttp\Cookie\CookieJar;
 use Illuminate\Support\Arr;
-use Spatie\Browsershot\Browsershot;
 use Spatie\Crawler\Crawler;
 
 class ProductOffersJob extends Amazon
@@ -39,11 +37,6 @@ class ProductOffersJob extends Amazon
         $observer->setCountry(Arr::first($this->countries));
         $observer->setShopUrl($shopUrl);
 
-        $browsershot = new Browsershot();
-        $browsershot->setNodeBinary(env('NODE_PATH'));
-        $browsershot->setNpmBinary(env('NPM_PATH'));
-        $browsershot->setBinPath(app_path('Crawler/bin/browser.js'));
-
         Crawler::create($this->clientOptions())
             ->ignoreRobots()
             ->acceptNofollowLinks()
@@ -51,7 +44,8 @@ class ProductOffersJob extends Amazon
             ->setCrawlObserver($observer)
             ->setMaximumCrawlCount(1)
             ->setDelayBetweenRequests($this->delayBtwRequest)
-            ->setBrowsershot($browsershot)->executeJavaScript()
+            ->setBrowsershot($this->browsershot())
+            ->executeJavaScript()
             ->startCrawling($offerUrl);
     }
 }

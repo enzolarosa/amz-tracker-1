@@ -4,7 +4,9 @@ namespace App\Console;
 
 use aglipanci\ForgeTile\Commands\FetchForgeRecentEventsCommand;
 use aglipanci\ForgeTile\Commands\FetchForgeServersCommand;
+use App\Console\Commands\CleanUpSettingCommand;
 use App\Console\Commands\DispatchAmzCheckerCommand;
+use App\Console\Commands\ProcessNotificationCommand;
 use App\Console\Commands\SearchProductCommand;
 use App\Console\Commands\UpdateProductCommand;
 use Illuminate\Console\Scheduling\Schedule;
@@ -44,12 +46,18 @@ class Kernel extends ConsoleKernel
 
     public function hourly(Schedule $schedule)
     {
-        $schedule->command('amz:notify')->everyMinute();
-        $schedule->command('amz:update-product')->everyTenMinutes();
+        $schedule->command(CleanUpSettingCommand::class)->everyMinute();
+
+        $schedule->command(ProcessNotificationCommand::class)->withoutOverlapping()->everyMinute();
+        $schedule->command('server-monitor:run-checks')->withoutOverlapping()->everyMinute();
+        // is need a lot of listener in order to prevent the 503 amz error
+        // $schedule->command(UpdateProductCommand::class)->withoutOverlapping()->everyMinute();
     }
 
     public function daily(Schedule $schedule)
     {
+        // this line should be not present!
+        $schedule->command(UpdateProductCommand::class)->withoutOverlapping()->twiceDaily(4, 16);
         $schedule->command('telegram:webhook', ['amztracker', '--setup'])->dailyAt('02:00');
     }
 

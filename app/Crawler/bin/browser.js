@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer-extra')
+//const puppeteer = require('puppeteer')
 const fs = require('fs');
 const URL = require('url').URL;
 const URLParse = require('url').parse;
@@ -8,10 +9,6 @@ const [, , ...args] = process.argv;
 // Add stealth plugin and use defaults (all tricks to hide puppeteer usage)
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 puppeteer.use(StealthPlugin())
-
-// Add adblocker plugin to block all ads and trackers (saves bandwidth)
-const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
-puppeteer.use(AdblockerPlugin({ blockTrackers: true }))
 
 /**
  * There are two ways for Browsershot to communicate with puppeteer:
@@ -28,16 +25,21 @@ const requestsList = [];
 const getOutput = async (page, request) => {
     let output;
 
-    if (request.action == 'requestsList') {
+    if (request.action === 'requestsList') {
         output = JSON.stringify(requestsList);
 
         return output;
     }
 
-    if (request.action == 'evaluate') {
+    if (request.action === 'evaluate') {
         output = await page.evaluate(request.options.pageFunction);
 
         return output;
+    }
+
+    if (request.action === 'cookie') {
+        output = await page._client.send('Network.getAllCookies');
+        return JSON.stringify(output);
     }
 
     output = await page[request.action](request.options);

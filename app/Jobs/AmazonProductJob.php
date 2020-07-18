@@ -8,6 +8,8 @@ use App\Models\AmzProduct;
 
 class AmazonProductJob extends Job
 {
+    const WAIT_CRAWLER = 30;
+
     protected string $asin;
     protected array $countries;
 
@@ -48,7 +50,7 @@ class AmazonProductJob extends Job
         }
 
         $offers = new ProductOffersJob($this->asin);
-        dispatch($offers);
+        dispatch($offers)->delay(now()->addSeconds(self::WAIT_CRAWLER));
     }
 
     /**

@@ -29,9 +29,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductLog whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductLog whereUpdatedAt($value)
  */
-    class AmzProductLog extends \Eloquent
-    {
-    }
+	class AmzProductLog extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -54,9 +52,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ShortUrl whereLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ShortUrl whereUpdatedAt($value)
  */
-    class ShortUrl extends \Eloquent
-    {
-    }
+	class ShortUrl extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -95,9 +91,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUsername($value)
  */
-    class User extends \Eloquent
-    {
-    }
+	class User extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -122,9 +116,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductUser whereUserId($value)
  */
-    class AmzProductUser extends \Eloquent
-    {
-    }
+	class AmzProductUser extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -149,9 +141,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereUserId($value)
  */
-    class Notification extends \Eloquent
-    {
-    }
+	class Notification extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -176,9 +166,26 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RequestLog whereResponse($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RequestLog whereUpdatedAt($value)
  */
-    class RequestLog extends \Eloquent
-    {
-    }
+	class RequestLog extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Setting
+ *
+ * @property string $id
+ * @property string $key
+ * @property string|null $value
+ * @property string|null $expire_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Setting newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Setting newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Setting query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Setting whereExpireAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Setting whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Setting whereKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Setting whereValue($value)
+ */
+	class Setting extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -227,7 +234,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProduct whereUpdatedAt($value)
  */
-    class AmzProduct extends \Eloquent
-    {
-    }
+	class AmzProduct extends \Eloquent {}
 }
+

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cf15e14dd6a289966a0d9ce55029ba7a",
+    "content-hash": "ad9954644c09e799c22b94a8c36ea8a5",
     "packages": [
         {
             "name": "aglipanci/laravel-dashboard-forge-tile",
@@ -1505,16 +1505,16 @@
         },
         {
             "name": "fidum/laravel-dashboard-chart-tile",
-            "version": "3.0.3",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fidum/laravel-dashboard-chart-tile.git",
-                "reference": "3cd0e353414d8a985045acf89599848c6c81edcb"
+                "reference": "0845d3bd6ed3b635fee1e410b9830a180581362a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fidum/laravel-dashboard-chart-tile/zipball/3cd0e353414d8a985045acf89599848c6c81edcb",
-                "reference": "3cd0e353414d8a985045acf89599848c6c81edcb",
+                "url": "https://api.github.com/repos/fidum/laravel-dashboard-chart-tile/zipball/0845d3bd6ed3b635fee1e410b9830a180581362a",
+                "reference": "0845d3bd6ed3b635fee1e410b9830a180581362a",
                 "shasum": ""
             },
             "require": {
@@ -1571,7 +1571,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-07-06T01:45:57+00:00"
+            "time": "2020-07-17T14:10:27+00:00"
         },
         {
             "name": "friendsofphp/php-cs-fixer",
@@ -4227,6 +4227,54 @@
             "time": "2020-07-07T18:42:57+00:00"
         },
         {
+            "name": "spatie/blink",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/blink.git",
+                "reference": "9d75211ed5185d7242f388336714a3d7fefc650e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/blink/zipball/9d75211ed5185d7242f388336714a3d7fefc650e",
+                "reference": "9d75211ed5185d7242f388336714a3d7fefc650e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.0 || ^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Blink\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Cache that expires in the blink of an eye",
+            "homepage": "https://github.com/spatie/blink",
+            "keywords": [
+                "Blink",
+                "cache",
+                "caching",
+                "spatie"
+            ],
+            "time": "2020-02-16T19:18:04+00:00"
+        },
+        {
             "name": "spatie/browsershot",
             "version": "3.37.1",
             "source": {
@@ -4453,6 +4501,151 @@
             "time": "2019-11-25T12:29:24+00:00"
         },
         {
+            "name": "spatie/laravel-blink",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-blink.git",
+                "reference": "3e7ce60286b9cf4934bf3ca77817950d998e6751"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-blink/zipball/3e7ce60286b9cf4934bf3ca77817950d998e6751",
+                "reference": "3e7ce60286b9cf4934bf3ca77817950d998e6751",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5.8.0|^6.0|^7.0",
+                "php": "^7.4",
+                "spatie/blink": "^1.1.2"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^5.0",
+                "phpunit/phpunit": "^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\LaravelBlink\\BlinkServiceProvider"
+                    ],
+                    "aliases": {
+                        "Blink": "Spatie\\LaravelBlink\\BlinkFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\LaravelBlink\\": "src"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Cache that expires in the blink of an eye",
+            "homepage": "https://github.com/spatie/laravel-blink",
+            "keywords": [
+                "laravel-blink",
+                "spatie"
+            ],
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                }
+            ],
+            "time": "2020-03-03T07:53:58+00:00"
+        },
+        {
+            "name": "spatie/laravel-csp",
+            "version": "2.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-csp.git",
+                "reference": "7bb6bbe55cf4d61f56eab99ef3665a0d9d032e0e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-csp/zipball/7bb6bbe55cf4d61f56eab99ef3665a0d9d032e0e",
+                "reference": "7bb6bbe55cf4d61f56eab99ef3665a0d9d032e0e",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": "~5.8.0|^6.0|^7.0",
+                "illuminate/support": "~5.8.0|^6.0|^7.0",
+                "php": "^7.2"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.0",
+                "orchestra/testbench": "~3.8.0|^4.0|^5.0",
+                "phpunit/phpunit": "^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\Csp\\CspServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Csp\\": "src"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Thomas Verhelst",
+                    "email": "tvke91@gmail.com",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Add CSP headers to the responses of a Laravel app",
+            "homepage": "https://github.com/spatie/laravel-csp",
+            "keywords": [
+                "content-security-policy",
+                "csp",
+                "headers",
+                "laravel",
+                "laravel-csp",
+                "security",
+                "spatie"
+            ],
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                }
+            ],
+            "time": "2020-07-17T06:38:15+00:00"
+        },
+        {
             "name": "spatie/laravel-dashboard",
             "version": "1.3.0",
             "source": {
@@ -4580,6 +4773,121 @@
                 }
             ],
             "time": "2020-05-29T15:32:18+00:00"
+        },
+        {
+            "name": "spatie/laravel-server-monitor",
+            "version": "1.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-server-monitor.git",
+                "reference": "762d98aee06691053356e4f6073bf28c1ccea7fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-server-monitor/zipball/762d98aee06691053356e4f6073bf28c1ccea7fa",
+                "reference": "762d98aee06691053356e4f6073bf28c1ccea7fa",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.3",
+                "laravel/framework": "^6.0|^7.0",
+                "php": "^7.2",
+                "spatie/laravel-blink": "^1.3",
+                "spatie/regex": "^1.1",
+                "symfony/process": "^4.0|^5.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^4.0|^5.0",
+                "phpunit/phpunit": "^8.0|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\ServerMonitor\\ServerMonitorServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\ServerMonitor\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Monitor servers",
+            "homepage": "https://github.com/spatie/laravel-server-monitor",
+            "keywords": [
+                "laravel-server-monitor",
+                "spatie"
+            ],
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                }
+            ],
+            "time": "2020-03-03T13:40:13+00:00"
+        },
+        {
+            "name": "spatie/regex",
+            "version": "1.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/regex.git",
+                "reference": "b046f05e07b82cbd1a4bed5d5a2a2139a87ff417"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/regex/zipball/b046f05e07b82cbd1a4bed5d5a2a2139a87ff417",
+                "reference": "b046f05e07b82cbd1a4bed5d5a2a2139a87ff417",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Regex\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian De Deyne",
+                    "email": "sebastian@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A sane interface for php's built in preg_* functions",
+            "homepage": "https://github.com/spatie/regex",
+            "keywords": [
+                "expression",
+                "expressions",
+                "regex",
+                "regular",
+                "spatie"
+            ],
+            "time": "2019-06-19T06:59:15+00:00"
         },
         {
             "name": "spatie/robots-txt",

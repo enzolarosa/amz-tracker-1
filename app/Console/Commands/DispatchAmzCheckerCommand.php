@@ -2,9 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Common\UserAgent;
+use App\Crawler\Browsershot;
 use App\Jobs\Amazon\SearchJob;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 
 class DispatchAmzCheckerCommand extends Command
 {
@@ -29,14 +32,31 @@ class DispatchAmzCheckerCommand extends Command
      */
     public function handle()
     {
-        //  $asin = 'B07QNZ3XT3'; // focusrite 2i2;
+    /*    $browsershot = new Browsershot();
+        $browsershot->setNodeBinary(env('NODE_PATH'));
+        $browsershot->setNpmBinary(env('NPM_PATH'));
+        $browsershot->setBinPath(app_path('Crawler/bin/browser.js'));
+        $browsershot->userAgent(Arr::random(UserAgent::get()));
+        $browsershot->setExtraHttpHeaders([
+            'Accept-Encoding' => 'gzip, deflate, br',
+            'Connection' => 'keep-alive',
+            'X-Requested-With' => 'XMLHttpRequest',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ]);
 
-        /*$job = new AmazonProductJob($asin);
-      dispatch($job);
-      $this->comment("\nDone!");*/
+        $browsershot->setUrl((string)"https://www.amazon.it/s?k=smart+casa");
+        $cookies = optional(json_decode($browsershot->getCookie()))->{'cookies'};
+        $browsershot->setOption('cookies', $cookies);
+
+        //dump( html_entity_decode($html));
+        dd(json_encode($cookies), json_encode($cookiesPostHtml));
+*/
+        $search=[
+            'Apple','Samsung','Xiaomi','DJI','Macbook pro','Synology','Ip Camera Synology','Synology','QNAP'
+        ];
 
         $user = User::find(1);
-        $job = new SearchJob("smart working");
+        $job = new SearchJob(Arr::random($search));
         $job->setUser($user);
         dispatch_now($job);
 
@@ -47,4 +67,6 @@ class DispatchAmzCheckerCommand extends Command
           $not->setProduct($prod);
           $user->notify($not);*/
     }
+
+
 }

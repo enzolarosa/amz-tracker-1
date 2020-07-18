@@ -3,9 +3,9 @@
 namespace App\Jobs\Amazon;
 
 use App\Crawler\Amazon\SearchCrawler;
+use App\Crawler\CrawlRequestFulfilled;
 use App\Models\User;
 use Illuminate\Support\Arr;
-use Spatie\Browsershot\Browsershot;
 use Spatie\Crawler\Crawler;
 
 class SearchJob extends Amazon
@@ -53,19 +53,16 @@ class SearchJob extends Amazon
         $observer->setCountry(Arr::first($this->countries));
         $observer->setUser($this->getUser());
 
-        $browsershot = new Browsershot();
-        $browsershot->setNodeBinary(env('NODE_PATH'));
-        $browsershot->setNpmBinary(env('NPM_PATH'));
-        $browsershot->setBinPath(app_path('Crawler/bin/browser.js'));
-
         Crawler::create($this->clientOptions())
+            ->setCrawlFulfilledHandlerClass(CrawlRequestFulfilled::class)
             ->ignoreRobots()
             ->acceptNofollowLinks()
             ->setConcurrency($this->concurrency)
             ->setCrawlObserver($observer)
             ->setMaximumCrawlCount(1)
             ->setDelayBetweenRequests($this->delayBtwRequest)
-            ->setBrowsershot($browsershot)->executeJavaScript()
+            ->setBrowsershot($this->browsershot())
+            ->executeJavaScript()
             ->startCrawling($search);
     }
 
