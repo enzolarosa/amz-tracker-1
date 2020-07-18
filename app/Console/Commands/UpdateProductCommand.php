@@ -8,6 +8,8 @@ use Illuminate\Console\Command;
 
 class UpdateProductCommand extends Command
 {
+    const WAIT_CRAWLER = 15;
+
     /**
      * The name and signature of the console command.
      *
@@ -44,10 +46,14 @@ class UpdateProductCommand extends Command
 
         $bar = $this->output->createProgressBar($prod->count());
         $bar->start();
+        $waitSec = 0;
 
-        $prod->each(function (AmzProduct $product) use ($bar) {
+        $prod->each(function (AmzProduct $product) use ($bar, &$waitSec) {
+
             $job = new AmazonProductJob($product->asin);
-            dispatch($job);
+            dispatch($job)->delay(now()->addSeconds($waitSec));
+
+            $waitSec += self::WAIT_CRAWLER;
             $bar->advance();
         });
         $bar->finish();
