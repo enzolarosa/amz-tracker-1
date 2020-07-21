@@ -4,6 +4,7 @@ namespace App\Jobs\Amazon;
 
 use App\Crawler\Amazon\SearchCrawler;
 use App\Crawler\CrawlRequestFulfilled;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use Spatie\Crawler\Crawler;
@@ -47,6 +48,10 @@ class SearchJob extends Amazon
     public function handle()
     {
         $search = $this->url ?? sprintf("https://www.amazon.it/s?k=%s", urlencode($this->keyword));
+
+        while (Setting::read('amz-wait')->value) {
+            sleep(10);
+        }
 
         // Get Product Details
         $observer = new SearchCrawler();

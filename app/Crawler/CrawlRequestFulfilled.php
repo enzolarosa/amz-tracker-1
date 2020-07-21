@@ -14,15 +14,15 @@ class CrawlRequestFulfilled extends CrawlRequest
     {
         $browsershot = $this->crawler->getBrowsershot();
 
-        $cookies = $this->getCookies();
+        /*$cookies = $this->getCookies();
         if (!is_null($cookies)) {
             $browsershot->setOption('cookies', json_decode($cookies));
-        }
+        }*/
 
         $html = $browsershot->setUrl((string)$url)->bodyHtml();
 
-        $cookies = optional(json_decode($browsershot->getCookie()))->{'cookies'};
-        Setting::store(self::COOKIES_KEY, $cookies, now()->addHours(2));
+        /*$cookies = optional(json_decode($browsershot->getCookie()))->{'cookies'};
+        Setting::store(self::COOKIES_KEY, $cookies, now()->addHours(2));*/
 
         return html_entity_decode($html);
     }

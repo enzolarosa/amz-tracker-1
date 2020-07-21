@@ -3,6 +3,7 @@
 namespace App\Jobs\Amazon;
 
 use App\Crawler\Amazon\OffersCrawler;
+use App\Models\Setting;
 use Illuminate\Support\Arr;
 use Spatie\Crawler\Crawler;
 
@@ -29,6 +30,10 @@ class ProductOffersJob extends Amazon
     {
         $offerUrl = $this->getProductUrl('offer');
         $shopUrl = $this->getProductUrl('shop');
+
+        while (Setting::read('amz-wait')->value) {
+            sleep(10);
+        }
 
         // Get Product Price
         $observer = new OffersCrawler();

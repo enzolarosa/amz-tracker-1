@@ -6,6 +6,7 @@ use App\Common\UserAgent;
 use App\Crawler\Browsershot;
 use App\Jobs\Job;
 use App\Logging\GuzzleLogger;
+use App\Models\ProxyServer;
 use DateTime;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\HandlerStack;
@@ -63,11 +64,12 @@ class Amazon extends Job
     {
         $rateLimitedMiddleware = (new RateLimited())
             ->allow(10)
-            ->everyMinutes(2)
-            ->releaseAfterMinutes(10)
+            ->everyMinutes(1)
+            ->releaseAfterMinutes(5)
             ->releaseAfterBackoff($this->attempts());
 
-        return [$rateLimitedMiddleware];
+        //return [$rateLimitedMiddleware];
+        return [];
     }
 
     /**
@@ -138,18 +140,29 @@ class Amazon extends Job
      */
     protected function browsershot(): Browsershot
     {
-        $browsershot = new Browsershot();
-        $browsershot->setNodeBinary(env('NODE_PATH'));
-        $browsershot->setNpmBinary(env('NPM_PATH'));
-        $browsershot->setBinPath(app_path('Crawler/bin/browser.js'));
-        $browsershot->userAgent(Arr::random(UserAgent::get()));
-        $browsershot->setExtraHttpHeaders([
-            'Accept-Encoding' => 'gzip, deflate, br',
-            'Connection' => 'keep-alive',
-            'X-Requested-With' => 'XMLHttpRequest',
-            'Accept' => 'text/html,*/*',
-            'Content-Type' => 'application/x-www-form-urlencoded',
-        ]);
+        $browsershot = (new Browsershot())
+            ->setNodeBinary(env('NODE_PATH'))
+            ->setNpmBinary(env('NPM_PATH'))
+            ->setBinPath(app_path('Crawler/bin/browser.js'))
+            ->userAgent(Arr::random(UserAgent::get()))
+            ->noSandbox()
+            ->setExtraHttpHeaders([
+                'Accept-Encoding' => 'gzip, deflate, br',
+                'Connection' => 'keep-alive',
+                'X-Requested-With' => 'XMLHttpRequest',
+                'Accept' => 'text/html,*/*',
+                'Content-Type' => 'application/x-www-form-urlencoded',
+            ])
+            ->addChromiumArguments([
+                'window-size' => '1920,1080',
+            ]);
+
+        $proxy = optional(ProxyServer::giveOne())->proxy;
+        if ($proxy) {
+            dump("Proxy: $proxy");
+            //   $browsershot->setProxyServer($proxy);
+        }
+
         return $browsershot;
     }
 

@@ -5,10 +5,13 @@ namespace App\Crawler\Amazon;
 use App\Jobs\Amazon\ProductDetailsJob;
 use App\Jobs\Amazon\ProductOffersJob;
 use App\Models\AmzProduct;
+use App\Models\Setting;
 use DOMDocument;
 use Exception;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
+use PHPHtmlParser\Dom;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Spatie\Crawler\CrawlObserver;
@@ -133,6 +136,22 @@ class Amazon extends CrawlObserver
             }
         } else {
             AmzProduct::query()->where('asin', $this->getAsin())->update(['enabled' => false]);
+        }
+
+        $doc = new DOMDocument();
+        @$doc->loadHTML($requestException->getResponse()->getBody());
+        $jquery = new Dom();
+        $jquery->load($doc->saveHTML());
+
+        $title = trim(optional(optional($jquery->find('title'))[0])->text);
+        if (
+            ($status !== Response::HTTP_OK && $status !== Response::HTTP_NOT_FOUND)
+            || Str::contains($title, 'Robot Check')
+            || Str::contains($title, 'CAPTCHA')
+            || Str::contains($title, 'Toutes nos excuses')
+            || Str::contains($title, 'Tut uns Leid!')
+            || Str::contains($title, 'Service Unavailable Error')) {
+            Setting::store('amz-wait', true, now()->addMinutes(10));
         }
 
         throw new Exception($msg);

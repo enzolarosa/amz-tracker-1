@@ -1,5 +1,5 @@
-const puppeteer = require('puppeteer-extra')
-//const puppeteer = require('puppeteer')
+//const puppeteer = require('puppeteer-extra')
+const puppeteer = require('puppeteer')
 const fs = require('fs');
 const URL = require('url').URL;
 const URLParse = require('url').parse;
@@ -7,8 +7,8 @@ const URLParse = require('url').parse;
 const [, , ...args] = process.argv;
 
 // Add stealth plugin and use defaults (all tricks to hide puppeteer usage)
-const StealthPlugin = require('puppeteer-extra-plugin-stealth')
-puppeteer.use(StealthPlugin())
+//const StealthPlugin = require('puppeteer-extra-plugin-stealth')
+//puppeteer.use(StealthPlugin())
 
 /**
  * There are two ways for Browsershot to communicate with puppeteer:

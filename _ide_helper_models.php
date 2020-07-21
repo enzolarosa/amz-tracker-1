@@ -121,6 +121,29 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\ProxyServer
+ *
+ * @property int $id
+ * @property string $proxy
+ * @property bool $active
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProxyServer newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProxyServer newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProxyServer query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProxyServer whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProxyServer whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProxyServer whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProxyServer whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProxyServer whereProxy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ProxyServer whereUpdatedAt($value)
+ */
+	class ProxyServer extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Notification
  *
  * @property int $id

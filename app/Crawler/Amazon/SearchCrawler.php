@@ -6,10 +6,13 @@ use App\Jobs\Amazon\SearchJob;
 use App\Jobs\AmazonProductJob;
 use App\Models\AmzProduct;
 use App\Models\AmzProductUser;
+use App\Models\Setting;
 use App\Models\User;
 use DOMDocument;
 use Exception;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
@@ -17,7 +20,7 @@ use Spatie\Crawler\CrawlObserver;
 
 class SearchCrawler extends CrawlObserver
 {
-    const WAIT_CRAWLER = 30;
+    const WAIT_CRAWLER = 10;
 
     protected DOMDocument $doc;
     protected ResponseInterface $response;
@@ -66,8 +69,9 @@ class SearchCrawler extends CrawlObserver
                     'enabled' => true
                 ]);
             }
+            dump("asin to check $asin");
             $job = new AmazonProductJob($asin);
-            dispatch($job)->delay(now()->addSeconds($waitSec));
+            dispatch($job);//->delay(now()->addSeconds($waitSec));
 
             $waitSec += self::WAIT_CRAWLER;
         }
@@ -80,7 +84,7 @@ class SearchCrawler extends CrawlObserver
             $link = "{$url->getScheme()}://{$url->getHost()}$href";
             $job = new SearchJob('amz-crawler', ['IT'], $link);
             $job->setUser($this->getUser());
-            dispatch($job)->delay(now()->addSeconds($waitSec * 2));
+            dispatch($job);//->delay(now()->addSeconds($waitSec + self::WAIT_CRAWLER));
         }
     }
 
@@ -94,10 +98,26 @@ class SearchCrawler extends CrawlObserver
             $requestException->getMessage(),
         );
 
+        $doc = new DOMDocument();
+        @$doc->loadHTML($requestException->getResponse()->getBody());
+        $jquery = new Dom();
+        $jquery->load($doc->saveHTML());
+
+        $title = trim(optional(optional($jquery->find('title'))[0])->text);
+        if (
+            $status !== Response::HTTP_OK
+            || Str::contains($title, 'Robot Check')
+            || Str::contains($title, 'CAPTCHA')
+            || Str::contains($title, 'Toutes nos excuses')
+            || Str::contains($title, 'Tut uns Leid!')
+            || Str::contains($title, 'Service Unavailable Error')) {
+            Setting::store('amz-wait', true, now()->addMinutes(10));
+        }
+
         $link = "{$url->getScheme()}://{$url->getHost()}{$url->getPath()}?{$url->getQuery()}";
         $job = new SearchJob('amz-crawler', ['IT'], $link);
         $job->setUser($this->getUser());
-        dispatch($job)->delay(now()->addHours(4));
+        dispatch($job)->delay(now()->addHours(1));
 
         throw new Exception($msg);
     }

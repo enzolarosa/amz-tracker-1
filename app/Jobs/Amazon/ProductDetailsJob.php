@@ -3,8 +3,8 @@
 namespace App\Jobs\Amazon;
 
 use App\Crawler\Amazon\DetailsCrawler;
+use App\Models\Setting;
 use Illuminate\Support\Arr;
-use Spatie\Browsershot\Browsershot;
 use Spatie\Crawler\Crawler;
 
 class ProductDetailsJob extends Amazon
@@ -30,6 +30,10 @@ class ProductDetailsJob extends Amazon
     {
         $detailUrl = $this->getProductUrl('detail');
         $shopUrl = $this->getProductUrl('shop');
+
+        while (Setting::read('amz-wait')->value) {
+            sleep(10);
+        }
 
         // Get Product Details
         $observer = new DetailsCrawler();

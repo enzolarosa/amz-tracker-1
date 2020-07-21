@@ -6,6 +6,7 @@ use aglipanci\ForgeTile\Commands\FetchForgeRecentEventsCommand;
 use aglipanci\ForgeTile\Commands\FetchForgeServersCommand;
 use App\Console\Commands\CleanUpSettingCommand;
 use App\Console\Commands\DispatchAmzCheckerCommand;
+use App\Console\Commands\GetProxyServerCommand;
 use App\Console\Commands\ProcessNotificationCommand;
 use App\Console\Commands\SearchProductCommand;
 use App\Console\Commands\UpdateProductCommand;
@@ -50,14 +51,16 @@ class Kernel extends ConsoleKernel
 
         $schedule->command(ProcessNotificationCommand::class)->withoutOverlapping()->everyMinute();
         $schedule->command('server-monitor:run-checks')->withoutOverlapping()->everyMinute();
+        $schedule->command(GetProxyServerCommand::class)->withoutOverlapping()->everyTenMinutes();
+
         // is need a lot of listener in order to prevent the 503 amz error
-        // $schedule->command(UpdateProductCommand::class)->withoutOverlapping()->everyMinute();
+        $schedule->command(UpdateProductCommand::class)->withoutOverlapping()->everyMinute();
     }
 
     public function daily(Schedule $schedule)
     {
         // this line should be not present!
-        $schedule->command(UpdateProductCommand::class)->withoutOverlapping()->twiceDaily(4, 16);
+       // $schedule->command(UpdateProductCommand::class)->withoutOverlapping()->twiceDaily(4, 16);
         $schedule->command('telegram:webhook', ['amztracker', '--setup'])->dailyAt('02:00');
     }
 
