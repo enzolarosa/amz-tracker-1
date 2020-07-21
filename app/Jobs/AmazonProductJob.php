@@ -45,7 +45,7 @@ class AmazonProductJob extends Job
     public function handle()
     {
         $prod = AmzProduct::query()->firstOrCreate(['asin' => $this->asin]);
-        AmzProductQueue::query()->firstOrCreate(['amz_product_id' => $prod->id]);
+        AmzProductQueue::query()->firstOrCreate(['amz_product_id' => $prod->id, 'reserved_at' => now()]);
 
         if ($this->needDetails($prod)) {
             $details = new ProductDetailsJob($this->asin);
