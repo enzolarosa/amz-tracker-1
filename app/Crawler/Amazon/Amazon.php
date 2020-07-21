@@ -131,7 +131,7 @@ class Amazon extends CrawlObserver
             $requestException->getMessage(),
         );
 
-        $prod = AmzProduct::query()->firstOrCreate('asin', $this->getAsin());
+        $prod = AmzProduct::query()->firstOrCreate(['asin' => $this->getAsin()]);
         if ($status === Response::HTTP_NOT_FOUND) {
             $prod->update(['enabled' => false]);
         }
