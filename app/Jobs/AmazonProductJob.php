@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Jobs\Amazon\ProductDetailsJob;
 use App\Jobs\Amazon\ProductOffersJob;
 use App\Models\AmzProduct;
+use App\Models\AmzProductQueue;
 
 class AmazonProductJob extends Job
 {
@@ -33,6 +34,7 @@ class AmazonProductJob extends Job
 
         $this->asin = $asin;
         $this->countries = $countries;
+
     }
 
     /**
@@ -43,6 +45,7 @@ class AmazonProductJob extends Job
     public function handle()
     {
         $prod = AmzProduct::query()->firstOrCreate(['asin' => $this->asin]);
+        AmzProductQueue::query()->firstOrCreate(['amz_product_id' => $prod->id]);
 
         if ($this->needDetails($prod)) {
             $details = new ProductDetailsJob($this->asin);
@@ -51,6 +54,7 @@ class AmazonProductJob extends Job
 
         $offers = new ProductOffersJob($this->asin);
         dispatch($offers)->delay(now()->addSeconds(self::WAIT_CRAWLER));
+
     }
 
     /**

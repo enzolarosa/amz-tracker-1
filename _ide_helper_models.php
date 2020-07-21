@@ -12,6 +12,28 @@
 
 namespace App\Models{
 /**
+ * App\Models\AmzProductQueue
+ *
+ * @property int $id
+ * @property int $amz_product_id
+ * @property \Illuminate\Support\Carbon|null $reserved_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\AmzProduct $product
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductQueue newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductQueue newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductQueue query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductQueue whereAmzProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductQueue whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductQueue whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductQueue whereReservedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AmzProductQueue whereUpdatedAt($value)
+ */
+	class AmzProductQueue extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\AmzProductLog
  *
  * @property int $id

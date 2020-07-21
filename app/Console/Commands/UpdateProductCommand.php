@@ -41,7 +41,13 @@ class UpdateProductCommand extends Command
      */
     public function handle()
     {
-        $prod = AmzProduct::query()->where('enabled', true)->where('updated_at', '<=', now()->subMinutes(45));
+        $prod = AmzProduct::query()
+            ->select('amz_products.*')
+            ->leftJoin('amz_product_queues', 'amz_product_queues.amz_product_id', '=', 'amz_products.id')
+            ->whereNull('amz_product_queues.id')
+            ->where('amz_products.enabled', true)
+            ->where('amz_products.updated_at', '<=', now()->subMinutes(45));
+
         $this->comment("I've {$prod->count()} products to analyze!");
 
         $bar = $this->output->createProgressBar($prod->count());
@@ -49,9 +55,8 @@ class UpdateProductCommand extends Command
         $waitSec = 0;
 
         $prod->each(function (AmzProduct $product) use ($bar, &$waitSec) {
-
             $job = new AmazonProductJob($product->asin);
-            dispatch($job)->delay(now()->addSeconds($waitSec));
+            dispatch($job);//->delay(now()->addSeconds($waitSec));
 
             $waitSec += self::WAIT_CRAWLER;
             $bar->advance();

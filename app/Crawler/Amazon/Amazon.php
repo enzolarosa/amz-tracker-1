@@ -5,6 +5,7 @@ namespace App\Crawler\Amazon;
 use App\Jobs\Amazon\ProductDetailsJob;
 use App\Jobs\Amazon\ProductOffersJob;
 use App\Models\AmzProduct;
+use App\Models\AmzProductQueue;
 use App\Models\Setting;
 use DOMDocument;
 use Exception;
@@ -109,6 +110,13 @@ class Amazon extends CrawlObserver
                 $prod->update(['preview_price' => $prod->current_price]);
             }
             $prod->update($data);
+        }
+
+        $queue = AmzProductQueue::query()->firstOrCreate(['amz_product_id' => $prod->id]);
+        try {
+            $queue->delete();
+        } catch (Exception $exception) {
+            report($exception);
         }
     }
 
