@@ -6,7 +6,6 @@ use App\Common\UserAgent;
 use App\Crawler\Browsershot;
 use App\Jobs\Job;
 use App\Logging\GuzzleLogger;
-use App\Models\ProxyServer;
 use DateTime;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\HandlerStack;
@@ -157,11 +156,11 @@ class Amazon extends Job
                 'window-size' => '1920,1080',
             ]);
 
-        $proxy = optional(ProxyServer::giveOne())->proxy;
+        /*$proxy = optional(ProxyServer::giveOne())->proxy;
         if ($proxy) {
-            dump("Proxy: $proxy");
+            //    dump("Proxy: $proxy");
             //   $browsershot->setProxyServer($proxy);
-        }
+        }*/
 
         return $browsershot;
     }
