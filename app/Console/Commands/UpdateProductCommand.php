@@ -41,7 +41,7 @@ class UpdateProductCommand extends Command
      */
     public function handle()
     {
-        $prod = AmzProduct::query()->where('enabled', true)->when('updated_at', '<=', now()->subMinutes(45));
+        $prod = AmzProduct::query()->where('enabled', true)->where('updated_at', '<=', now()->subMinutes(45));
         $this->comment("I've {$prod->count()} products to analyze!");
 
         $bar = $this->output->createProgressBar($prod->count());
