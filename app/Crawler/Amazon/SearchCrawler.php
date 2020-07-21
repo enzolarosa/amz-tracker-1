@@ -69,7 +69,7 @@ class SearchCrawler extends CrawlObserver
                     'enabled' => true
                 ]);
             }
-            dump("asin to check $asin");
+
             $job = new AmazonProductJob($asin);
             dispatch($job);//->delay(now()->addSeconds($waitSec));
 
