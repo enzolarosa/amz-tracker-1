@@ -2,8 +2,7 @@
 
 namespace App\Crawler\Amazon;
 
-use App\Jobs\Amazon\ProductDetailsJob;
-use App\Jobs\Amazon\ProductOffersJob;
+use App\Common\Constants;
 use App\Models\AmzProduct;
 use App\Models\AmzProductQueue;
 use App\Models\Setting;
@@ -132,18 +131,9 @@ class Amazon extends CrawlObserver
             $requestException->getMessage(),
         );
 
-        if ($status !== Response::HTTP_NOT_FOUND) {
-            if ($this instanceof DetailsCrawler) {
-                $details = new ProductDetailsJob($this->asin);
-                dispatch($details)->delay(now()->addHours(2)->addMinutes(30));
-            }
-
-            if ($this instanceof OffersCrawler) {
-                $offers = new ProductOffersJob($this->asin);
-                dispatch($offers)->delay(now()->addHours(2)->addMinutes(30));
-            }
-        } else {
-            AmzProduct::query()->where('asin', $this->getAsin())->update(['enabled' => false]);
+        $prod = AmzProduct::query()->firstOrCreate('asin', $this->getAsin());
+        if ($status === Response::HTTP_NOT_FOUND) {
+            $prod->update(['enabled' => false]);
         }
 
         $doc = new DOMDocument();
@@ -159,10 +149,18 @@ class Amazon extends CrawlObserver
             || Str::contains($title, 'Toutes nos excuses')
             || Str::contains($title, 'Tut uns Leid!')
             || Str::contains($title, 'Service Unavailable Error')) {
-            Setting::store('amz-wait', true, now()->addMinutes(10));
+            Setting::store('amz-wait', true, now()->addMinutes(Constants::$WAIT_AMZ_HTTP_ERROR));
         }
 
-        throw new Exception($msg);
+        $queue = AmzProductQueue::query()->firstOrCreate(['amz_product_id' => $prod->id]);
+
+        try {
+            $queue->delete();
+        } catch (Exception $exception) {
+            report($exception);
+        }
+
+        report(new Exception($msg));
     }
 
     protected function parsePage()

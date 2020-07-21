@@ -2,6 +2,7 @@
 
 namespace App\Crawler\Amazon;
 
+use App\Common\Constants;
 use App\Jobs\Amazon\SearchJob;
 use App\Jobs\AmazonProductJob;
 use App\Models\AmzProduct;
@@ -20,8 +21,6 @@ use Spatie\Crawler\CrawlObserver;
 
 class SearchCrawler extends CrawlObserver
 {
-    const WAIT_CRAWLER = 10;
-
     protected DOMDocument $doc;
     protected ResponseInterface $response;
     protected UriInterface $uri;
@@ -56,7 +55,7 @@ class SearchCrawler extends CrawlObserver
         $jquery->load($doc->saveHTML());
 
         $asins = $jquery->find('div.s-asin');
-        $waitSec = self::WAIT_CRAWLER;
+        $waitSec = Constants::$WAIT_CRAWLER;
 
         foreach ($asins as $k => $asin) {
             $asin = $asin->{'data-asin'};
@@ -73,18 +72,21 @@ class SearchCrawler extends CrawlObserver
             $job = new AmazonProductJob($asin);
             dispatch($job);//->delay(now()->addSeconds($waitSec));
 
-            $waitSec += self::WAIT_CRAWLER;
+            $waitSec += Constants::$WAIT_CRAWLER;
         }
+        try {
+            $pagination = $jquery->find('ul.a-pagination');
+            $next = $pagination->find('li.a-last');
+            $href = optional($next->find('a'))->href;
 
-        $pagination = $jquery->find('ul.a-pagination');
-        $next = $pagination->find('li.a-last');
-        $href = optional($next->find('a'))->href;
-
-        if ($href) {
-            $link = "{$url->getScheme()}://{$url->getHost()}$href";
-            $job = new SearchJob('amz-crawler', ['IT'], $link);
-            $job->setUser($this->getUser());
-            dispatch($job);//->delay(now()->addSeconds($waitSec + self::WAIT_CRAWLER));
+            if ($href) {
+                $link = "{$url->getScheme()}://{$url->getHost()}$href";
+                $job = new SearchJob('amz-crawler', ['IT'], $link);
+                $job->setUser($this->getUser());
+                dispatch($job);//->delay(now()->addSeconds($waitSec + Constants::$WAIT_CRAWLER));
+            }
+        } catch (Exception $exception) {
+            report($exception);
         }
     }
 
@@ -111,7 +113,7 @@ class SearchCrawler extends CrawlObserver
             || Str::contains($title, 'Toutes nos excuses')
             || Str::contains($title, 'Tut uns Leid!')
             || Str::contains($title, 'Service Unavailable Error')) {
-            Setting::store('amz-wait', true, now()->addMinutes(10));
+            Setting::store('amz-wait', true, now()->addMinutes(Constants::$WAIT_AMZ_HTTP_ERROR));
         }
 
         $link = "{$url->getScheme()}://{$url->getHost()}{$url->getPath()}?{$url->getQuery()}";

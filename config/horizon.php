@@ -1,5 +1,6 @@
 <?php
 
+use App\Common\Constants;
 use Illuminate\Support\Str;
 
 return [
@@ -204,7 +205,7 @@ return [
                 'min-processes' => 0,
                 'max-processes' => 2,
                 'tries' => 1,
-                'timeout' => 60 * 30,
+                'timeout' => 60 * Constants::$TRACKER_TIMEOUT,
             ],
             'notification' => [
                 'connection' => 'redis',
@@ -254,7 +255,7 @@ return [
                 'min-processes' => 0,
                 'max-processes' => 2,
                 'tries' => 3,
-                'timeout' => 60 * 30,
+                'timeout' => 60 * Constants::$TRACKER_TIMEOUT,
             ],
             'notification' => [
                 'connection' => 'redis',

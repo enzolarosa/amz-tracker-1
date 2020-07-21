@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Amazon;
 
+use App\Common\Constants;
 use App\Common\UserAgent;
 use App\Crawler\Browsershot;
 use App\Jobs\Job;
@@ -62,13 +63,12 @@ class Amazon extends Job
     public function middleware()
     {
         $rateLimitedMiddleware = (new RateLimited())
-            ->allow(10)
+            ->allow(20)
             ->everyMinutes(1)
             ->releaseAfterMinutes(5)
             ->releaseAfterBackoff($this->attempts());
 
-        //return [$rateLimitedMiddleware];
-        return [];
+        return [$rateLimitedMiddleware];
     }
 
     /**
@@ -100,7 +100,7 @@ class Amazon extends Job
         return "{$this->baseUrls[Arr::first($this->countries)]}/$url/{$this->asin}";
     }
 
-    protected function clientOptions(?CookieJar &$cookieJar = null): array
+    protected function clientOptions(?CookieJar $cookieJar = null): array
     {
         $handler = HandlerStack::create();
         $handler->push(Middleware::log(
@@ -116,8 +116,8 @@ class Amazon extends Job
         $opt = [
             'handler' => $handler,
             RequestOptions::VERIFY => config('app.env') !== 'local',
-            RequestOptions::CONNECT_TIMEOUT => 60 * 8,
-            RequestOptions::TIMEOUT => 60 * 8,
+            RequestOptions::CONNECT_TIMEOUT => 60 * Constants::$CONNECTION_TIMEOUT,
+            RequestOptions::TIMEOUT => 60 * Constants::$CONNECTION_TIMEOUT,
             RequestOptions::HEADERS => [
                 'User-Agent' => Arr::random(UserAgent::get()),
                 'Accept-Encoding' => 'gzip, deflate, br',

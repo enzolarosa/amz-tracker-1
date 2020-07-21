@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Common\Constants;
 use App\Jobs\Amazon\ProductDetailsJob;
 use App\Jobs\Amazon\ProductOffersJob;
 use App\Models\AmzProduct;
@@ -9,8 +10,6 @@ use App\Models\AmzProductQueue;
 
 class AmazonProductJob extends Job
 {
-    const WAIT_CRAWLER = 30;
-
     protected string $asin;
     protected array $countries;
 
@@ -53,7 +52,7 @@ class AmazonProductJob extends Job
         }
 
         $offers = new ProductOffersJob($this->asin);
-        dispatch($offers)->delay(now()->addSeconds(self::WAIT_CRAWLER));
+        dispatch($offers)->delay(now()->addSeconds(Constants::$WAIT_CRAWLER));
 
     }
 
