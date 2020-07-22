@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Amazon;
 
+use App\Common\Constants;
 use App\Crawler\Amazon\OffersCrawler;
 use App\Models\Setting;
 use Illuminate\Support\Arr;
@@ -32,7 +33,7 @@ class ProductOffersJob extends Amazon
         $shopUrl = $this->getProductUrl('shop');
 
         while (Setting::read('amz-wait')->value) {
-            sleep(10);
+            sleep(Constants::$SLEEP_CRAWLER);
         }
 
         // Get Product Price

@@ -52,7 +52,7 @@ class AmazonProductJob extends Job
         }
 
         $offers = new ProductOffersJob($this->asin);
-        dispatch($offers)->delay(now()->addSeconds(Constants::$WAIT_CRAWLER));
+        dispatch($offers);//->delay(now()->addSeconds(Constants::$WAIT_CRAWLER));
 
     }
 
