@@ -7,6 +7,7 @@ use App\Common\UserAgent;
 use App\Crawler\Browsershot;
 use App\Jobs\Job;
 use App\Logging\GuzzleLogger;
+use App\Models\ProxyServer;
 use DateTime;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\HandlerStack;
@@ -100,7 +101,7 @@ class Amazon extends Job
         return "{$this->baseUrls[Arr::first($this->countries)]}/$url/{$this->asin}";
     }
 
-    protected function clientOptions(?CookieJar $cookieJar = null): array
+    protected function clientOptions(?CookieJar $cookieJar = null, bool $proxy = false): array
     {
         $handler = HandlerStack::create();
         $handler->push(Middleware::log(
@@ -127,8 +128,13 @@ class Amazon extends Job
                 'Content-Type' => 'application/x-www-form-urlencoded',
             ],
         ];
+
         if (!is_null($cookieJar)) {
             $opt[RequestOptions::COOKIES] = $cookieJar;
+        }
+
+        if ($proxy) {
+            $opt[RequestOptions::PROXY] = ProxyServer::giveOne();
         }
 
         return $opt;
