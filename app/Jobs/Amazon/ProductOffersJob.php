@@ -31,11 +31,12 @@ class ProductOffersJob extends Amazon
     {
         $offerUrl = $this->getProductUrl('offer');
         $shopUrl = $this->getProductUrl('shop');
-
+/*
+         * Todo optimize this part
         while (Setting::read('amz-wait')->value) {
             sleep(Constants::$SLEEP_CRAWLER);
         }
-
+*/
         // Get Product Price
         $observer = new OffersCrawler();
         $observer->setCurrency($this->currency[Arr::first($this->countries)]);
@@ -50,7 +51,7 @@ class ProductOffersJob extends Amazon
             ->setCrawlObserver($observer)
             ->setMaximumCrawlCount(1)
             ->setDelayBetweenRequests($this->delayBtwRequest)
-          //  ->setBrowsershot($this->browsershot())
+            ->setBrowsershot($this->browsershot())
             ->executeJavaScript()
             ->startCrawling($offerUrl);
     }

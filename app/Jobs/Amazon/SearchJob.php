@@ -49,9 +49,11 @@ class SearchJob extends Amazon
     {
         $search = $this->url ?? sprintf("https://www.amazon.it/s?k=%s", urlencode($this->keyword));
 
+        /*
+         * Todo optimize this part
         while (Setting::read('amz-wait')->value) {
             sleep(10);
-        }
+        }*/
 
         // Get Product Details
         $observer = new SearchCrawler();
@@ -66,7 +68,7 @@ class SearchJob extends Amazon
             ->setCrawlObserver($observer)
             ->setMaximumCrawlCount(1)
             ->setDelayBetweenRequests($this->delayBtwRequest)
-           // ->setBrowsershot($this->browsershot())
+            ->setBrowsershot($this->browsershot())
             ->executeJavaScript()
             ->startCrawling($search);
     }

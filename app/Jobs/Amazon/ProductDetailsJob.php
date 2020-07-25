@@ -31,10 +31,12 @@ class ProductDetailsJob extends Amazon
     {
         $detailUrl = $this->getProductUrl('detail');
         $shopUrl = $this->getProductUrl('shop');
-
-        while (Setting::read('amz-wait')->value) {
-            sleep(Constants::$SLEEP_CRAWLER);
-        }
+        /*
+                 * Todo optimize this part
+          while (Setting::read('amz-wait')->value) {
+             sleep(Constants::$SLEEP_CRAWLER);
+         }
+        */
 
         // Get Product Details
         $observer = new DetailsCrawler();
@@ -50,7 +52,7 @@ class ProductDetailsJob extends Amazon
             ->setCrawlObserver($observer)
             ->setMaximumCrawlCount(1)
             ->setDelayBetweenRequests($this->delayBtwRequest)
-            //->setBrowsershot($this->browsershot())
+            ->setBrowsershot($this->browsershot())
             ->executeJavaScript()
             ->startCrawling($detailUrl);
     }
