@@ -10,6 +10,7 @@ use App\Console\Commands\GetProxyServerCommand;
 use App\Console\Commands\ProcessNotificationCommand;
 use App\Console\Commands\SearchProductCommand;
 use App\Console\Commands\UpdateProductCommand;
+use Astrotomic\PingPingTile\FetchPingPingMonitorsCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use MarcusMyers\AccuWeatherTile\Commands\FetchAccuWeatherCurrentConditionsCommand;
@@ -60,7 +61,7 @@ class Kernel extends ConsoleKernel
     public function daily(Schedule $schedule)
     {
         // this line should be not present!
-       // $schedule->command(UpdateProductCommand::class)->withoutOverlapping()->twiceDaily(4, 16);
+        // $schedule->command(UpdateProductCommand::class)->withoutOverlapping()->twiceDaily(4, 16);
         $schedule->command('telegram:webhook', ['amztracker', '--setup'])->dailyAt('02:00');
     }
 
@@ -78,12 +79,14 @@ class Kernel extends ConsoleKernel
 
     public function dashboard(Schedule $schedule)
     {
-        $schedule->command(FetchForgeRecentEventsCommand::class)->everyMinute();
+        $schedule->command(FetchPingPingMonitorsCommand::class)->withoutOverlapping()->everyMinute();
 
-        $schedule->command(FetchAccuWeatherCurrentConditionsCommand::class)->hourly();
-        $schedule->command(FetchForgeServersCommand::class)->hourly();
+        $schedule->command(FetchForgeRecentEventsCommand::class)->withoutOverlapping()->everyMinute();
 
-        $schedule->command(FetchAccuWeatherFiveDayForecastCommand::class)->daily();
+        $schedule->command(FetchAccuWeatherCurrentConditionsCommand::class)->withoutOverlapping()->hourly();
+        $schedule->command(FetchForgeServersCommand::class)->withoutOverlapping()->hourly();
+
+        $schedule->command(FetchAccuWeatherFiveDayForecastCommand::class)->withoutOverlapping()->daily();
     }
 
     /**

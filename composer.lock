@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ad9954644c09e799c22b94a8c36ea8a5",
+    "content-hash": "58415cd0642032c0b19dbb4844a6f3ca",
     "packages": [
         {
             "name": "aglipanci/laravel-dashboard-forge-tile",
@@ -107,6 +107,78 @@
                 "stack"
             ],
             "time": "2019-12-24T22:41:47+00:00"
+        },
+        {
+            "name": "astrotomic/laravel-dashboard-pingping-tile",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Astrotomic/laravel-dashboard-pingping-tile.git",
+                "reference": "219402390532f59886fb8cb10881d525cf794964"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Astrotomic/laravel-dashboard-pingping-tile/zipball/219402390532f59886fb8cb10881d525cf794964",
+                "reference": "219402390532f59886fb8cb10881d525cf794964",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.5",
+                "illuminate/console": "^7.0",
+                "illuminate/http": "^7.0",
+                "illuminate/support": "^7.0",
+                "nesbot/carbon": "^2.0",
+                "php": "^7.4",
+                "spatie/laravel-dashboard": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Astrotomic\\PingPingTile\\PingPingTileServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Astrotomic\\PingPingTile\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tom Witkowski",
+                    "email": "gummibeer@astrotomic.info",
+                    "homepage": "https://gummibeer.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A PingPing tile for Laravel Dashboard",
+            "homepage": "https://github.com/Astrotomic/laravel-dashboard-pingping-tile",
+            "keywords": [
+                "astrotomic",
+                "laravel-dashboard",
+                "laravel-dashboard-pingping-tile",
+                "laravel-dashboard-tile",
+                "pingping"
+            ],
+            "funding": [
+                {
+                    "url": "https://plant.treeware.earth/Astrotomic/laravel-dashboard-pingping-tile",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/Gummibeer",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-05-08T11:57:20+00:00"
         },
         {
             "name": "barryvdh/laravel-ide-helper",

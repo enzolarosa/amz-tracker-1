@@ -46,5 +46,12 @@ return [
         'charts' => [
             'refresh_interval_in_seconds' => 60 * 5,
         ],
+        'pingping' => [
+            'api_key' => '', // https://pingping.io/account/api
+            'monitors' => [// IDs can be found in URL https://pingping.io/monitors/[0-9]+
+                '29738', //enzolarosa.dev
+            ],
+            'refresh_interval_in_seconds' => 60,
+        ],
     ],
 ];

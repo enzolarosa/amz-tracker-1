@@ -50,7 +50,7 @@ class ProductOffersJob extends Amazon
             ->setCrawlObserver($observer)
             ->setMaximumCrawlCount(1)
             ->setDelayBetweenRequests($this->delayBtwRequest)
-            ->setBrowsershot($this->browsershot())
+          //  ->setBrowsershot($this->browsershot())
             ->executeJavaScript()
             ->startCrawling($offerUrl);
     }
