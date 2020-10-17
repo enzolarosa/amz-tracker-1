@@ -167,7 +167,7 @@ class Amazon extends Job
     protected function shouldRelease(string $url): bool
     {
         if ($timestamp = Cache::get('amz-http-limit')) {
-            $this->release($timestamp - time());
+            $this->release((int)$timestamp - time());
             return true;
         }
 
@@ -182,7 +182,7 @@ class Amazon extends Job
 
             Cache::put('amz-http-limit', now()->addSeconds($secondsRemaining)->timestamp, $secondsRemaining);
 
-            $this->release($secondsRemaining);
+            $this->release((int)$secondsRemaining);
             return true;
         }
         return false;
