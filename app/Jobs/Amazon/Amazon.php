@@ -170,13 +170,22 @@ class Amazon extends Job
             return true;
         }
 
-        $response = Http::acceptJson()->timeout(10)->get($url);
+        $response = Http::withHeaders([
+            'User-Agent' => Arr::random(UserAgent::get()),
+            'Accept-Encoding' => 'gzip, deflate, br',
+            'Connection' => 'keep-alive',
+            'X-Requested-With' => 'XMLHttpRequest',
+            'Accept' => 'text/html,*/*',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ])->timeout(30)->get($url);
 
         if ($response->failed()) {
             info("endpoint $url failed statusCode: {$response->status()}");
         }
 
         if ($response->failed() && in_array($response->status(), [429, 503])) {
+            info("body job: " . json_encode($response->body()));
+
             // $secondsRemaining = $response->header('Retry-After');
             $secondsRemaining = self::WAIT_CRAWLER;
 
@@ -185,6 +194,7 @@ class Amazon extends Job
             $this->release((int)$secondsRemaining);
             return true;
         }
+
         return false;
     }
 }

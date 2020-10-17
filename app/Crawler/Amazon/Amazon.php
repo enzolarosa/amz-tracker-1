@@ -10,6 +10,7 @@ use DOMDocument;
 use Exception;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
 use Psr\Http\Message\ResponseInterface;
@@ -18,7 +19,7 @@ use Spatie\Crawler\CrawlObservers\CrawlObserver;
 
 class Amazon extends CrawlObserver
 {
-    const WAIT_CRAWLER = 30;
+    const WAIT_CRAWLER = 60;
 
     protected DOMDocument $doc;
     protected ResponseInterface $response;
@@ -142,14 +143,21 @@ class Amazon extends CrawlObserver
         $jquery->load($doc->saveHTML());
 
         $title = trim(optional(optional($jquery->find('title'))[0])->text);
+        $report = true;
         if (
             ($status !== Response::HTTP_OK && $status !== Response::HTTP_NOT_FOUND)
             || Str::contains($title, 'Robot Check')
             || Str::contains($title, 'CAPTCHA')
             || Str::contains($title, 'Toutes nos excuses')
             || Str::contains($title, 'Tut uns Leid!')
-            || Str::contains($title, 'Service Unavailable Error')) {
+            || Str::contains($title, 'Service Unavailable Error')
+            || Str::contains($title, 'Ci dispiace')
+        ) {
             Setting::store('amz-wait', true, now()->addMinutes(Constants::$WAIT_AMZ_HTTP_ERROR));
+            // $secondsRemaining = $response->header('Retry-After');
+            $secondsRemaining = self::WAIT_CRAWLER;
+            Cache::put('amz-http-limit', now()->addSeconds($secondsRemaining)->timestamp, $secondsRemaining);
+            $report = false;
         }
 
         $queue = AmzProductQueue::query()->firstOrCreate(['amz_product_id' => $prod->id]);
@@ -160,7 +168,9 @@ class Amazon extends CrawlObserver
             report($exception);
         }
 
-        report(new Exception($msg));
+        if ($report) {
+            report(new Exception($msg));
+        }
     }
 
     protected function parsePage()
