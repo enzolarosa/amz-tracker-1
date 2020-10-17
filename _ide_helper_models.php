@@ -79,6 +79,33 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Address
+ *
+ * @property int $id
+ * @property string|null $fornitore
+ * @property string|null $indirizzo
+ * @property string|null $citta
+ * @property string|null $cap
+ * @property string|null $provincia
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Address newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Address newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Address query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Address whereCap($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Address whereCitta($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Address whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Address whereFornitore($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Address whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Address whereIndirizzo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Address whereProvincia($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Address whereUpdatedAt($value)
+ */
+	class Address extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\User
  *
  * @property int $id

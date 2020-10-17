@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
-use Spatie\Crawler\CrawlObserver;
+use Spatie\Crawler\CrawlObservers\CrawlObserver;
 
 class Amazon extends CrawlObserver
 {

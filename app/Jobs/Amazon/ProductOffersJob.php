@@ -2,10 +2,10 @@
 
 namespace App\Jobs\Amazon;
 
-use App\Common\Constants;
 use App\Crawler\Amazon\OffersCrawler;
-use App\Models\Setting;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Spatie\Crawler\Crawler;
 
 class ProductOffersJob extends Amazon
@@ -31,12 +31,11 @@ class ProductOffersJob extends Amazon
     {
         $offerUrl = $this->getProductUrl('offer');
         $shopUrl = $this->getProductUrl('shop');
-/*
-         * Todo optimize this part
-        while (Setting::read('amz-wait')->value) {
-            sleep(Constants::$SLEEP_CRAWLER);
+
+        if ($this->shouldRelease($offerUrl)) {
+            return;
         }
-*/
+
         // Get Product Price
         $observer = new OffersCrawler();
         $observer->setCurrency($this->currency[Arr::first($this->countries)]);

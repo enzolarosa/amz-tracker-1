@@ -14,6 +14,8 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Monolog\Logger;
 use Psr\Http\Message\RequestInterface;
@@ -21,6 +23,8 @@ use Spatie\RateLimitedMiddleware\RateLimited;
 
 class Amazon extends Job
 {
+    public $tries = 15;
+
     const WAIT_CRAWLER = 30;
 
     protected int $concurrency = 1;
@@ -59,17 +63,6 @@ class Amazon extends Job
     public function tags()
     {
         return [get_class($this), 'asin:' . $this->asin];
-    }
-
-    public function middleware()
-    {
-        $rateLimitedMiddleware = (new RateLimited())
-            ->allow(20)
-            ->everyMinutes(1)
-            ->releaseAfterMinutes(5)
-            ->releaseAfterBackoff($this->attempts());
-
-        return [$rateLimitedMiddleware];
     }
 
     /**
@@ -145,7 +138,7 @@ class Amazon extends Job
      */
     protected function browsershot(): Browsershot
     {
-        $browsershot = (new Browsershot())
+        return (new Browsershot())
             ->setNodeBinary(env('NODE_PATH'))
             ->setNpmBinary(env('NPM_PATH'))
             ->setBinPath(app_path('Crawler/bin/browser.js'))
@@ -161,14 +154,6 @@ class Amazon extends Job
             ->addChromiumArguments([
                 'window-size' => '1920,1080',
             ]);
-
-        /*$proxy = optional(ProxyServer::giveOne())->proxy;
-        if ($proxy) {
-            //    dump("Proxy: $proxy");
-            //   $browsershot->setProxyServer($proxy);
-        }*/
-
-        return $browsershot;
     }
 
     /**
@@ -177,5 +162,29 @@ class Amazon extends Job
     public function retryUntil(): DateTime
     {
         return now()->addDay();
+    }
+
+    protected function shouldRelease(string $url): bool
+    {
+        if ($timestamp = Cache::get('amz-http-limit')) {
+            $this->release($timestamp - time());
+            return true;
+        }
+
+        $response = Http::acceptJson()->timeout(10)->get($url);
+
+        if ($response->failed()) {
+            info("endpoint $url failed statusCode: {$response->status()}");
+        }
+
+        if ($response->failed() && in_array($response->status(), [429, 503])) {
+            $secondsRemaining = $response->header('Retry-After');
+
+            Cache::put('amz-http-limit', now()->addSeconds($secondsRemaining)->timestamp, $secondsRemaining);
+
+            $this->release($secondsRemaining);
+            return true;
+        }
+        return false;
     }
 }

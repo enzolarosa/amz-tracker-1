@@ -31,12 +31,10 @@ class ProductDetailsJob extends Amazon
     {
         $detailUrl = $this->getProductUrl('detail');
         $shopUrl = $this->getProductUrl('shop');
-        /*
-                 * Todo optimize this part
-          while (Setting::read('amz-wait')->value) {
-             sleep(Constants::$SLEEP_CRAWLER);
-         }
-        */
+
+        if ($this->shouldRelease($detailUrl)) {
+            return;
+        }
 
         // Get Product Details
         $observer = new DetailsCrawler();

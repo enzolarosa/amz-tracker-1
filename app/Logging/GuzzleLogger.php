@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 
 class GuzzleLogger extends MessageFormatter
 {
@@ -37,27 +38,27 @@ class GuzzleLogger extends MessageFormatter
     /**
      * Returns a formatted message string.
      *
-     * @param RequestInterface  $request  Request that was sent
-     * @param ResponseInterface $response Response that was received
-     * @param Exception         $error    Exception that was received
+     * @param RequestInterface $request Request that was sent
+     * @param ResponseInterface|null $response Response that was received
+     * @param Throwable|null $error Exception that was received
      *
      * @return string
      */
-    public function format(RequestInterface $request, ResponseInterface $response = null, Exception $error = null)
+    public function format(RequestInterface $request, ?ResponseInterface $response = null, ?Throwable $error = null): string
     {
         RequestLog::log([
             'request_id' => Arr::first($request->getHeader('X-Request-ID')) ?? Str::uuid(),
             'provider'   => $this->getProvider(),
-            'response'   => (string)json_encode([
+            'response'   => [
                 'body'     => !is_null($response) ? json_decode((string)$response->getBody()) : (!is_null($error) ? ['msg' => $error->getMessage(), 'trace' => $error->getTrace()] : []),
                 'headers'  => $this->headers($response),
-            ]),
-            'request'    => (string)json_encode([
+            ],
+            'request'    =>[
                 'body'     => json_decode((string)$request->getBody()),
                 'method'   => $request->getMethod(),
                 'target'   => $request->getRequestTarget(),
                 'headers'  => $this->headers($request),
-            ]),
+            ],
         ]);
 
         return parent::format($request, $response, $error);
