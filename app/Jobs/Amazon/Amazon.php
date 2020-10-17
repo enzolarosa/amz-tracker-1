@@ -19,13 +19,12 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Monolog\Logger;
 use Psr\Http\Message\RequestInterface;
-use Spatie\RateLimitedMiddleware\RateLimited;
 
 class Amazon extends Job
 {
     public $tries = 15;
 
-    const WAIT_CRAWLER = 30;
+    const WAIT_CRAWLER = 60;
 
     protected int $concurrency = 1;
     protected int $delayBtwRequest = 25;
@@ -167,7 +166,7 @@ class Amazon extends Job
     protected function shouldRelease(string $url): bool
     {
         if ($timestamp = Cache::get('amz-http-limit')) {
-            $this->release((int)$timestamp - time());
+            $this->release($timestamp - time());
             return true;
         }
 
@@ -178,7 +177,8 @@ class Amazon extends Job
         }
 
         if ($response->failed() && in_array($response->status(), [429, 503])) {
-            $secondsRemaining = $response->header('Retry-After');
+            // $secondsRemaining = $response->header('Retry-After');
+            $secondsRemaining = self::WAIT_CRAWLER;
 
             Cache::put('amz-http-limit', now()->addSeconds($secondsRemaining)->timestamp, $secondsRemaining);
 

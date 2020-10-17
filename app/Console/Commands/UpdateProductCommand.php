@@ -40,7 +40,6 @@ class UpdateProductCommand extends Command
 
         $bar = $this->output->createProgressBar($prod->count());
         $bar->start();
-        $waitSec = 0;
 
         $prod->each(function (AmzProduct $product) use ($bar) {
             $job = new AmazonProductJob($product->asin);
