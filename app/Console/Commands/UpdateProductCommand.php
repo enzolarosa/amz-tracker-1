@@ -8,8 +8,6 @@ use Illuminate\Console\Command;
 
 class UpdateProductCommand extends Command
 {
-    const WAIT_CRAWLER = 10;
-
     /**
      * The name and signature of the console command.
      *
@@ -23,16 +21,6 @@ class UpdateProductCommand extends Command
      * @var string
      */
     protected $description = 'Check all enabled product and update their price';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.
@@ -54,12 +42,11 @@ class UpdateProductCommand extends Command
         $bar->start();
         $waitSec = 0;
 
-        $prod->each(function (AmzProduct $product) use ($bar, &$waitSec) {
+        $prod->each(function (AmzProduct $product) use ($bar) {
             $job = new AmazonProductJob($product->asin);
             $product->touch();
-            dispatch($job);//->delay(now()->addSeconds($waitSec));
+            dispatch($job);
 
-            $waitSec += self::WAIT_CRAWLER;
             $bar->advance();
         });
         $bar->finish();
