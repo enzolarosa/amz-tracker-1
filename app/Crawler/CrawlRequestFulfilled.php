@@ -24,6 +24,8 @@ class CrawlRequestFulfilled extends CrawlRequest
         /*$cookies = optional(json_decode($browsershot->getCookie()))->{'cookies'};
         Setting::store(self::COOKIES_KEY, $cookies, now()->addHours(2));*/
 
+        $cookies = optional(json_decode($browsershot->getCookie()))->{'cookies'};
+        info("cookies: " . json_encode($cookies));
         return html_entity_decode($html);
     }
 

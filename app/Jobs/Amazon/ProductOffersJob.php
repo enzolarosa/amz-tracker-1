@@ -3,6 +3,7 @@
 namespace App\Jobs\Amazon;
 
 use App\Crawler\Amazon\OffersCrawler;
+use App\Crawler\CrawlRequestFulfilled;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -44,6 +45,7 @@ class ProductOffersJob extends Amazon
         $observer->setShopUrl($shopUrl);
 
         Crawler::create($this->clientOptions())
+            ->setCrawlFulfilledHandlerClass(CrawlRequestFulfilled::class)
             ->ignoreRobots()
             ->acceptNofollowLinks()
             ->setConcurrency($this->concurrency)
