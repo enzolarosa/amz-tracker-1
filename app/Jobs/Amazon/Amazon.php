@@ -122,8 +122,11 @@ class Amazon extends Job
         ];
 
         if (!is_null($cookieJar)) {
-            $opt[RequestOptions::COOKIES] = $cookieJar;
+            $cookies = Cache::get(Constants::COOKIES_KEY);
+            info("cookies cache:" . json_encode($cookies));
+            $cookieJar = new CookieJar(true, $cookies);
         }
+        $opt[RequestOptions::COOKIES] = $cookieJar;
 
         if ($proxy) {
             $opt[RequestOptions::PROXY] = ProxyServer::giveOne();

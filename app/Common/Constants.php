@@ -9,4 +9,7 @@ class Constants
     public static int $TRACKER_TIMEOUT = 30; // minutes
     public static int $WAIT_AMZ_HTTP_ERROR = 5;// minutes
     public static int $CONNECTION_TIMEOUT = 3;// minutes
+
+    const COOKIES_KEY = "amz_cookies";
+
 }
