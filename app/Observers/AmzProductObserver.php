@@ -67,6 +67,7 @@ class AmzProductObserver
     protected function onSaving(AmzProduct $product)
     {
         if (!is_null($product->sellers) && $product->sellers->count() > 0) {
+            $product->preview_price = $product->current_price;
             $product->current_price = $this->minPrice($product->sellers);
         }
 
