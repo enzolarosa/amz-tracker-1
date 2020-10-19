@@ -41,18 +41,21 @@ class UpdateProductCommand extends Command
 
         $this->comment("I've {$prod->count()} products to analyze!");
 
-        $bar = $this->output->createProgressBar($prod->count());
+        $bar = $this->output->createProgressBar($count = $prod->count());
         $bar->start();
 
-        $batch = Bus::batch([])->onQueue('check-amz-product')->name("Execution `UpdateProductCommand`")->dispatch();
+        if ($count > 0) {
+            $batch = Bus::batch([])->onQueue('check-amz-product')->name("Execution `UpdateProductCommand` will check $count products")->dispatch();
 
-        $prod->each(function (AmzProduct $product) use ($bar, $batch) {
-            $job = new AmazonProductJob($product->asin, $batch->id);
-            $product->touch();
+            $prod->each(function (AmzProduct $product) use ($bar, $batch) {
+                $job = new AmazonProductJob($product->asin, $batch->id);
+                $product->touch();
 
-            $batch->add([$job]);
-            $bar->advance();
-        });
+                $batch->add([$job]);
+                $bar->advance();
+            });
+        }
+
         $bar->finish();
         $this->comment("\nDone!");
     }
