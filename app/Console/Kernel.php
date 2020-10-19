@@ -46,7 +46,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command(CleanUpSettingCommand::class)->everyMinute();
 
-        $schedule->command(ProcessNotificationCommand::class)->withoutOverlapping()->everyMinute();
+   //     $schedule->command(ProcessNotificationCommand::class)->withoutOverlapping()->everyMinute();
         //    $schedule->command('server-monitor:run-checks')->withoutOverlapping()->everyMinute();
         //    $schedule->command(GetProxyServerCommand::class)->withoutOverlapping()->everyTenMinutes();
 

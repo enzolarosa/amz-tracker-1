@@ -210,6 +210,7 @@ return [
             'queue' => [
                 'check-amz-product',
                 'amz-search',
+                'telegram-batch',
             ],
             'balance' => 'auto',
             'maxProcesses' => 3,
