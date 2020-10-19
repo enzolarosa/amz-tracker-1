@@ -14,6 +14,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
@@ -168,6 +169,10 @@ class Amazon extends Job
 
     protected function shouldRelease(string $url): bool
     {
+        if ($this->batch()->cancelled()) {
+            return true;
+        }
+
         if ($timestamp = Cache::get('amz-http-limit')) {
             $this->release($timestamp - time());
             return true;

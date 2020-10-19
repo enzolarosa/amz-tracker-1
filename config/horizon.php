@@ -89,6 +89,7 @@ return [
         'redis:logging' => 60,
         'redis:notify-telegram' => 60,
         'redis:amz-product' => 60 * 5,
+        'redis:check-amz-product' => 60 * 5,
         'redis:amz-search' => 60 * 5,
     ],
 
@@ -169,105 +170,91 @@ return [
     |
     */
 
+    'defaults' => [
+        'default' => [
+            'connection' => 'redis',
+            'queue' => [
+                'default',
+                'logging',
+            ],
+            'balance' => 'auto',
+            'maxProcesses' => 5,
+            'nice' => 0,
+            'tries' => 3,
+            'timeout' => 60,
+        ],
+        'amz' => [
+            'connection' => 'redis',
+            'queue' => [
+                'amz-product',
+            ],
+            'balance' => 'auto',
+            'maxProcesses' => 5,
+            'nice' => 0,
+            'tries' => 3,
+            'timeout' => 60,
+        ],
+        'notification' => [
+            'connection' => 'redis',
+            'queue' => [
+                'notify-telegram',
+            ],
+            'balance' => 'auto',
+            'maxProcesses' => 5,
+            'nice' => 0,
+            'tries' => 1,
+            'timeout' => 60 * 3,
+        ],
+        'tracker' => [
+            'connection' => 'redis',
+            'queue' => [
+                'check-amz-product',
+                'amz-search',
+            ],
+            'balance' => 'auto',
+            'maxProcesses' => 3,
+            'nice' => 0,
+            'tries' => 1,
+            'timeout' => 60 * Constants::$TRACKER_TIMEOUT,
+        ],
+    ],
+
     'environments' => [
         'production' => [
             'default' => [
-                'connection' => 'redis',
-                'queue' => [
-                    'default',
-                    'logging',
-                ],
-                'balance' => 'simple',
-                'min-processes' => 0,
-                'max-processes' => 5,
-                'tries' => 3,
-                'timeout' => 60,
+                'balanceMaxShift' => 5,
+                'balanceCooldown' => 2,
             ],
             'amz' => [
-                'connection' => 'redis',
-                'queue' => [
-                    'amz-product',
-                ],
-                'balance' => 'auto',
-                'min-processes' => 0,
-                'max-processes' => 4,
-                'tries' => 3,
-                'timeout' => 60,
-            ],
-            'tracker' => [
-                'connection' => 'redis',
-                'queue' => [
-                    'amz-product-details',
-                    'amz-product-offers',
-                    'amz-search',
-                ],
-                'balance' => 'auto',
-                'min-processes' => 0,
-                'max-processes' => 2,
-                'tries' => 1,
-                'timeout' => 60 * Constants::$TRACKER_TIMEOUT,
+                'balanceMaxShift' => 5,
+                'balanceCooldown' => 2,
             ],
             'notification' => [
-                'connection' => 'redis',
-                'queue' => [
-                    'notify-telegram',
-                ],
-                'balance' => 'auto',
-                'min-processes' => 0,
-                'max-processes' => 5,
-                'tries' => 1,
-                'timeout' => 60 * 3,
+                'balanceMaxShift' => 5,
+                'balanceCooldown' => 2,
             ],
+            'tracker' => [
+                'balanceMaxShift' => 3,
+                'balanceCooldown' => 2,
+            ]
         ],
-
         'local' => [
             'default' => [
-                'connection' => 'redis',
-                'queue' => [
-                    'default',
-                    'logging',
-                ],
-                'balance' => 'simple',
-                'min-processes' => 0,
-                'max-processes' => 5,
-                'tries' => 3,
-                'timeout' => 60,
+                'balanceMaxShift' => 2,
+                'balanceCooldown' => 2,
             ],
             'amz' => [
-                'connection' => 'redis',
-                'queue' => [
-                    'amz-product',
-                ],
-                'balance' => 'auto',
-                'min-processes' => 0,
-                'max-processes' => 4,
-                'tries' => 3,
-                'timeout' => 60,
-            ],
-            'tracker' => [
-                'connection' => 'redis',
-                'queue' => [
-                    'amz-product-details',
-                    'amz-product-offers',
-                    'amz-search',
-                ],
-                'balance' => 'auto',
-                'min-processes' => 0,
-                'max-processes' => 2,
-                'tries' => 3,
-                'timeout' => 60 * Constants::$TRACKER_TIMEOUT,
+                'balanceMaxShift' => 2,
+                'balanceCooldown' => 2,
             ],
             'notification' => [
-                'connection' => 'redis',
-                'queue' => [
-                    'notify-telegram',
-                ],
-                'balance' => 'auto',
-                'min-processes' => 0,
-                'max-processes' => 5,
-                'tries' => 1,
-                'timeout' => 60 * 3,
+                'balanceMaxShift' => 2,
+                'balanceCooldown' => 2,
             ],
+            'tracker' => [
+                'balanceMaxShift' => 2,
+                'balanceCooldown' => 2,
+            ]
         ],
     ],
 ];

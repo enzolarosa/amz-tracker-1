@@ -12,18 +12,6 @@ use Spatie\Crawler\Crawler;
 class ProductOffersJob extends Amazon
 {
     /**
-     * Create a new job instance.
-     *
-     * @param string $asin
-     * @param array $countries
-     */
-    public function __construct(string $asin, array $countries = ['IT'])
-    {
-        parent::__construct($asin, $countries);
-        $this->onQueue('amz-product-offers');
-    }
-
-    /**
      * Execute the job.
      *
      * @return void

@@ -5,24 +5,12 @@ namespace App\Jobs\Amazon;
 use App\Common\Constants;
 use App\Crawler\Amazon\DetailsCrawler;
 use App\Crawler\CrawlRequestFulfilled;
-use App\Models\Setting;
+use App\Models\AmzProduct;
 use Illuminate\Support\Arr;
 use Spatie\Crawler\Crawler;
 
 class ProductDetailsJob extends Amazon
 {
-    /**
-     * Create a new job instance.
-     *
-     * @param string $asin
-     * @param array $countries
-     */
-    public function __construct(string $asin, array $countries = ['IT'])
-    {
-        parent::__construct($asin, $countries);
-        $this->onQueue('amz-product-details');
-    }
-
     /**
      * Execute the job.
      *
@@ -30,6 +18,11 @@ class ProductDetailsJob extends Amazon
      */
     public function handle()
     {
+        $product = AmzProduct::query()->where('asin', $this->asin)->first();
+        if (!(is_null($product->title) || $product->created_at <= now()->subWeek())) {
+            return;
+        }
+
         $detailUrl = $this->getProductUrl('detail');
         $shopUrl = $this->getProductUrl('shop');
 

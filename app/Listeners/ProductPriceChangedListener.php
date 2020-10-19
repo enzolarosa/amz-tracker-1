@@ -6,7 +6,6 @@ use App\Events\ProductPriceChangedEvent;
 use App\Models\AmzProduct;
 use App\Models\Notification;
 use App\Models\User;
-use App\Notifications\ProductPriceChangedNotification;
 
 class ProductPriceChangedListener
 {

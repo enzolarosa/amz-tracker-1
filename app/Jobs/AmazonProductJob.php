@@ -3,10 +3,13 @@
 namespace App\Jobs;
 
 use App\Common\Constants;
+use App\Events\ProductPriceChangedEvent;
 use App\Jobs\Amazon\ProductDetailsJob;
 use App\Jobs\Amazon\ProductOffersJob;
 use App\Models\AmzProduct;
 use App\Models\AmzProductQueue;
+use Illuminate\Bus\Batch;
+use Throwable;
 
 class AmazonProductJob extends Job
 {
@@ -40,28 +43,26 @@ class AmazonProductJob extends Job
      * Execute the job.
      *
      * @return void
+     * @throws Throwable
      */
     public function handle()
     {
         $prod = AmzProduct::query()->firstOrCreate(['asin' => $this->asin]);
         AmzProductQueue::query()->firstOrCreate(['amz_product_id' => $prod->id, 'reserved_at' => now()]);
 
-        if ($this->needDetails($prod)) {
-            $details = new ProductDetailsJob($this->asin);
-            dispatch($details);
-        }
-
+        $details = new ProductDetailsJob($this->asin);
         $offers = new ProductOffersJob($this->asin);
-        dispatch($offers);//->delay(now()->addSeconds(Constants::$WAIT_CRAWLER));
 
-    }
+        $batch = \Bus::batch([
+            $details,
+            $offers
+        ])->then(function (Batch $batch) use ($prod) {
+            if ($prod->wasChanged('current_price') && $prod->current_price < $prod->preview_price) {
+                $event = new ProductPriceChangedEvent();
+                $event->setProduct($prod);
+                event($event);
+            }
+        })->onQueue('check-amz-product')->name("Check `$prod->asin` amazon product")->dispatch();
 
-    /**
-     * @param AmzProduct $product
-     * @return bool
-     */
-    protected function needDetails(AmzProduct $product): bool
-    {
-        return is_null($product->title) || $product->created_at <= now()->subWeek();
     }
 }
