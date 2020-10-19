@@ -46,9 +46,8 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command(CleanUpSettingCommand::class)->everyMinute();
 
-   //     $schedule->command(ProcessNotificationCommand::class)->withoutOverlapping()->everyMinute();
-        //    $schedule->command('server-monitor:run-checks')->withoutOverlapping()->everyMinute();
-        //    $schedule->command(GetProxyServerCommand::class)->withoutOverlapping()->everyTenMinutes();
+        $schedule->command(ProcessNotificationCommand::class)->withoutOverlapping()->everyMinute();
+        $schedule->command('server-monitor:run-checks')->withoutOverlapping()->everyMinute();
 
         // is need a lot of listener in order to prevent the 503 amz error
         $schedule->command(UpdateProductCommand::class)->withoutOverlapping()->everyMinute();
