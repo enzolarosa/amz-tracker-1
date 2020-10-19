@@ -9,7 +9,8 @@ class Notification extends Model
     protected $fillable = [
         'user_id',
         'amz_product_id',
-        'sent'
+        'sent',
+        'price',
     ];
 
     protected $casts = [
