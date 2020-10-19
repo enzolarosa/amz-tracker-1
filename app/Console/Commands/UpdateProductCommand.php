@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use App\Jobs\AmazonProductJob;
 use App\Models\AmzProduct;
 use Illuminate\Console\Command;
+use Bus;
+use Throwable;
 
 class UpdateProductCommand extends Command
 {
@@ -26,6 +28,7 @@ class UpdateProductCommand extends Command
      * Execute the console command.
      *
      * @return void
+     * @throws Throwable
      */
     public function handle()
     {
@@ -41,11 +44,13 @@ class UpdateProductCommand extends Command
         $bar = $this->output->createProgressBar($prod->count());
         $bar->start();
 
-        $prod->each(function (AmzProduct $product) use ($bar) {
-            $job = new AmazonProductJob($product->asin);
-            //    $product->touch();
-            dispatch($job);
+        $batch = Bus::batch([])->onQueue('check-amz-product')->name("Execution `UpdateProductCommand`")->dispatch();
 
+        $prod->each(function (AmzProduct $product) use ($bar, $batch) {
+            $job = new AmazonProductJob($product->asin, $batch->id);
+            $product->touch();
+
+            $batch->add([$job]);
             $bar->advance();
         });
         $bar->finish();
