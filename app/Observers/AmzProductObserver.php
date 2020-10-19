@@ -83,7 +83,7 @@ class AmzProductObserver
         if ($product->current_price < $product->preview_price) {
             $event = new ProductPriceChangedEvent();
             $event->setProduct($product);
-            event($event);
+        //    event($event);
         }
 
         AmzProductLog::query()->create([
