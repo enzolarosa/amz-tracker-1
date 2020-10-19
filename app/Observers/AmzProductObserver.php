@@ -66,17 +66,26 @@ class AmzProductObserver
      */
     protected function onSaving(AmzProduct $product)
     {
+        $event = null;
         if (!is_null($product->sellers) && $product->sellers->count() > 0) {
-            $preview = $product->current_price;
+            $previous = $product->current_price;
             $product->current_price = $this->minPrice($product->sellers);
-            if (is_null($preview)) {
-                $preview = $product->current_price;
+            if ($product->current_price < $product->previous_price) {
+                $event = new ProductPriceChangedEvent();
+                $event->setProduct($product);
             }
-            $product->preview_price = $preview;
+            if (is_null($previous)) {
+                $previous = $product->current_price;
+            }
+            $product->previous_price = $previous;
         }
 
         if (is_null($product->start_price) && !is_null($product->sellers) && $product->sellers->count() > 0) {
             $product->start_price = $product->current_price;
+        }
+
+        if (!is_null($event)) {
+            event($event);
         }
     }
 
@@ -85,12 +94,6 @@ class AmzProductObserver
      */
     protected function onSaved(AmzProduct $product)
     {
-        if ($product->current_price < $product->preview_price) {
-            $event = new ProductPriceChangedEvent();
-            $event->setProduct($product);
-            event($event);
-        }
-
         if (env('AMZ_PRODUCT_HISTORY', false)) {
             AmzProductLog::query()->create([
                 'amz_product_id' => $product->id,

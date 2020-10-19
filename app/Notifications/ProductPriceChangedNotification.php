@@ -47,7 +47,7 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
                     "Good news for you!\n\nThe product '*%s*' price now is *%s* (previous: %s)\n\nLink: %s",
                     $this->getProduct()->title,
                     number_format($this->getProduct()->current_price, 2, ',', '.') . "€",
-                    number_format($this->getProduct()->preview_price, 2, ',', '.') . "€",
+                    number_format($this->getProduct()->previous_price, 2, ',', '.') . "€",
                     ShortUrl::hideLink($this->getProduct()->itemDetailUrl . '?tag=' . env('AMZ_PARTNER'))
                 )
             );

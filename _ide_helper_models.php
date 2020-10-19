@@ -27,7 +27,7 @@ namespace App\Models{
  * @property string|null $itemDetailUrl
  * @property \Illuminate\Support\Collection|null $sellers
  * @property string|null $start_price
- * @property string|null $preview_price
+ * @property string|null $previous_price
  * @property string|null $current_price
  * @property int $enabled
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -48,7 +48,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct whereImages($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct whereItemDetailUrl($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct wherePreviewPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct wherePreviousPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct whereReview($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct whereSellers($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct whereStars($value)

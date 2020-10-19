@@ -19,7 +19,7 @@ class AmzProduct extends Model
         'itemDetailUrl',
         'sellers',
         'start_price',
-        'preview_price',
+        'previous_price',
         'current_price'
     ];
 

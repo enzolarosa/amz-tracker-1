@@ -9,7 +9,7 @@ class OffersCrawler extends Amazon
 {
     protected function parsePage()
     {
-        $prod = AmzProduct::query()->firstOrCreate(['asin'=> $this->getAsin()]);
+        $prod = AmzProduct::query()->firstOrCreate(['asin' => $this->getAsin()]);
         if (is_null($prod)) {
             return null;
         }
@@ -26,6 +26,7 @@ class OffersCrawler extends Amazon
             $pricePerUnit = trim(optional($offer->find('span.olpOfferPrice')[0])->text);
             $offerCondition = trim(preg_replace('/\s\s+/', '', optional($offer->find('span.olpCondition')[0])->text));
             $shippingPrice = optional($offer->find('span.olpShippingPrice')[0])->text;
+            $shippingParsed = (float)str_replace([$this->getCurrency(), '.', ','], ['', '', '.'], $price);
             $shippingInfo = optional($offer->find('span.olpShippingPriceText')[0])->text;
 
             $prime = optional($offer->find('i.a-icon-prime')[0]) ? true : false;
@@ -52,7 +53,8 @@ class OffersCrawler extends Amazon
                 'condition' => $offerCondition,
                 'sellerName' => $sellerName ?? 'seller unknown',
                 'prime' => $prime,
-                'shippingPrice' => $shippingPrice ?? 0.00,
+                'shippingPrice' => $shippingPrice,
+                'shippingParsed' => $shippingParsed,
                 'shippingInfo' => $shippingInfo,
                 'shopUrl' => $shopUrl ?? 'seller unknown',
                 'pricePerUnit' => $pricePerUnit

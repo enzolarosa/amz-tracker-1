@@ -107,7 +107,7 @@ class Amazon extends CrawlObserver
         $data = $this->parsePage();
         if (!is_null($data)) {
             if (!is_null($prod->current_price)) {
-                $prod->update(['preview_price' => $prod->current_price]);
+                $prod->update(['previous_price' => $prod->current_price]);
             }
             $prod->update($data);
         }
