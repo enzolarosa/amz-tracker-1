@@ -125,7 +125,6 @@ class Amazon extends Job
         if (is_null($cookieJar)) {
             $cookies = Cache::get(Constants::COOKIES_KEY);
             if ($cookies) {
-                info("cookies cache:" . $cookies);
                 $cookies = json_decode($cookies,true);
             }
             $cookieJar = new CookieJar(true, $cookies ?? []);
