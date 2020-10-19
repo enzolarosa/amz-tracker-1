@@ -25,7 +25,7 @@ class ProductPriceChangedListener
                 Notification::query()->firstOrCreate([
                     'user_id' => $user->id,
                     'amz_product_id' => $prod->id,
-                    'sent' => false
+                    'price' => $prod->current_price,
                 ]);
             }
         });

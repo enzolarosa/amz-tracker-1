@@ -80,7 +80,7 @@ class AmzProductObserver
      */
     protected function onSaved(AmzProduct $product)
     {
-        if ($product->wasChanged('current_price') && $product->current_price < $product->preview_price) {
+        if ($product->current_price < $product->preview_price) {
             $event = new ProductPriceChangedEvent();
             $event->setProduct($product);
             event($event);

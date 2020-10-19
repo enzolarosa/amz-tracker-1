@@ -136,6 +136,7 @@ namespace App\Models{
  * @property int $user_id
  * @property int $amz_product_id
  * @property bool $sent
+ * @property mixed|null $price
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\AmzProduct $product
@@ -146,6 +147,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereAmzProductId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereSent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUserId($value)

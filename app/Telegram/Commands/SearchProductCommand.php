@@ -4,6 +4,7 @@ namespace App\Telegram\Commands;
 
 use App\Jobs\Amazon\SearchJob;
 use App\Models\User;
+use Illuminate\Support\Facades\Bus;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
@@ -50,9 +51,12 @@ class SearchProductCommand extends Command
             return;
         }
 
-        $job = new SearchJob($str);
-        $job->setUser($user);
-        dispatch($job);
+        $searchJob = new SearchJob($str);
+        $searchJob->setUser($user);
+
+        Bus::batch([
+            $searchJob
+        ])->onQueue('amz-search')->name("[#{$user->tId} $user->username] Searching `$str` products")->dispatch();
 
         $this->replyWithMessage(['text' => sprintf('I will add each results for `%s` in your tracker list.', $str)]);
     }

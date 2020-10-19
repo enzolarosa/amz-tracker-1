@@ -55,7 +55,8 @@ class ProcessNotificationCommand extends Command
             $notification->setProduct($prod);
             $user->notify($notification);
 
-            $not->delete();
+            $not->sent = true;
+            $not->save();
 
             $bar->advance();
         });
