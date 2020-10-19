@@ -53,9 +53,10 @@ class AmazonProductJob extends Job
         $details = new ProductDetailsJob($this->asin, $this->batchUuid);
         $offers = new ProductOffersJob($this->asin, $this->batchUuid);
 
-        $batch = Bus::batch([])->name("Check `$prod->asin` amazon product")->onQueue('check-amz-product')->dispatch();
         if ($this->batchUuid) {
             $batch = Bus::findBatch($this->batchId);
+        } else {
+            $batch = Bus::batch([])->name("Check `$prod->asin` amazon product")->onQueue('check-amz-product')->dispatch();
         }
 
         $batch->add([$details, $offers]);
