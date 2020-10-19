@@ -23,16 +23,13 @@ use Psr\Http\Message\RequestInterface;
 
 class Amazon extends Job
 {
-    public $tries = 15;
-
     const WAIT_CRAWLER = 60;
 
+    public $tries = 15;
     protected int $concurrency = 1;
     protected int $delayBtwRequest = 25;
-
     protected ?string $asin = null;
     protected array $countries;
-
     protected array $baseUrls = [
         'US' => 'https://www.amazon.com',
         'UK' => 'https://www.amazon.co.uk',
@@ -44,7 +41,6 @@ class Amazon extends Job
         'CA' => 'https://www.amazon.ca',
         'JP' => 'https://www.amazon.co.jp',
     ];
-
     protected array $currency = [
         'US' => 'USD',
         'UK' => 'GBP',
@@ -56,6 +52,7 @@ class Amazon extends Job
         'CA' => 'CAD',
         'JP' => 'JPY',
     ];
+    protected $batchUuid;
 
     /**
      * @return array
@@ -69,6 +66,7 @@ class Amazon extends Job
      * Create a new job instance.
      *
      * @param string $asin
+     * @param null $batchUuid
      * @param array $countries
      */
     public function __construct(string $asin, $batchUuid = null, array $countries = ['IT'])
@@ -77,6 +75,7 @@ class Amazon extends Job
 
         $this->asin = $asin;
         $this->countries = $countries;
+        $this->batchUuid = $batchUuid;
     }
 
     protected function getProductUrl(string $type = ''): string
