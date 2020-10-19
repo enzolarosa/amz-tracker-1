@@ -2,7 +2,6 @@
 
 namespace App\Jobs\Amazon;
 
-use App\Common\Constants;
 use App\Crawler\Amazon\DetailsCrawler;
 use App\Crawler\CrawlRequestFulfilled;
 use App\Models\AmzProduct;

@@ -34,7 +34,7 @@ class UpdateProductCommand extends Command
             //->leftJoin('amz_product_queues', 'amz_product_queues.amz_product_id', '=', 'amz_products.id')
             // ->whereNull('amz_product_queues.id')
             ->where('amz_products.enabled', true)
-            ->where('amz_products.updated_at', '<=', now()->subMinutes(20));
+            ->where('amz_products.updated_at', '<=', now()->subMinutes(15));
 
         $this->comment("I've {$prod->count()} products to analyze!");
 

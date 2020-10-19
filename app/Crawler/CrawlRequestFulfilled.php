@@ -15,9 +15,21 @@ class CrawlRequestFulfilled extends CrawlRequest
         $html = $browsershot->setUrl((string)$url)->bodyHtml();
 
         $cookies = optional(json_decode($browsershot->getCookie()))->{'cookies'};
-        Cache::put(Constants::COOKIES_KEY, json_encode($cookies));
+        Cache::put(Constants::COOKIES_KEY, json_encode($cookies), $this->getTtl($cookies));
         info("write cookie to cache. " . json_encode($cookies));
 
         return html_entity_decode($html);
+    }
+
+    protected function getTtl($cookies)
+    {
+        $ttl = null;
+        foreach ($cookies as $cookie) {
+            if ($cookie->name == 'session-id-time') {
+                $ttl = $cookie->expires;
+            }
+        }
+
+        return $ttl;
     }
 }

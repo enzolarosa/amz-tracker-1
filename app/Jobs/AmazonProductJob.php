@@ -8,6 +8,7 @@ use App\Jobs\Amazon\ProductDetailsJob;
 use App\Jobs\Amazon\ProductOffersJob;
 use App\Models\AmzProduct;
 use App\Models\AmzProductQueue;
+use Bus;
 use Illuminate\Bus\Batch;
 use Throwable;
 
@@ -53,16 +54,16 @@ class AmazonProductJob extends Job
         $details = new ProductDetailsJob($this->asin);
         $offers = new ProductOffersJob($this->asin);
 
-        $batch = \Bus::batch([
+        $batch = Bus::batch([
             $details,
             $offers
-        ])->then(function (Batch $batch) use ($prod) {
+        ])->then(function (Batch $batch) {
+        /*    $prod = AmzProduct::query()->firstOrCreate(['asin' => $this->asin]);
             if ($prod->wasChanged('current_price') && $prod->current_price < $prod->preview_price) {
                 $event = new ProductPriceChangedEvent();
                 $event->setProduct($prod);
                 event($event);
-            }
+            }*/
         })->onQueue('check-amz-product')->name("Check `$prod->asin` amazon product")->dispatch();
-
     }
 }
