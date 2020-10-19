@@ -16,7 +16,7 @@ class CrawlRequestFulfilled extends CrawlRequest
 
         $cookies = optional(json_decode($browsershot->getCookie()))->{'cookies'};
         Cache::put(Constants::COOKIES_KEY, json_encode($cookies));
-        info("write cookie to cache. " . $cookies);
+        info("write cookie to cache. " . json_encode($cookies));
 
         return html_entity_decode($html);
     }
