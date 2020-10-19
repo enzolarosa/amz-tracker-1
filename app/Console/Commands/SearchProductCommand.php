@@ -4,7 +4,10 @@ namespace App\Console\Commands;
 
 use App\Jobs\Amazon\SearchJob;
 use App\Models\User;
+use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
+use Bus;
+use Throwable;
 
 class SearchProductCommand extends Command
 {
@@ -26,6 +29,7 @@ class SearchProductCommand extends Command
      * Execute the console command.
      *
      * @return mixed
+     * @throws Throwable
      */
     public function handle()
     {
@@ -33,10 +37,14 @@ class SearchProductCommand extends Command
         $this->comment("I'll search $keyword product!");
         $user = $this->option('user');
 
-        $job = new SearchJob($keyword);
+        $searchJob = new SearchJob($keyword);
         if ($user) {
-            $job->setUser(User::findOrFail($user));
+            $searchJob->setUser(User::findOrFail($user));
         }
-        dispatch($job);
+
+        $batch = Bus::batch([
+            $searchJob
+        ])->onQueue('amz-search')->name("Searching `$keyword` products")->dispatch();
+
     }
 }

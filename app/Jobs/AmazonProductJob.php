@@ -2,20 +2,18 @@
 
 namespace App\Jobs;
 
-use App\Common\Constants;
-use App\Events\ProductPriceChangedEvent;
 use App\Jobs\Amazon\ProductDetailsJob;
 use App\Jobs\Amazon\ProductOffersJob;
 use App\Models\AmzProduct;
 use App\Models\AmzProductQueue;
-use Bus;
-use Illuminate\Bus\Batch;
+use Illuminate\Support\Facades\Bus;
 use Throwable;
 
 class AmazonProductJob extends Job
 {
     protected string $asin;
     protected array $countries;
+    protected $batchUuid;
 
     /**
      * @return array
@@ -30,14 +28,15 @@ class AmazonProductJob extends Job
      *
      * @param string $asin
      * @param array $countries
+     * @param null $batchUuid
      */
-    public function __construct(string $asin, array $countries = ['IT'])
+    public function __construct(string $asin, $batchUuid = null, array $countries = ['IT'])
     {
         $this->onQueue('amz-product');
 
         $this->asin = $asin;
         $this->countries = $countries;
-
+        $this->batchUuid = $batchUuid;
     }
 
     /**
@@ -51,19 +50,14 @@ class AmazonProductJob extends Job
         $prod = AmzProduct::query()->firstOrCreate(['asin' => $this->asin]);
         AmzProductQueue::query()->firstOrCreate(['amz_product_id' => $prod->id, 'reserved_at' => now()]);
 
-        $details = new ProductDetailsJob($this->asin);
-        $offers = new ProductOffersJob($this->asin);
+        $details = new ProductDetailsJob($this->asin, $this->batchUuid);
+        $offers = new ProductOffersJob($this->asin, $this->batchUuid);
 
-        $batch = Bus::batch([
-            $details,
-            $offers
-        ])->then(function (Batch $batch) {
-        /*    $prod = AmzProduct::query()->firstOrCreate(['asin' => $this->asin]);
-            if ($prod->wasChanged('current_price') && $prod->current_price < $prod->preview_price) {
-                $event = new ProductPriceChangedEvent();
-                $event->setProduct($prod);
-                event($event);
-            }*/
-        })->onQueue('check-amz-product')->name("Check `$prod->asin` amazon product")->dispatch();
+        $batch = Bus::batch([])->name("Check `$prod->asin` amazon product")->dispatch();
+        if ($this->batchUuid) {
+            $batch = Bus::findBatch($this->batchId);
+        }
+
+        $batch->add([$details, $offers]);
     }
 }

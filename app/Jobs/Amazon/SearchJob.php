@@ -4,7 +4,6 @@ namespace App\Jobs\Amazon;
 
 use App\Crawler\Amazon\SearchCrawler;
 use App\Crawler\CrawlRequestFulfilled;
-use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use Spatie\Crawler\Crawler;
@@ -57,6 +56,7 @@ class SearchJob extends Amazon
         $observer = new SearchCrawler();
         $observer->setCountry(Arr::first($this->countries));
         $observer->setUser($this->getUser());
+        $observer->setBatchId($this->batch()->id);
 
         Crawler::create($this->clientOptions())
             ->setCrawlFulfilledHandlerClass(CrawlRequestFulfilled::class)

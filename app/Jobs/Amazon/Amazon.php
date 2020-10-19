@@ -71,7 +71,7 @@ class Amazon extends Job
      * @param string $asin
      * @param array $countries
      */
-    public function __construct(string $asin, array $countries = ['IT'])
+    public function __construct(string $asin, $batchUuid = null, array $countries = ['IT'])
     {
         $this->onQueue('amz-product');
 
@@ -125,7 +125,7 @@ class Amazon extends Job
         if (is_null($cookieJar)) {
             $cookies = Cache::get(Constants::COOKIES_KEY);
             if ($cookies) {
-                $cookies = json_decode($cookies,true);
+                $cookies = json_decode($cookies, true);
             }
             $cookieJar = new CookieJar(true, $cookies ?? []);
         }

@@ -13,6 +13,7 @@ use DOMDocument;
 use Exception;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
 use Psr\Http\Message\ResponseInterface;
@@ -28,25 +29,12 @@ class SearchCrawler extends CrawlObserver
     protected string $currency;
     protected string $country;
     protected ?User $user = null;
-
-    /**
-     * @return string
-     */
-    public function getCountry(): string
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param string $country
-     */
-    public function setCountry(string $country): void
-    {
-        $this->country = $country;
-    }
+    protected $batchId;
 
     public function crawled(UriInterface $url, ResponseInterface $response, ?UriInterface $foundOnUrl = null)
     {
+        $batch = Bus::findBatch($this->batchId);
+
         preg_match('/([A-Z0-9]{10})/', $url->getPath(), $prod, PREG_OFFSET_CAPTURE);
 
         $doc = new DOMDocument();
@@ -55,7 +43,6 @@ class SearchCrawler extends CrawlObserver
         $jquery->load($doc->saveHTML());
 
         $asins = $jquery->find('div.s-asin');
-        $waitSec = Constants::$WAIT_CRAWLER;
 
         foreach ($asins as $k => $asin) {
             $asin = $asin->{'data-asin'};
@@ -69,11 +56,10 @@ class SearchCrawler extends CrawlObserver
                 ]);
             }
 
-            $job = new AmazonProductJob($asin);
-            dispatch($job);//->delay(now()->addSeconds($waitSec));
-
-            $waitSec += Constants::$WAIT_CRAWLER;
+            $job = new AmazonProductJob($asin, $this->batchId);
+            $batch->add([$job]);
         }
+
         try {
             $pagination = $jquery->find('ul.a-pagination');
             $next = $pagination->find('li.a-last');
@@ -83,7 +69,7 @@ class SearchCrawler extends CrawlObserver
                 $link = "{$url->getScheme()}://{$url->getHost()}$href";
                 $job = new SearchJob('amz-crawler', ['IT'], $link);
                 $job->setUser($this->getUser());
-                dispatch($job);//->delay(now()->addSeconds($waitSec + Constants::$WAIT_CRAWLER));
+                $batch->add([$job]);
             }
         } catch (Exception $exception) {
             report($exception);
@@ -139,4 +125,37 @@ class SearchCrawler extends CrawlObserver
     {
         $this->user = $user;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getBatchId()
+    {
+        return $this->batchId;
+    }
+
+    /**
+     * @param mixed $batchId
+     */
+    public function setBatchId($batchId): void
+    {
+        $this->batchId = $batchId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountry(): string
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param string $country
+     */
+    public function setCountry(string $country): void
+    {
+        $this->country = $country;
+    }
+
 }
