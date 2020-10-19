@@ -32,6 +32,8 @@ class SearchJob extends Amazon
      */
     public function __construct(string $keyword, array $countries = ['IT'], string $url = null)
     {
+        parent::__construct('');
+
         $this->onQueue('amz-search');
 
         $this->keyword = $keyword;
