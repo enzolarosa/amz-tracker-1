@@ -18,9 +18,7 @@ class ProductPriceChangedListener
     public function handle(ProductPriceChangedEvent $event)
     {
         $prod = $event->getProduct();
-        /** @var User $users */
-        $users = $prod->users()->where('active', true)->get();
-        $users->each(function (User $user) use ($prod) {
+        $prod->users()->where('active', true)->each(function (User $user) use ($prod) {
             if ($this->shouldNotify($user, $prod)) {
                 Notification::query()->firstOrCreate([
                     'user_id' => $user->id,

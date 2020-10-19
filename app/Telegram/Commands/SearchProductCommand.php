@@ -54,9 +54,15 @@ class SearchProductCommand extends Command
         $searchJob = new SearchJob($str);
         $searchJob->setUser($user);
 
-        Bus::batch([
-            $searchJob
-        ])->onQueue('amz-search')->name("[#{$user->tId} $user->username] Searching `$str` products")->dispatch();
+        if ($user->batch_id) {
+            $batch = Bus::findBatch($user->batch_id);
+        } else {
+            $batch = Bus::batch([])->onQueue('telegram-batch')->name("Telegram User #$user->tId $user->first_name $user->last_name")->dispatch();
+            $user->batch_id = $batch->id;
+            $user->save();
+        }
+
+        $batch->add([$searchJob]);
 
         $this->replyWithMessage(['text' => sprintf('I will add each results for `%s` in your tracker list.', $str)]);
     }

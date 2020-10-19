@@ -5,6 +5,7 @@ namespace App\Telegram\Commands;
 use App\Models\AmzProduct;
 use App\Models\AmzProductUser;
 use App\Models\User;
+use Illuminate\Support\Facades\Bus;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
@@ -44,6 +45,14 @@ class RemoveProductCommand extends Command
             'language_code' => $tUser->language_code,
             'active' => true,
         ]);
+
+        if ($user->batch_id) {
+            $batch = Bus::findBatch($user->batch_id);
+        } else {
+            $batch = Bus::batch([])->onQueue('telegram-batch')->name("Telegram User #$user->tId $user->first_name $user->last_name")->dispatch();
+            $user->batch_id = $batch->id;
+            $user->save();
+        }
 
         $asin = $args['asin'] ?? null;
         if (is_null($asin) || empty($asin)) {

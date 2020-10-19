@@ -6,6 +6,7 @@ use App\Jobs\AmazonProductJob;
 use App\Models\AmzProduct;
 use App\Models\AmzProductUser;
 use App\Models\User;
+use Illuminate\Support\Facades\Bus;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
@@ -69,8 +70,16 @@ class AddProductCommand extends Command
             'enabled' => true
         ]);
 
-        $job = new AmazonProductJob($asin);
-        dispatch($job);
+        if ($user->batch_id) {
+            $batch = Bus::findBatch($user->batch_id);
+        } else {
+            $batch = Bus::batch([])->onQueue('telegram-batch')->name("Telegram User #$user->tId $user->first_name $user->last_name")->dispatch();
+            $user->batch_id = $batch->id;
+            $user->save();
+        }
+
+        $job = new AmazonProductJob($asin, $user->batch_id);
+        $batch->add([$job]);
 
         $this->replyWithMessage(['text' => sprintf('Your product: %s added to tracker list.', $asin)]);
     }

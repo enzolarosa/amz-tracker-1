@@ -44,22 +44,24 @@ class ProcessNotificationCommand extends Command
         $nots = Notification::query()->where('sent', false);
         $this->comment("I've {$nots->count()} notifications to send!");
 
-        $bar = $this->output->createProgressBar($nots->count());
+        $bar = $this->output->createProgressBar($count = $nots->count());
         $bar->start();
 
-        $nots->each(function (Notification $not) use ($bar) {
-            $prod = AmzProduct::find($not->amz_product_id);
-            $user = User::find($not->user_id);
+        if ($count > 0) {
+            $nots->each(function (Notification $not) use ($bar) {
+                $prod = AmzProduct::find($not->amz_product_id);
+                $user = User::find($not->user_id);
 
-            $notification = new ProductPriceChangedNotification();
-            $notification->setProduct($prod);
-            $user->notify($notification);
+                $notification = new ProductPriceChangedNotification();
+                $notification->setProduct($prod);
+                $user->notify($notification);
 
-            $not->sent = true;
-            $not->save();
+                $not->sent = true;
+                $not->save();
 
-            $bar->advance();
-        });
+                $bar->advance();
+            });
+        }
 
         $bar->finish();
         $this->comment("\nDone!");
