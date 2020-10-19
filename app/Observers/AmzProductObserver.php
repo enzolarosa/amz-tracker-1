@@ -84,7 +84,7 @@ class AmzProductObserver
             $product->start_price = $product->current_price;
         }
 
-        if (!is_null($event)) {
+        if (!is_null($event) && !is_null($product->title)) {
             event($event);
         }
     }
