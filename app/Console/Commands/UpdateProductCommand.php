@@ -47,7 +47,7 @@ class UpdateProductCommand extends Command
 
         $batch = Bus::batch([])
             ->onQueue('check-amz-product')
-            ->name("[" . now()->format('md hi') . "] UpdateProductCommand running")
+            ->name("[" . now()->format('d M h:i') . "] UpdateProductCommand running")
             ->dispatch();
 
         if ($count > 0) {

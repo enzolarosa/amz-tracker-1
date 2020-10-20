@@ -39,9 +39,9 @@ class UpdateWishlistCommand extends Command
 
         $batch = Bus::batch([])
             ->onQueue('check-amz-product')
-            ->name("[" . now()->format('md hi') . "] UpdateWishListCommand running")
+            ->name("[" . now()->format('d M h:i') . "] UpdateWishListCommand running")
             ->dispatch();
-        
+
         if ($count > 0) {
             WishList::query()->each(function (WishList $list) use ($bar, $batch) {
                 $list->touch();
