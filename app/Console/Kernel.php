@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
         UpdateProductCommand::class,
         UpdateWishlistCommand::class,
         SearchProductCommand::class,
+        ProcessNotificationCommand::class,
     ];
 
     /**
