@@ -57,7 +57,7 @@ class Kernel extends ConsoleKernel
     public function daily(Schedule $schedule)
     {
         $schedule->command('telegram:webhook', ['amztracker', '--setup'])->dailyAt('02:00');
-        $schedule->command(UpdateWishlistCommand::class)->twiceDaily('04:00', '16:00');
+        $schedule->command(UpdateWishlistCommand::class)->cron('15 */4 * * *'); // @link https://crontab.guru/#15_*/4_*_*_*
     }
 
     public function weekly(Schedule $schedule)
@@ -80,17 +80,5 @@ class Kernel extends ConsoleKernel
 
         $schedule->command(FetchAccuWeatherCurrentConditionsCommand::class)->withoutOverlapping()->hourly();
         $schedule->command(FetchAccuWeatherFiveDayForecastCommand::class)->withoutOverlapping()->daily();
-    }
-
-    /**
-     * Register the commands for the application.
-     *
-     * @return void
-     */
-    protected function commands()
-    {
-        $this->load(__DIR__ . '/Commands');
-
-        require base_path('routes/console.php');
     }
 }
