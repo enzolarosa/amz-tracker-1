@@ -29,6 +29,12 @@ class UpdateWishlistCommand extends Command
      */
     public function handle()
     {
+        $wishlists = WishList::query();
+        $this->comment("I've {$wishlists->count()} wishlists to analyze!");
+
+        $bar = $this->output->createProgressBar($count = $wishlists->count());
+        $bar->start();
+
         $result = DB::select("select * from job_batches where name like 'UpdateWishListCommand%' order by created_at desc limit 1;");
         $batchId = null;
 
@@ -42,8 +48,15 @@ class UpdateWishlistCommand extends Command
             $batch = Bus::batch([])->onQueue('check-amz-product')->name("UpdateWishListCommand running")->dispatch();
         }
 
-        WishList::query()->each(function (WishList $list) use ($batch) {
-            $batch->add([new WishlistJob($list->url)]);
-        });
+        if ($count > 0) {
+            WishList::query()->each(function (WishList $list) use ($bar, $batch) {
+                $list->touch();
+                $batch->add([new WishlistJob($list->url)]);
+                $bar->advance();
+            });
+        }
+
+        $bar->finish();
+        $this->comment("\nDone!");
     }
 }
