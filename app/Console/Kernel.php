@@ -23,6 +23,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         DispatchAmzCheckerCommand::class,
         UpdateProductCommand::class,
+        UpdateWishlistCommand::class,
         SearchProductCommand::class,
     ];
 
