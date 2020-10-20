@@ -11,7 +11,7 @@ class DetailsCrawler extends Amazon
 {
     protected function parsePage()
     {
-        $prod = AmzProduct::query()->firstOrCreate(['asin'=> $this->getAsin()]);
+        $prod = AmzProduct::query()->firstOrCreate(['asin' => $this->getAsin()]);
         if (is_null($prod)) {
             return null;
         }
@@ -35,7 +35,7 @@ class DetailsCrawler extends Amazon
         ];
 
         if ($title) {
-            $data['title'] = $title;
+            $data['title'] = substr($title, 0, 250);
         }
         if ($desc) {
             $data['description'] = $desc;
