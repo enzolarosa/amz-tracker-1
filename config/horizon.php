@@ -179,18 +179,6 @@ return [
             ],
             'balance' => 'auto',
             'maxProcesses' => 5,
-            'nice' => 0,
-            'tries' => 3,
-            'timeout' => 60,
-        ],
-        'amz' => [
-            'connection' => 'redis',
-            'queue' => [
-                'amz-product',
-            ],
-            'balance' => 'auto',
-            'maxProcesses' => 5,
-            'nice' => 0,
             'tries' => 3,
             'timeout' => 60,
         ],
@@ -201,20 +189,19 @@ return [
             ],
             'balance' => 'auto',
             'maxProcesses' => 5,
-            'nice' => 0,
             'tries' => 1,
             'timeout' => 60 * 3,
         ],
         'tracker' => [
             'connection' => 'redis',
             'queue' => [
+                'amz-product',
                 'check-amz-product',
                 'amz-search',
                 'telegram-batch',
             ],
             'balance' => 'auto',
             'maxProcesses' => 3,
-            'nice' => 0,
             'tries' => 1,
             'timeout' => 60 * Constants::$TRACKER_TIMEOUT,
         ],
@@ -226,25 +213,18 @@ return [
                 'balanceMaxShift' => 5,
                 'balanceCooldown' => 2,
             ],
-            'amz' => [
-                'balanceMaxShift' => 5,
-                'balanceCooldown' => 2,
-            ],
             'notification' => [
                 'balanceMaxShift' => 5,
                 'balanceCooldown' => 2,
             ],
             'tracker' => [
-                'balanceMaxShift' => 3,
+                'balanceMaxShift' => 5,
                 'balanceCooldown' => 2,
+                'maxProcesses' => 5,
             ]
         ],
         'local' => [
             'default' => [
-                'balanceMaxShift' => 2,
-                'balanceCooldown' => 2,
-            ],
-            'amz' => [
                 'balanceMaxShift' => 2,
                 'balanceCooldown' => 2,
             ],
