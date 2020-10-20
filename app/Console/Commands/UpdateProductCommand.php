@@ -45,19 +45,10 @@ class UpdateProductCommand extends Command
         $bar = $this->output->createProgressBar($count = $prod->count());
         $bar->start();
 
-        $result = DB::select("select * from job_batches where name like 'UpdateProductCommand%' order by created_at desc limit 1;");
-        $batchId = null;
-
-        if (!empty($result)) {
-            $batchId = $result[0]->id;
-        }
-
-        if ($batchId) {
-            $batch = Bus::findBatch($batchId);
-            DB::statement("update job_batches set finished_at = null where id = '$batchId';");
-        } else {
-            $batch = Bus::batch([])->onQueue('check-amz-product')->name("UpdateProductCommand running")->dispatch();
-        }
+        $batch = Bus::batch([])
+            ->onQueue('check-amz-product')
+            ->name("[" . now()->format('md hi') . "] UpdateProductCommand running")
+            ->dispatch();
 
         if ($count > 0) {
             $prod->each(function (AmzProduct $product) use ($bar, $batch) {

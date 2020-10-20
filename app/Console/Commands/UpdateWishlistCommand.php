@@ -7,6 +7,7 @@ use App\Models\WishList;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class UpdateWishlistCommand extends Command
 {
@@ -26,6 +27,7 @@ class UpdateWishlistCommand extends Command
 
     /**
      * Execute the console command.
+     * @throws Throwable
      */
     public function handle()
     {
@@ -35,20 +37,11 @@ class UpdateWishlistCommand extends Command
         $bar = $this->output->createProgressBar($count = $wishlists->count());
         $bar->start();
 
-        $result = DB::select("select * from job_batches where name like 'UpdateWishListCommand%' order by created_at desc limit 1;");
-        $batchId = null;
-
-        if (!empty($result)) {
-            $batchId = $result[0]->id;
-        }
-
-        if ($batchId) {
-            $batch = Bus::findBatch($batchId);
-            DB::statement("update job_batches set finished_at = null where id = '$batchId';");
-        } else {
-            $batch = Bus::batch([])->onQueue('check-amz-product')->name("UpdateWishListCommand running")->dispatch();
-        }
-
+        $batch = Bus::batch([])
+            ->onQueue('check-amz-product')
+            ->name("[" . now()->format('md hi') . "] UpdateWishListCommand running")
+            ->dispatch();
+        
         if ($count > 0) {
             WishList::query()->each(function (WishList $list) use ($bar, $batch) {
                 $list->touch();
