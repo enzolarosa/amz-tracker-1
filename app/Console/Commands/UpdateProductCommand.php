@@ -45,13 +45,13 @@ class UpdateProductCommand extends Command
         $bar = $this->output->createProgressBar($count = $prod->count());
         $bar->start();
 
-        $result = optional(DB::select("select * from job_batches where name like 'UpdateProductCommand%' order by created_at desc limit 1;"));
+        $result = DB::select("select * from job_batches where name like 'UpdateProductCommand%' order by created_at desc limit 1;");
         $batchId = null;
 
-        if ($result) {
+        if (!empty($result)) {
             $batchId = $result[0]->id;
         }
-        
+
         if ($batchId) {
             $batch = Bus::findBatch($batchId);
         } else {
