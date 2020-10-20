@@ -37,12 +37,12 @@ class UpdateWishlistCommand extends Command
         $bar = $this->output->createProgressBar($count = $wishlists->count());
         $bar->start();
 
-        $batch = Bus::batch([])
-            ->onQueue('check-amz-product')
-            ->name("[" . now()->format('d M h:i') . "] UpdateWishListCommand running")
-            ->dispatch();
-
         if ($count > 0) {
+            $batch = Bus::batch([])
+                ->onQueue('check-amz-product')
+                ->name("[" . now()->format('d M h:i') . "] UpdateWishListCommand running")
+                ->dispatch();
+
             WishList::query()->each(function (WishList $list) use ($bar, $batch) {
                 $list->touch();
                 $batch->add([new WishlistJob($list->url)]);
