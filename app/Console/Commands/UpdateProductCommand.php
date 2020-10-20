@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\AmazonProductJob;
 use App\Models\AmzProduct;
+use DB;
 use Illuminate\Console\Command;
 use Bus;
 use Throwable;
@@ -44,9 +45,14 @@ class UpdateProductCommand extends Command
         $bar = $this->output->createProgressBar($count = $prod->count());
         $bar->start();
 
-        if ($count > 0) {
-            $batch = Bus::batch([])->onQueue('check-amz-product')->name("Execution `UpdateProductCommand` will check $count products")->dispatch();
+        $batchId = optional(DB::select("select * from job_batches where name like 'UpdateProductCommand%' order by created_at desc limit 1;")[0])->id;
+        if ($batchId) {
+            $batch = Bus::findBatch($batchId);
+        } else {
+            $batch = Bus::batch([])->onQueue('check-amz-product')->name("UpdateProductCommand running")->dispatch();
+        }
 
+        if ($count > 0) {
             $prod->each(function (AmzProduct $product) use ($bar, $batch) {
                 $job = new AmazonProductJob($product->asin, $batch->id);
                 $product->touch();
