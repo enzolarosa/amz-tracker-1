@@ -44,6 +44,7 @@ class UpdateWishlistCommand extends Command
 
         if ($batchId) {
             $batch = Bus::findBatch($batchId);
+            DB::statement("update job_batches set finished_at = null where id = '$batchId';");
         } else {
             $batch = Bus::batch([])->onQueue('check-amz-product')->name("UpdateWishListCommand running")->dispatch();
         }

@@ -34,6 +34,7 @@ class StopCommand extends Command
             'username' => $tUser->username,
             'language_code' => $tUser->language_code,
             'active' => false,
+            'batch_id' => null,
         ]);
 
         $this->replyWithMessage(['text' => sprintf("I'm sorry! Bye %s", $user->first_name)]);

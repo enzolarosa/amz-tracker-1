@@ -4,9 +4,9 @@ namespace App\Console\Commands;
 
 use App\Jobs\AmazonProductJob;
 use App\Models\AmzProduct;
-use DB;
 use Illuminate\Console\Command;
 use Bus;
+use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class UpdateProductCommand extends Command
@@ -54,6 +54,7 @@ class UpdateProductCommand extends Command
 
         if ($batchId) {
             $batch = Bus::findBatch($batchId);
+            DB::statement("update job_batches set finished_at = null where id = '$batchId';");
         } else {
             $batch = Bus::batch([])->onQueue('check-amz-product')->name("UpdateProductCommand running")->dispatch();
         }
