@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\UpdateWishlistCommand;
 use App\Console\Commands\CleanUpSettingCommand;
 use App\Console\Commands\DispatchAmzCheckerCommand;
 use App\Console\Commands\ProcessNotificationCommand;
@@ -56,6 +57,7 @@ class Kernel extends ConsoleKernel
     public function daily(Schedule $schedule)
     {
         $schedule->command('telegram:webhook', ['amztracker', '--setup'])->dailyAt('02:00');
+        $schedule->command(UpdateWishlistCommand::class)->twiceDaily('04:00', '16:00');
     }
 
     public function weekly(Schedule $schedule)
@@ -73,8 +75,8 @@ class Kernel extends ConsoleKernel
     public function dashboard(Schedule $schedule)
     {
         //    $schedule->command(FetchPingPingMonitorsCommand::class)->withoutOverlapping()->everyMinute();
-        //  $schedule->command(FetchForgeRecentEventsCommand::class)->withoutOverlapping()->everyMinute();
-//    $schedule->command(FetchForgeServersCommand::class)->withoutOverlapping()->hourly();
+        //    $schedule->command(FetchForgeRecentEventsCommand::class)->withoutOverlapping()->everyMinute();
+        //    $schedule->command(FetchForgeServersCommand::class)->withoutOverlapping()->hourly();
 
         $schedule->command(FetchAccuWeatherCurrentConditionsCommand::class)->withoutOverlapping()->hourly();
         $schedule->command(FetchAccuWeatherFiveDayForecastCommand::class)->withoutOverlapping()->daily();

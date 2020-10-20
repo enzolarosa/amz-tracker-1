@@ -6,6 +6,7 @@ use App\Common\Constants;
 use App\Common\UserAgent;
 use App\Crawler\Browsershot;
 use App\Crawler\ComuniCitta;
+use App\Jobs\Amazon\WishlistJob;
 use App\Logging\GuzzleLogger;
 use App\Models\ProxyServer;
 use GuzzleHttp\Cookie\CookieJar;
@@ -42,58 +43,10 @@ class DispatchAmzCheckerCommand extends Command
      */
     public function handle()
     {
-        /*    $browsershot = new Browsershot();
-            $browsershot->setNodeBinary(env('NODE_PATH'));
-            $browsershot->setNpmBinary(env('NPM_PATH'));
-            $browsershot->setBinPath(app_path('Crawler/bin/browser.js'));
-            $browsershot->userAgent(Arr::random(UserAgent::get()));
-            $browsershot->setExtraHttpHeaders([
-                'Accept-Encoding' => 'gzip, deflate, br',
-                'Connection' => 'keep-alive',
-                'X-Requested-With' => 'XMLHttpRequest',
-                'Content-Type' => 'application/x-www-form-urlencoded',
-            ]);
+        $url = 'https://www.amazon.it/hz/wishlist/ls/DRBE4G2NQBCC/ref=nav_wishlist_lists_1?_encoding=UTF8&type=wishlist';
 
-            $browsershot->setUrl((string)"https://www.amazon.it/s?k=smart+casa");
-            $cookies = optional(json_decode($browsershot->getCookie()))->{'cookies'};
-            $browsershot->setOption('cookies', $cookies);
-
-            //dump( html_entity_decode($html));
-            dd(json_encode($cookies), json_encode($cookiesPostHtml));
-    */
-        /*
-        $search = [
-            'Apple', 'Samsung', 'Xiaomi', 'DJI', 'Macbook pro', 'Synology', 'Ip Camera Synology', 'Synology', 'QNAP'
-        ];
-        $s = Arr::random($search);
-      //  $user = User::find(1);
-        $job = new SearchJob($s);
-      //  $job->setUser($user);
-        dispatch_now($job);*/
-        /*$user = User::findOrFail(1);
-                  $prod = AmzProduct::query()->where('asin', $asin)->first();
-
-                  $not = new ProductPriceChangedNotification();
-                  $not->setProduct($prod);
-                  $user->notify($not);*/
-
-        $via = strtolower(urlencode("Via amilcare Ponchielli Perugia"));
-        $url = sprintf("https://www.mapdevelopers.com/what-is-my-zip-code.php?address=%s", $via);
-
-        $observer = new ComuniCitta();
-        // $observer->setAddress($address);
-        dump($url);
-
-        Crawler::create($this->clientOptions())
-            ->ignoreRobots()
-            ->acceptNofollowLinks()
-            ->setConcurrency($this->concurrency)
-            ->setCrawlObserver($observer)
-            ->setMaximumCrawlCount(1)
-            ->setDelayBetweenRequests($this->delayBtwRequest)
-            ->setBrowsershot($this->browsershot())
-            ->executeJavaScript()
-            ->startCrawling($url);
+        $job = new WishlistJob($url);
+        dispatch_now($job);
     }
 
     /**

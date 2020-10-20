@@ -43,6 +43,7 @@ return [
                 App\Telegram\Commands\AddProductCommand::class,
                 // App\Telegram\Commands\ListProductCommand::class,
                 // App\Telegram\Commands\RemoveProductCommand::class,
+                App\Telegram\Commands\AddWishlistCommand::class,
                 App\Telegram\Commands\SearchProductCommand::class,
                 'stop',
             ],

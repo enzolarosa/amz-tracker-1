@@ -170,7 +170,7 @@ class Amazon extends Job
 
     protected function shouldRelease(string $url): bool
     {
-        if ($this->batch()->cancelled()) {
+        if (!is_null($this->batch()) && $this->batch()->cancelled()) {
             return true;
         }
 
