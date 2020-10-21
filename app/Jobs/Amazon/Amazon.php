@@ -122,7 +122,7 @@ class Amazon extends Job
         ];
 
         if (is_null($cookieJar)) {
-            $cookies = Cache::get(Constants::COOKIES_KEY);
+            $cookies = Cache::get(Constants::getAmzCookiesKey());
             if ($cookies) {
                 $cookies = json_decode($cookies, true);
             }
@@ -174,7 +174,7 @@ class Amazon extends Job
             return true;
         }
 
-        if ($timestamp = Cache::get('amz-http-limit')) {
+        if ($timestamp = Cache::get(Constants::getAmzHttpLimitKey())) {
             $this->release($timestamp - time());
             return true;
         }
@@ -198,7 +198,7 @@ class Amazon extends Job
             // $secondsRemaining = $response->header('Retry-After');
             $secondsRemaining = self::WAIT_CRAWLER;
 
-            Cache::put('amz-http-limit', now()->addSeconds($secondsRemaining)->timestamp, $secondsRemaining);
+            Cache::put(Constants::getAmzHttpLimitKey(), now()->addSeconds($secondsRemaining)->timestamp, $secondsRemaining);
 
             $this->release((int)$secondsRemaining);
             return true;
