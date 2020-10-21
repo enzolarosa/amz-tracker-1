@@ -6,6 +6,7 @@ use App\Common\Constants;
 use App\Common\UserAgent;
 use App\Crawler\Browsershot;
 use App\Crawler\ComuniCitta;
+use App\Events\ProductPriceChangedEvent;
 use App\Jobs\Amazon\ProductDetailsJob;
 use App\Jobs\Amazon\WishlistJob;
 use App\Jobs\AmazonProductJob;
@@ -49,10 +50,14 @@ class DispatchAmzCheckerCommand extends Command
         $url = 'https://www.amazon.it/hz/wishlist/ls/DRBE4G2NQBCC/ref=nav_wishlist_lists_1?_encoding=UTF8&type=wishlist';
 
         $asin = 'B0858YWBGT';
-        AmzProduct::query()->firstOrCreate(['asin' => $asin]);
+        $product =  AmzProduct::query()->firstOrCreate(['asin' => $asin]);
         $job = new ProductDetailsJob($asin);
 
         dispatch_now($job);
+
+        $event = new ProductPriceChangedEvent();
+        $event->setProduct($product);
+        event($event);
     }
 
     /**

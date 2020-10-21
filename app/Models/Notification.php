@@ -11,6 +11,7 @@ class Notification extends Model
         'amz_product_id',
         'sent',
         'price',
+        'previous_price',
     ];
 
     protected $casts = [

@@ -16,10 +16,12 @@ class ProductPriceChangedJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected AmzProduct $product;
+    protected $previous_price;
 
-    public function __construct(AmzProduct $product)
+    public function __construct(AmzProduct $product, $previous_price)
     {
         $this->product = $product;
+        $this->previous_price = $previous_price;
     }
 
     /**
@@ -35,6 +37,7 @@ class ProductPriceChangedJob implements ShouldQueue
                     'user_id' => $user->id,
                     'amz_product_id' => $this->product->id,
                     'price' => $this->product->current_price,
+                    'previous_price' => $this->previous_price,
                     'sent' => false,
                 ]);
             }

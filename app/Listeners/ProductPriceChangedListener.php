@@ -18,6 +18,6 @@ class ProductPriceChangedListener
      */
     public function handle(ProductPriceChangedEvent $event)
     {
-        ProductPriceChangedJob::dispatch($event->getProduct())->delay(now()->addMinute());
+        ProductPriceChangedJob::dispatch($event->getProduct(), $event->getPreviousPrice());
     }
 }

@@ -54,6 +54,8 @@ class ProcessNotificationCommand extends Command
 
                 $notification = new ProductPriceChangedNotification();
                 $notification->setProduct($prod);
+                $notification->setPreviousPrice($not->previous_price);
+                $notification->setPrice($not->price);
                 $user->notify($notification);
 
                 $not->sent = true;

@@ -16,6 +16,23 @@ class ProductPriceChangedEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     protected AmzProduct $product;
+    protected $previous_price;
+
+    /**
+     * @return mixed
+     */
+    public function getPreviousPrice()
+    {
+        return $this->previous_price;
+    }
+
+    /**
+     * @param mixed $previous_price
+     */
+    public function setPreviousPrice($previous_price): void
+    {
+        $this->previous_price = $previous_price;
+    }
 
     /**
      * @return AmzProduct

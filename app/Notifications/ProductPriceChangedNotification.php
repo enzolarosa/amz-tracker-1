@@ -15,6 +15,8 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
     use Queueable;
 
     protected AmzProduct $product;
+    protected $previous_price;
+    protected $price;
 
     /**
      * Get the notification's delivery channels.
@@ -45,8 +47,8 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
             ->content(sprintf(
                 "I've good news for you!\nYour favorites product '*%s*' has now a new price *%s*. (previous: %s)\nLink: %s",
                 substr($this->getProduct()->title, 0, 20) . '...',
-                number_format($this->getProduct()->current_price, 2, ',', '.') . "€",
-                number_format($this->getProduct()->previous_price, 2, ',', '.') . "€",
+                number_format($this->price, 2, ',', '.') . "€",
+                number_format($this->previous_price, 2, ',', '.') . "€",
                 ShortUrl::hideLink($this->getProduct()->itemDetailUrl . '?tag=' . env('AMZ_PARTNER'))
             ));
     }
@@ -65,5 +67,37 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
     public function setProduct(AmzProduct $product): void
     {
         $this->product = $product;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPreviousPrice()
+    {
+        return $this->previous_price;
+    }
+
+    /**
+     * @param mixed $previous_price
+     */
+    public function setPreviousPrice($previous_price): void
+    {
+        $this->previous_price = $previous_price;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param mixed $price
+     */
+    public function setPrice($price): void
+    {
+        $this->price = $price;
     }
 }
