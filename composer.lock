@@ -4,8 +4,58 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1c7f50ebcfd54a3ce2b938e8a7fa8b22",
+    "content-hash": "01bb15e3de1acf3f3fff3e04398ea16c",
     "packages": [
+        {
+            "name": "aglipanci/laravel-dashboard-forge-tile",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aglipanci/laravel-dashboard-forge-tile.git",
+                "reference": "7cc1150a106c04dbf2954db3093185229039a275"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aglipanci/laravel-dashboard-forge-tile/zipball/7cc1150a106c04dbf2954db3093185229039a275",
+                "reference": "7cc1150a106c04dbf2954db3093185229039a275",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/forge-sdk": "^3.1",
+                "php": "^7.4",
+                "spatie/laravel-dashboard": "^2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "aglipanci\\ForgeTile\\ForgeTileServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "aglipanci\\ForgeTile\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Agli Panci",
+                    "email": "agli.panci@gmail.com",
+                    "homepage": "https://aglipanci.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "2.2.0",
+            "time": "2020-09-17T10:07:14+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "1.3.0",
@@ -239,6 +289,42 @@
                 }
             ],
             "time": "2020-08-18T23:57:15+00:00"
+        },
+        {
+            "name": "chartisan/php",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Chartisan/PHP.git",
+                "reference": "078c417200657837057c5a76b01764b2d5ac00e0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Chartisan/PHP/zipball/078c417200657837057c5a76b01764b2d5ac00e0",
+                "reference": "078c417200657837057c5a76b01764b2d5ac00e0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Chartisan\\PHP\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Èrik Campobadal Forés",
+                    "email": "soc@erik.cat"
+                }
+            ],
+            "description": "Chartisan's PHP backend",
+            "time": "2020-02-10T09:22:27+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -610,6 +696,64 @@
                 }
             ],
             "time": "2020-08-19T10:27:58+00:00"
+        },
+        {
+            "name": "consoletvs/charts",
+            "version": "7.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ConsoleTVs/Charts.git",
+                "reference": "a61a96e4fc48e4cc9a992a06a3e15352e647cdeb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ConsoleTVs/Charts/zipball/a61a96e4fc48e4cc9a992a06a3e15352e647cdeb",
+                "reference": "a61a96e4fc48e4cc9a992a06a3e15352e647cdeb",
+                "shasum": ""
+            },
+            "require": {
+                "chartisan/php": "^1.2.0",
+                "illuminate/console": "^7.14.1|^8.0",
+                "illuminate/contracts": "^7.14.1|^8.0",
+                "illuminate/http": "^7.14.1|^8.0",
+                "illuminate/support": "^7.14.1|^8.0",
+                "php": ">=7.4"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ConsoleTVs\\Charts\\ChartsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ConsoleTVs\\Charts\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Èrik C. Forés",
+                    "email": "soc@erik.cat"
+                }
+            ],
+            "description": "The missing charting library on laravel, powered by Chartisan",
+            "funding": [
+                {
+                    "url": "https://github.com/ConsoleTVs",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/ErikCampobadal",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-09-10T15:52:22+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1341,6 +1485,76 @@
             "time": "2020-06-23T01:36:47+00:00"
         },
         {
+            "name": "fidum/laravel-dashboard-chart-tile",
+            "version": "4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fidum/laravel-dashboard-chart-tile.git",
+                "reference": "694298d8486d63c1167e13ccb22de3f1ecb5222b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fidum/laravel-dashboard-chart-tile/zipball/694298d8486d63c1167e13ccb22de3f1ecb5222b",
+                "reference": "694298d8486d63c1167e13ccb22de3f1ecb5222b",
+                "shasum": ""
+            },
+            "require": {
+                "consoletvs/charts": "^7.1",
+                "illuminate/console": "^8.0",
+                "illuminate/support": "^8.0",
+                "php": "^7.4",
+                "spatie/laravel-dashboard": "^2.0"
+            },
+            "require-dev": {
+                "nunomaduro/laravel-mojito": "^0.2.4",
+                "orchestra/testbench": "^6.0",
+                "phpunit/phpunit": "^9.3",
+                "psalm/plugin-laravel": "dev-master",
+                "vimeo/psalm": "^3.11"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Fidum\\ChartTile\\ChartTileServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fidum\\ChartTile\\": "src",
+                    "Fidum\\ChartTile\\Examples\\": "examples"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniel Mason",
+                    "email": "fidum.dev@gmail.com",
+                    "homepage": "https://danielmason.co.uk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Generic chart tiles for laravel dashboard",
+            "homepage": "https://github.com/fidum/laravel-dashboard-chart-tile",
+            "keywords": [
+                "chart",
+                "fidum",
+                "laravel-dashboard",
+                "laravel-dashboard-chart-tile"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/dmason30",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-09-10T16:46:29+00:00"
+        },
+        {
             "name": "friendsofphp/php-cs-fixer",
             "version": "v2.16.4",
             "source": {
@@ -2060,6 +2274,69 @@
                 "telegram notifications channel"
             ],
             "time": "2020-09-07T19:29:19+00:00"
+        },
+        {
+            "name": "laravel/forge-sdk",
+            "version": "v3.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/forge-sdk.git",
+                "reference": "ba86ce82c66bcd54dc7afc793e7a8f192a4c76bc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/forge-sdk/zipball/ba86ce82c66bcd54dc7afc793e7a8f192a4c76bc",
+                "reference": "ba86ce82c66bcd54dc7afc793e7a8f192a4c76bc",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.3.1|^7.0",
+                "php": "^7.2"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.3.1",
+                "phpunit/phpunit": "^8.4|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Forge\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                },
+                {
+                    "name": "Mohamed Said",
+                    "email": "mohamed@laravel.com"
+                },
+                {
+                    "name": "Dries Vints",
+                    "email": "dries@laravel.com"
+                },
+                {
+                    "name": "James Brooks",
+                    "email": "james@laravel.com"
+                }
+            ],
+            "description": "The official Laravel Forge PHP SDK.",
+            "keywords": [
+                "forge",
+                "laravel"
+            ],
+            "time": "2020-09-22T15:46:50+00:00"
         },
         {
             "name": "laravel/framework",
@@ -2974,25 +3251,23 @@
         },
         {
             "name": "marcusmyers/laravel-dashboard-accuweather-tile",
-            "version": "v1.1.0",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/marcusmyers/laravel-dashboard-accuweather-tile.git",
-                "reference": "a741e80083eff9b64e430725097507388c98e2d7"
+                "reference": "c3ee16cf99d59e9a8a69935208780fa912f7abcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/marcusmyers/laravel-dashboard-accuweather-tile/zipball/a741e80083eff9b64e430725097507388c98e2d7",
-                "reference": "a741e80083eff9b64e430725097507388c98e2d7",
+                "url": "https://api.github.com/repos/marcusmyers/laravel-dashboard-accuweather-tile/zipball/c3ee16cf99d59e9a8a69935208780fa912f7abcc",
+                "reference": "c3ee16cf99d59e9a8a69935208780fa912f7abcc",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4",
-                "spatie/laravel-dashboard": "^1.0"
+                "spatie/laravel-dashboard": "^2.0"
             },
             "require-dev": {
-                "guzzlehttp/guzzle": "^6.5",
-                "orchestra/testbench": "^5.0",
                 "phpunit/phpunit": "^9.0"
             },
             "type": "library",
@@ -3026,7 +3301,7 @@
                 "laravel-dashboard-accuweather-tile",
                 "marcusmyers"
             ],
-            "time": "2020-06-25T12:57:33+00:00"
+            "time": "2020-09-24T17:59:14+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -3573,30 +3848,34 @@
         },
         {
             "name": "paquettg/php-html-parser",
-            "version": "2.2.1",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paquettg/php-html-parser.git",
-                "reference": "668c770fc5724ea3f15b8791435f054835be8d5e"
+                "reference": "b200ae9894af3ba309115c120799f3f273d3e2aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paquettg/php-html-parser/zipball/668c770fc5724ea3f15b8791435f054835be8d5e",
-                "reference": "668c770fc5724ea3f15b8791435f054835be8d5e",
+                "url": "https://api.github.com/repos/paquettg/php-html-parser/zipball/b200ae9894af3ba309115c120799f3f273d3e2aa",
+                "reference": "b200ae9894af3ba309115c120799f3f273d3e2aa",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-mbstring": "*",
                 "ext-zlib": "*",
+                "guzzlehttp/guzzle": "^7.0",
+                "guzzlehttp/psr7": "^1.6",
+                "myclabs/php-enum": "^1.7",
                 "paquettg/string-encode": "~1.0.0",
-                "php": ">=7.1"
+                "php": ">=7.1",
+                "php-http/httplug": "^2.1"
             },
             "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.16",
                 "infection/infection": "^0.13.4",
                 "mockery/mockery": "^1.2",
                 "phan/phan": "^2.4",
-                "php-coveralls/php-coveralls": "^2.1",
                 "phpunit/phpunit": "^7.5.1"
             },
             "type": "library",
@@ -3623,7 +3902,13 @@
                 "html",
                 "parser"
             ],
-            "time": "2020-01-20T12:59:15+00:00"
+            "funding": [
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/paquettg/php-html-parser",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-09-19T19:27:31+00:00"
         },
         {
             "name": "paquettg/string-encode",
@@ -3766,6 +4051,117 @@
                 "diff"
             ],
             "time": "2020-10-14T08:39:05+00:00"
+        },
+        {
+            "name": "php-http/httplug",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-http/httplug.git",
+                "reference": "191a0a1b41ed026b717421931f8d3bd2514ffbf9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-http/httplug/zipball/191a0a1b41ed026b717421931f8d3bd2514ffbf9",
+                "reference": "191a0a1b41ed026b717421931f8d3bd2514ffbf9",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1 || ^8.0",
+                "php-http/promise": "^1.1",
+                "psr/http-client": "^1.0",
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "friends-of-phpspec/phpspec-code-coverage": "^4.1",
+                "phpspec/phpspec": "^5.1 || ^6.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Http\\Client\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eric GELOEN",
+                    "email": "geloen.eric@gmail.com"
+                },
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com",
+                    "homepage": "https://sagikazarmark.hu"
+                }
+            ],
+            "description": "HTTPlug, the HTTP client abstraction for PHP",
+            "homepage": "http://httplug.io",
+            "keywords": [
+                "client",
+                "http"
+            ],
+            "time": "2020-07-13T15:43:23+00:00"
+        },
+        {
+            "name": "php-http/promise",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-http/promise.git",
+                "reference": "4c4c1f9b7289a2ec57cde7f1e9762a5789506f88"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-http/promise/zipball/4c4c1f9b7289a2ec57cde7f1e9762a5789506f88",
+                "reference": "4c4c1f9b7289a2ec57cde7f1e9762a5789506f88",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1 || ^8.0"
+            },
+            "require-dev": {
+                "friends-of-phpspec/phpspec-code-coverage": "^4.3.2",
+                "phpspec/phpspec": "^5.1.2 || ^6.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Http\\Promise\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joel Wurtz",
+                    "email": "joel.wurtz@gmail.com"
+                },
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com"
+                }
+            ],
+            "description": "Promise used for asynchronous HTTP requests",
+            "homepage": "http://httplug.io",
+            "keywords": [
+                "promise"
+            ],
+            "time": "2020-07-07T09:29:14+00:00"
         },
         {
             "name": "php-webdriver/webdriver",
@@ -5146,16 +5542,16 @@
         },
         {
             "name": "spatie/laravel-csp",
-            "version": "2.6.2",
+            "version": "2.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-csp.git",
-                "reference": "eb68ef3bfeeab1bd022d04006e36de01ff5a92f0"
+                "reference": "91f86cba7360d732cecbc25df42428d047f27e6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-csp/zipball/eb68ef3bfeeab1bd022d04006e36de01ff5a92f0",
-                "reference": "eb68ef3bfeeab1bd022d04006e36de01ff5a92f0",
+                "url": "https://api.github.com/repos/spatie/laravel-csp/zipball/91f86cba7360d732cecbc25df42428d047f27e6a",
+                "reference": "91f86cba7360d732cecbc25df42428d047f27e6a",
                 "shasum": ""
             },
             "require": {
@@ -5219,20 +5615,20 @@
                     "type": "custom"
                 }
             ],
-            "time": "2020-09-30T23:44:47+00:00"
+            "time": "2020-10-21T06:45:25+00:00"
         },
         {
             "name": "spatie/laravel-dashboard",
-            "version": "1.3.1",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-dashboard.git",
-                "reference": "690cc5a10c4127fbf88350f6c5322be8ca58241b"
+                "reference": "4ef281ebce17e5cecd86a571840867d4f41629bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-dashboard/zipball/690cc5a10c4127fbf88350f6c5322be8ca58241b",
-                "reference": "690cc5a10c4127fbf88350f6c5322be8ca58241b",
+                "url": "https://api.github.com/repos/spatie/laravel-dashboard/zipball/4ef281ebce17e5cecd86a571840867d4f41629bf",
+                "reference": "4ef281ebce17e5cecd86a571840867d4f41629bf",
                 "shasum": ""
             },
             "require": {
@@ -5292,7 +5688,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-09-09T07:40:34+00:00"
+            "time": "2020-09-09T07:43:45+00:00"
         },
         {
             "name": "spatie/laravel-server-monitor",

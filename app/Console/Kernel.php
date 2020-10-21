@@ -2,12 +2,15 @@
 
 namespace App\Console;
 
+use aglipanci\ForgeTile\Commands\FetchForgeRecentEventsCommand;
+use aglipanci\ForgeTile\Commands\FetchForgeServersCommand;
 use App\Console\Commands\UpdateWishlistCommand;
 use App\Console\Commands\CleanUpSettingCommand;
 use App\Console\Commands\DispatchAmzCheckerCommand;
 use App\Console\Commands\ProcessNotificationCommand;
 use App\Console\Commands\SearchProductCommand;
 use App\Console\Commands\UpdateProductCommand;
+use Astrotomic\PingPingTile\FetchPingPingMonitorsCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use MarcusMyers\AccuWeatherTile\Commands\FetchAccuWeatherCurrentConditionsCommand;
@@ -53,7 +56,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('server-monitor:run-checks')->withoutOverlapping()->everyMinute();
 
         // is need a lot of listener in order to prevent the 503 amz error
-        //  $schedule->command(UpdateProductCommand::class)->withoutOverlapping()->everyMinute();
+        $schedule->command(UpdateProductCommand::class)->withoutOverlapping()->everyMinute();
 
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
     }
@@ -78,9 +81,8 @@ class Kernel extends ConsoleKernel
 
     public function dashboard(Schedule $schedule)
     {
-        //    $schedule->command(FetchPingPingMonitorsCommand::class)->withoutOverlapping()->everyMinute();
-        //    $schedule->command(FetchForgeRecentEventsCommand::class)->withoutOverlapping()->everyMinute();
-        //    $schedule->command(FetchForgeServersCommand::class)->withoutOverlapping()->hourly();
+        $schedule->command(FetchForgeRecentEventsCommand::class)->withoutOverlapping()->everyMinute();
+        $schedule->command(FetchForgeServersCommand::class)->withoutOverlapping()->hourly();
 
         $schedule->command(FetchAccuWeatherCurrentConditionsCommand::class)->withoutOverlapping()->hourly();
         $schedule->command(FetchAccuWeatherFiveDayForecastCommand::class)->withoutOverlapping()->daily();

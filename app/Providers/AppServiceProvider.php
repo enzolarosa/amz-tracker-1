@@ -2,24 +2,18 @@
 
 namespace App\Providers;
 
+use App\Charts\DailyProductAnalyzeChart;
+use App\Charts\DailyProductsChart;
+use App\Charts\DailyUsersChart;
 use App\Models\AmzProduct;
 use App\Models\Setting;
 use App\Observers\AmzProductObserver;
 use App\Observers\SettingObserver;
+use ConsoleTVs\Charts\Registrar;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
-
     /**
      * Bootstrap any application services.
      *
@@ -39,10 +33,10 @@ class AppServiceProvider extends ServiceProvider
 
     protected function charts()
     {
-     /*   app(Registrar::class)->register([
+        app(Registrar::class)->register([
             DailyUsersChart::class,
             DailyProductsChart::class,
             DailyProductAnalyzeChart::class,
-        ]);*/
+        ]);
     }
 }

@@ -45,6 +45,5 @@ class SearchProductCommand extends Command
         $batch = Bus::batch([
             $searchJob
         ])->onQueue('amz-search')->name("Searching `$keyword` products")->dispatch();
-
     }
 }
