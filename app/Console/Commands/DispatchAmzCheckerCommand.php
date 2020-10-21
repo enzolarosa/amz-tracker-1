@@ -6,8 +6,11 @@ use App\Common\Constants;
 use App\Common\UserAgent;
 use App\Crawler\Browsershot;
 use App\Crawler\ComuniCitta;
+use App\Jobs\Amazon\ProductDetailsJob;
 use App\Jobs\Amazon\WishlistJob;
+use App\Jobs\AmazonProductJob;
 use App\Logging\GuzzleLogger;
+use App\Models\AmzProduct;
 use App\Models\ProxyServer;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\HandlerStack;
@@ -45,7 +48,10 @@ class DispatchAmzCheckerCommand extends Command
     {
         $url = 'https://www.amazon.it/hz/wishlist/ls/DRBE4G2NQBCC/ref=nav_wishlist_lists_1?_encoding=UTF8&type=wishlist';
 
-        $job = new WishlistJob($url);
+        $asin = 'B0858YWBGT';
+        AmzProduct::query()->firstOrCreate(['asin' => $asin]);
+        $job = new ProductDetailsJob($asin);
+
         dispatch_now($job);
     }
 

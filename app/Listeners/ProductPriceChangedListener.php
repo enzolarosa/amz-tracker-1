@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\ProductPriceChangedEvent;
+use App\Jobs\ProductPriceChangedJob;
 use App\Models\AmzProduct;
 use App\Models\Notification;
 use App\Models\User;
@@ -17,22 +18,6 @@ class ProductPriceChangedListener
      */
     public function handle(ProductPriceChangedEvent $event)
     {
-        $prod = $event->getProduct();
-        $prod->users()->where('active', true)->each(function (User $user) use ($prod) {
-            if ($this->shouldNotify($user, $prod)) {
-                Notification::query()->firstOrCreate([
-                    'user_id' => $user->id,
-                    'amz_product_id' => $prod->id,
-                    'sent' => false,
-                    'price' => $prod->current_price,
-                ]);
-            }
-        });
-    }
-
-    protected function shouldNotify(User $user, AmzProduct $product): bool
-    {
-        // TODO add user custom logic
-        return true;
+        ProductPriceChangedJob::dispatch($event->getProduct())->delay(now()->addMinute());
     }
 }

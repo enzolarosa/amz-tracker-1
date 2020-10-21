@@ -71,8 +71,12 @@ class AmzProductObserver
             $previous = $product->current_price;
             $product->current_price = $this->minPrice($product->sellers);
             if ($product->current_price < $product->previous_price) {
+                $product->min_price_at = now();
+                $product->min_price = $product->current_price;
+
                 $event = new ProductPriceChangedEvent();
                 $event->setProduct($product);
+                event($event);
             }
             if (is_null($previous)) {
                 $previous = $product->current_price;
@@ -82,10 +86,6 @@ class AmzProductObserver
 
         if (is_null($product->start_price) && !is_null($product->sellers) && $product->sellers->count() > 0) {
             $product->start_price = $product->current_price;
-        }
-
-        if (!is_null($event)) {
-            event($event);
         }
     }
 

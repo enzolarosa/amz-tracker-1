@@ -30,6 +30,8 @@ namespace App\Models{
  * @property string|null $previous_price
  * @property string|null $current_price
  * @property int $enabled
+ * @property string|null $min_price
+ * @property string|null $min_price_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AmzProductLog[] $logs
@@ -48,6 +50,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct whereImages($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct whereItemDetailUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct whereMinPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct whereMinPriceAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct wherePreviousPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct whereReview($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct whereSellers($value)
@@ -159,21 +163,9 @@ namespace App\Models{
 /**
  * App\Models\ProxyServer
  *
- * @property int $id
- * @property string $proxy
- * @property bool $active
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer query()
- * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer whereActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer whereProxy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer whereUpdatedAt($value)
  */
 	class ProxyServer extends \Eloquent {}
 }

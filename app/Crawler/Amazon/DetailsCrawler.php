@@ -4,6 +4,7 @@ namespace App\Crawler\Amazon;
 
 use App\Models\AmzProduct;
 use DOMDocument;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
 
@@ -24,8 +25,7 @@ class DetailsCrawler extends Amazon
         $desc = trim(optional($doc->getElementById('productDescription'))->nodeValue);
         $title = str_replace(PHP_EOL, '', optional($doc->getElementById('productTitle'))->nodeValue);
         $authors = optional($doc->getElementById('bylineInfo'))->nodeValue;
-        //$images = $this->getImages($doc);
-        $images = null;
+        $images = $this->getImages($doc);
 
         $data = [
             'asin' => $this->getAsin(),
@@ -59,36 +59,23 @@ class DetailsCrawler extends Amazon
         return $data;
     }
 
-
     protected function getImages(DOMDocument $doc): array
     {
+        $url = [];
         $elements = $doc->getElementsByTagName('script');
         /** @var DOMDocument $element */
         foreach ($elements as $element) {
             $str = $element->nodeValue;
             if (Str::contains($str, 'ImageBlockATF')) {
-                /*$jquery = new Dom();$jquery->load($doc->saveHTML($element));*/
-
-                $jquery = new Dom();
-                $jquery->loadStr($doc->saveHTML($element));
-
                 $str = str_replace(['\\n', '\\r', PHP_EOL], '', $str);
-                $str = str_replace([
-                    'P.when(\'A\').register("ImageBlockATF", function(A){var data = ',
-                    '\')};A.trigger(\'P.AboveTheFold\'); // trigger ATF event.return data;});',
-                ], '', $str);
-                $json = str_replace([
-                    '\'initial\'',
-                    '\'holderRatio\'',
-                ], [
-                    '"initial"',
-                    '"holderRatio"',
-                ], $str);
 
-                dd($json, json_decode($json), json_last_error(), json_last_error_msg());
+
+                preg_match_all('/((https?|http):\/\/(\S*?\.\S*?))([\s)\[\]{},;"\':<]|\.\s|$)/', $str, $url);
+                return collect(Arr::first($url))->map(function ($url) {
+                    return str_replace('"', '', $url);
+                })->toArray();
             }
         }
-        dd("done");
-        return [];
+        return $url;
     }
 }
