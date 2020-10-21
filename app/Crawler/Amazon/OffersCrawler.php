@@ -15,7 +15,7 @@ class OffersCrawler extends Amazon
         }
 
         $jquery = new Dom();
-        $jquery->load($this->doc->saveHTML());
+        $jquery->loadStr($this->doc->saveHTML());
 
         $offers = $jquery->find('div.olpOffer');
         $sellers = [];

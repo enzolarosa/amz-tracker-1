@@ -70,7 +70,7 @@ class DetailsCrawler extends Amazon
                 /*$jquery = new Dom();$jquery->load($doc->saveHTML($element));*/
 
                 $jquery = new Dom();
-                $jquery->load($doc->saveHTML($element));
+                $jquery->loadStr($doc->saveHTML($element));
 
                 $str = str_replace(['\\n', '\\r', PHP_EOL], '', $str);
                 $str = str_replace([

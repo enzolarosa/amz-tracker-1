@@ -40,7 +40,7 @@ class SearchCrawler extends CrawlObserver
         $doc = new DOMDocument();
         @$doc->loadHTML($response->getBody());
         $jquery = new Dom();
-        $jquery->load($doc->saveHTML());
+        $jquery->loadStr($doc->saveHTML());
 
         $asins = $jquery->find('div.s-asin');
 
@@ -89,7 +89,7 @@ class SearchCrawler extends CrawlObserver
         $doc = new DOMDocument();
         @$doc->loadHTML($requestException->getResponse()->getBody());
         $jquery = new Dom();
-        $jquery->load($doc->saveHTML());
+        $jquery->loadStr($doc->saveHTML());
 
         $title = trim(optional(optional($jquery->find('title'))[0])->text);
         if (
