@@ -25,7 +25,7 @@ class Amazon extends Job
 {
     const WAIT_CRAWLER = 60;
 
-    public $tries = 15;
+    public $tries = 5;
     protected int $concurrency = 1;
     protected int $delayBtwRequest = 25;
     protected ?string $asin = null;
