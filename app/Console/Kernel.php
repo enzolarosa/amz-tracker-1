@@ -53,7 +53,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('server-monitor:run-checks')->withoutOverlapping()->everyMinute();
 
         // is need a lot of listener in order to prevent the 503 amz error
-        $schedule->command(UpdateProductCommand::class)->withoutOverlapping()->everyMinute();
+      //  $schedule->command(UpdateProductCommand::class)->withoutOverlapping()->everyMinute();
     }
 
     public function daily(Schedule $schedule)
