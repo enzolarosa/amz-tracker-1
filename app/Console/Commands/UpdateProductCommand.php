@@ -38,7 +38,7 @@ class UpdateProductCommand extends Command
             //->leftJoin('amz_product_queues', 'amz_product_queues.amz_product_id', '=', 'amz_products.id')
             // ->whereNull('amz_product_queues.id')
             ->where('amz_products.enabled', true)
-            ->where('amz_products.updated_at', '<=', now()->subMinutes(15));
+            ->where('amz_products.updated_at', '<=', now()->subMinutes(60));
 
         $this->comment("I've {$prod->count()} products to analyze!");
 
@@ -50,7 +50,7 @@ class UpdateProductCommand extends Command
                 ->onQueue('check-amz-product')
                 ->name("[" . now()->format('d M h:i') . "] UpdateProductCommand running")
                 ->dispatch();
-            
+
             $prod->each(function (AmzProduct $product) use ($bar, $batch) {
                 $job = new AmazonProductJob($product->asin, $batch->id);
                 $product->touch();
