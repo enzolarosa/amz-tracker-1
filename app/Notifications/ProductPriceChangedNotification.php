@@ -42,15 +42,13 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
     public function toTelegram($notifiable)
     {
         return TelegramMessage::create()
-            ->content(
-                sprintf(
-                    "I've good news for you!\nYour favorites product '*%s*' has now a new price *%s* (previous: %s)\nLink: %s",
-                    substr($this->getProduct()->title, 0, 20) . '...',
-                    number_format($this->getProduct()->current_price, 2, ',', '.') . "€",
-                    number_format($this->getProduct()->previous_price, 2, ',', '.') . "€",
-                    ShortUrl::hideLink($this->getProduct()->itemDetailUrl . '?tag=' . env('AMZ_PARTNER'))
-                )
-            );
+            ->content(sprintf(
+                "I've good news for you!\nYour favorites product '*%s*' has now a new price *%s*."/* (previous: %s)*/ . "\nLink: %s",
+                substr($this->getProduct()->title, 0, 20) . '...',
+                number_format($this->getProduct()->current_price, 2, ',', '.') . "€",
+                // number_format($this->getProduct()->previous_price, 2, ',', '.') . "€",
+                ShortUrl::hideLink($this->getProduct()->itemDetailUrl . '?tag=' . env('AMZ_PARTNER'))
+            ));
     }
 
     /**
