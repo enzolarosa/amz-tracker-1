@@ -70,16 +70,21 @@ class AmzProductObserver
             $previous = $product->current_price;
             $product->current_price = $this->minPrice($product->sellers);
 
+            if (is_null($product->min_price)) {
+                $product->min_price_at = now();
+                $product->min_price = $product->current_price;
+            }
+
             if ($product->current_price < $product->min_price) {
                 $product->min_price_at = now();
                 $product->min_price = $product->current_price;
                 // dispatch the best buy notification
             }
 
-            if ($product->current_price < $product->previous_price) {
+            if ($product->current_price < $previous) {
                 $event = new ProductPriceChangedEvent();
                 $event->setProduct($product);
-                $event->setPreviousPrice($product->current_price);
+                $event->setPreviousPrice($previous);
                 event($event);
             }
 
