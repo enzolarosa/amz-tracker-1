@@ -15,7 +15,8 @@ class Notification extends Model
     ];
 
     protected $casts = [
-        'price' => 'decimal:10,4',
+    //    'price' => 'decimal:10,4',
+    //    'previous_price' => 'decimal:10,4',
         'sent' => 'boolean',
     ];
 
