@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Models\AmzProduct;
 use App\Models\ShortUrl;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -70,6 +71,10 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
                 ->photo($img);
         }
 
+        if ($this->disableNotification()) {
+            $tMsg->disableNotification(true);
+        }
+
         return $tMsg->content($msg);
     }
 
@@ -119,5 +124,15 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
     public function setPrice($price): void
     {
         $this->price = $price;
+    }
+
+    protected function disableNotification(): bool
+    {
+        $now = Carbon::now();
+
+        $start = Carbon::createFromTimeString('22:00');
+        $end = Carbon::createFromTimeString('08:00')->addDay();
+
+        return $now->between($start, $end);
     }
 }
