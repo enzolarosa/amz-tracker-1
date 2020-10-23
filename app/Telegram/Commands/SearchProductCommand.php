@@ -20,7 +20,7 @@ class SearchProductCommand extends Command
     /**
      * @var string Command Argument Pattern
      */
-    protected $pattern = '{keyword}';
+    protected $pattern = '[a-zA-Z\ ]';
 
     /**
      * @var string Command Description
