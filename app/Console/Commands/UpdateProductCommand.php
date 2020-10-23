@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\AmazonProductJob;
 use App\Models\AmzProduct;
+use App\Models\Setting;
 use Illuminate\Console\Command;
 use Bus;
 use Illuminate\Support\Facades\DB;
@@ -33,12 +34,14 @@ class UpdateProductCommand extends Command
      */
     public function handle()
     {
+        $minutes = (int)Setting::read('check_product_minutes')->value ?? 30;
+
         $prod = AmzProduct::query()
             ->select('amz_products.*')
             //->leftJoin('amz_product_queues', 'amz_product_queues.amz_product_id', '=', 'amz_products.id')
             // ->whereNull('amz_product_queues.id')
             ->where('amz_products.enabled', true)
-            ->where('amz_products.updated_at', '<=', now()->subMinutes(30));
+            ->where('amz_products.updated_at', '<=', now()->subMinutes($minutes));
 
         $this->comment("I've {$prod->count()} products to analyze!");
 
