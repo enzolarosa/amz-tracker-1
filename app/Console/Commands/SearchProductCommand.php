@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\Amazon\SearchJob;
+use App\Models\SearchList;
 use App\Models\User;
 use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
@@ -40,9 +41,14 @@ class SearchProductCommand extends Command
         $searchJob = new SearchJob($keyword);
         if ($user) {
             $searchJob->setUser(User::findOrFail($user));
+
+            SearchList::query()->create([
+                'keywords' => $keyword,
+                'user_id' => $user,
+            ]);
         }
 
-        $batch = Bus::batch([
+        Bus::batch([
             $searchJob
         ])->onQueue('amz-search')->name("Searching `$keyword` products")->dispatch();
     }
