@@ -94,7 +94,6 @@ class WishlistCrawler extends CrawlObserver
             || Str::contains($title, 'Toutes nos excuses')
             || Str::contains($title, 'Tut uns Leid!')
             || Str::contains($title, 'Service Unavailable Error')) {
-            Setting::store('amz-wait', true, now()->addMinutes(Constants::$WAIT_AMZ_HTTP_ERROR));
         }
 
         $link = "{$url->getScheme()}://{$url->getHost()}{$url->getPath()}?{$url->getQuery()}";

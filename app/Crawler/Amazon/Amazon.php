@@ -154,7 +154,6 @@ class Amazon extends CrawlObserver
             || Str::contains($title, 'Service Unavailable Error')
             || Str::contains($title, 'Ci dispiace')
         ) {
-            Setting::store('amz-wait', true, now()->addMinutes(Constants::$WAIT_AMZ_HTTP_ERROR));
             // $secondsRemaining = $response->header('Retry-After');
             $secondsRemaining = self::WAIT_CRAWLER;
             Cache::put(Constants::getAmzHttpLimitKey(), now()->addSeconds($secondsRemaining)->timestamp, $secondsRemaining);

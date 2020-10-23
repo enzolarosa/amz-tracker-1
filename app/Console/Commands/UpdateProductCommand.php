@@ -7,7 +7,6 @@ use App\Models\AmzProduct;
 use App\Models\Setting;
 use Illuminate\Console\Command;
 use Bus;
-use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class UpdateProductCommand extends Command
