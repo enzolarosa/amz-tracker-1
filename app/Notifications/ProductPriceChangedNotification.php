@@ -7,7 +7,9 @@ use App\Models\ShortUrl;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Arr;
 use NotificationChannels\Telegram\TelegramChannel;
+use NotificationChannels\Telegram\TelegramFile;
 use NotificationChannels\Telegram\TelegramMessage;
 
 class ProductPriceChangedNotification extends Notification implements ShouldQueue
@@ -43,14 +45,32 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
 
     public function toTelegram($notifiable)
     {
-        return TelegramMessage::create()
-            ->content(sprintf(
-                "I've good news for you!\nYour favorites product '*%s*' has now a new price *%s*. (previous: %s)\nLink: %s",
-                substr($this->getProduct()->title, 0, 20) . '...',
-                number_format($this->price, 2, ',', '.') . "€",
-                number_format($this->previous_price, 2, ',', '.') . "€",
-                ShortUrl::hideLink($this->getProduct()->itemDetailUrl . '?tag=' . env('AMZ_PARTNER'))
-            ));
+        $img = Arr::first($this->getProduct()->images) ?? null;
+        $msg = sprintf(
+            "📦 %s
+
+⭐️ %s
+‼️ Prezzo ribassato
+💰 *%s* invece di %s
+
+🌐 %s
+
+🗣 [Invita i tuoi amici](%s)",
+            substr($this->getProduct()->title, 0, 150) . '...',
+            $this->getProduct()->stars,
+            number_format($this->price, 2, ',', '.') . "€",
+            number_format($this->previous_price, 2, ',', '.') . "€",
+            ShortUrl::hideLink($this->getProduct()->itemDetailUrl . '?tag=' . env('AMZ_PARTNER')),
+            'https://t.me/share/url?url=https://t.me/' . env('TELEGRAM_CHANNEL', 'minimoprezzo')
+        );
+
+        $tMsg = TelegramMessage::create();
+        if ($img) {
+            $tMsg = TelegramFile::create()
+                ->photo($img);
+        }
+
+        return $tMsg->content($msg);
     }
 
     /**
