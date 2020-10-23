@@ -31,7 +31,7 @@ class UpdateWishlistCommand extends Command
      */
     public function handle()
     {
-        $wishlists = WishList::query();
+        $wishlists = WishList::query()->where('enabled', 1);
         $this->comment("I've {$wishlists->count()} wishlists to analyze!");
 
         $bar = $this->output->createProgressBar($count = $wishlists->count());
@@ -43,7 +43,7 @@ class UpdateWishlistCommand extends Command
                 ->name("[" . now()->format('d M h:i') . "] UpdateWishListCommand running")
                 ->dispatch();
 
-            WishList::query()->each(function (WishList $list) use ($bar, $batch) {
+            $wishlists->each(function (WishList $list) use ($bar, $batch) {
                 $list->touch();
                 $batch->add([new WishlistJob($list->url)]);
                 $bar->advance();

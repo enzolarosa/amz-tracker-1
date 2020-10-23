@@ -4,13 +4,13 @@ namespace App\Console;
 
 use aglipanci\ForgeTile\Commands\FetchForgeRecentEventsCommand;
 use aglipanci\ForgeTile\Commands\FetchForgeServersCommand;
+use App\Console\Commands\UpdateSearchListCommand;
 use App\Console\Commands\UpdateWishlistCommand;
 use App\Console\Commands\CleanUpSettingCommand;
 use App\Console\Commands\DispatchAmzCheckerCommand;
 use App\Console\Commands\ProcessNotificationCommand;
 use App\Console\Commands\SearchProductCommand;
 use App\Console\Commands\UpdateProductCommand;
-use Astrotomic\PingPingTile\FetchPingPingMonitorsCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use MarcusMyers\AccuWeatherTile\Commands\FetchAccuWeatherCurrentConditionsCommand;
@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
         DispatchAmzCheckerCommand::class,
         UpdateProductCommand::class,
         UpdateWishlistCommand::class,
+        UpdateSearchListCommand::class,
         SearchProductCommand::class,
         ProcessNotificationCommand::class,
         CleanUpSettingCommand::class,
@@ -67,6 +68,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('telegram:webhook', ['amztracker', '--setup'])->dailyAt('02:00');
         $schedule->command(UpdateWishlistCommand::class)->cron('15 */4 * * *'); // @link https://crontab.guru/#15_*/4_*_*_*
+        $schedule->command(UpdateSearchListCommand::class)->cron('10 */6 * * *'); // @link https://crontab.guru/#10_*/6_*_*_*
     }
 
     public function weekly(Schedule $schedule)

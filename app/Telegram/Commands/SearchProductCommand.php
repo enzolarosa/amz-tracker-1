@@ -3,6 +3,7 @@
 namespace App\Telegram\Commands;
 
 use App\Jobs\Amazon\SearchJob;
+use App\Models\SearchList;
 use App\Models\User;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
@@ -45,6 +46,7 @@ class SearchProductCommand extends Command
             'language_code' => $tUser->language_code,
             'active' => true,
         ]);
+        info("args: " . json_encode($args));
 
         $str = $args['keyword'] ?? null;
         if (is_null($str) || empty($str)) {
@@ -52,18 +54,10 @@ class SearchProductCommand extends Command
             return;
         }
 
-        $searchJob = new SearchJob($str);
-        $searchJob->setUser($user);
-
-        if ($user->batch_id) {
-            $batch = Bus::findBatch($user->batch_id);DB::statement("update job_batches set finished_at = null where id = '$user->batch_id';");
-        } else {
-            $batch = Bus::batch([])->onQueue('telegram-batch')->name("Telegram User #$user->tId $user->first_name $user->last_name")->dispatch();
-            $user->batch_id = $batch->id;
-            $user->save();
-        }
-
-        $batch->add([$searchJob]);
+        SearchList::query()->create([
+            'user_id' => $user->id,
+            'keywords' => $str
+        ]);
 
         $this->replyWithMessage(['text' => sprintf('I will add each results for `%s` in your tracker list.', $str)]);
     }
