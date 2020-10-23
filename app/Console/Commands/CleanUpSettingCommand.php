@@ -20,7 +20,7 @@ class CleanUpSettingCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Cleanup the settings table';
 
     /**
      * Create a new command instance.
