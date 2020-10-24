@@ -27,7 +27,7 @@ class ProxyServer extends Model
             ->inRandomOrder()
             ->take(1)
             ->first();
-        if (is_null($proxy)){
+        if (is_null($proxy)) {
             return null;
         }
         $proxy->touch();

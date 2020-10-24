@@ -52,7 +52,6 @@ class Kernel extends ConsoleKernel
 
     public function hourly(Schedule $schedule)
     {
-
         $schedule->command(CleanUpSettingCommand::class)->everyMinute();
 
         $schedule->command(ProcessNotificationCommand::class)->withoutOverlapping()->everyMinute();

@@ -71,7 +71,6 @@ class WishlistCrawler extends CrawlObserver
                 dispatch(new AmazonProductJob($asin));
             }
         }
-
     }
 
     public function crawlFailed(UriInterface $url, RequestException $requestException, ?UriInterface $foundOnUrl = null)
@@ -158,5 +157,4 @@ class WishlistCrawler extends CrawlObserver
     {
         $this->country = $country;
     }
-
 }

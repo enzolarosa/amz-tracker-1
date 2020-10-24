@@ -12,5 +12,4 @@ class Browsershot extends Browser
 
         return $this->callBrowser($command);
     }
-
 }

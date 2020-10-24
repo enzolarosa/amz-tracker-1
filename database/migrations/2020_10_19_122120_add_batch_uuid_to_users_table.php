@@ -15,7 +15,6 @@ class AddBatchUuidToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->uuid('batch_id')->nullable()->after('id');
-
         });
     }
 

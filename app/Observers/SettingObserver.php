@@ -23,5 +23,4 @@ class SettingObserver
             $setting->id = Str::uuid();
         }
     }
-
 }

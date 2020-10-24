@@ -134,6 +134,29 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Membership
+ *
+ * @property int $id
+ * @property int $team_id
+ * @property int $user_id
+ * @property string|null $role
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Membership newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Membership newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Membership query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Membership whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Membership whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Membership whereRole($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Membership whereTeamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Membership whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Membership whereUserId($value)
+ */
+	class Membership extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Notification
  *
  * @property int $id
@@ -201,9 +224,21 @@ namespace App\Models{
 /**
  * App\Models\SearchList
  *
+ * @property int $id
+ * @property int $user_id
+ * @property string $keywords
+ * @property int $enabled
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|SearchList newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SearchList newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SearchList query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SearchList whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SearchList whereEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SearchList whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SearchList whereKeywords($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SearchList whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SearchList whereUserId($value)
  */
 	class SearchList extends \Eloquent {}
 }
@@ -252,10 +287,36 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Team
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $name
+ * @property bool $personal_team
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User $owner
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property-read int|null $users_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Team newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Team newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Team query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team wherePersonalTeam($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereUserId($value)
+ */
+	class Team extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\User
  *
  * @property int $id
- * @property string|null $batch_id
+ * @property string|null $name
  * @property string|null $first_name
  * @property string|null $last_name
  * @property string|null $username
@@ -264,27 +325,41 @@ namespace App\Models{
  * @property string|null $tId
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string|null $password
- * @property int $active
+ * @property string|null $two_factor_secret
+ * @property string|null $two_factor_recovery_codes
  * @property string|null $remember_token
+ * @property int|null $current_team_id
+ * @property string|null $profile_photo_path
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Team|null $currentTeam
+ * @property-read string $profile_photo_url
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $ownedTeams
+ * @property-read int|null $owned_teams_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AmzProduct[] $products
  * @property-read int|null $products_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $teams
+ * @property-read int|null $teams_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
+ * @property-read int|null $tokens_count
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
- * @method static \Illuminate\Database\Eloquent\Builder|User whereActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereBatchId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCurrentTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLanguageCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereProfilePhotoPath($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereTId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereTwoFactorRecoveryCodes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereTwoFactorSecret($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
  */

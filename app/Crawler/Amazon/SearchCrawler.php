@@ -173,5 +173,4 @@ class SearchCrawler extends CrawlObserver
     {
         $this->country = $country;
     }
-
 }
