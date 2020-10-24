@@ -1,13 +1,15 @@
-<x-dashboard>
-    <livewire:accuweather-current-conditions-tile position="a1:a2"/>
-    <livewire:accuweather-five-day-forecast-tile position="b1:d2"/>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Dashboard') }}
+        </h2>
+    </x-slot>
 
-    <livewire:forge-server-tile position="a3:a10"/>
-    <livewire:forge-recent-events-tile position="b5:b10"/>
-
-    <livewire:chart-tile chartClass="{{\App\Charts\DailyUsersChart::class}}" position="c5:d6"/>
-    <livewire:chart-tile chartClass="{{\App\Charts\DailyProductsChart::class}}" position="c7:d8"/>
-    <livewire:chart-tile chartClass="{{\App\Charts\DailyProductAnalyzeChart::class}}" position="c9:d10"/>
-
-</x-dashboard>
-
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <x-jet-welcome />
+            </div>
+        </div>
+    </div>
+</x-app-layout>
