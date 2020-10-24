@@ -56,13 +56,15 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
 
 🌐 %s
 
-🗣 [Invita i tuoi amici](%s)",
+🗣 [Invita i tuoi amici](%s)
+🤖 [@AmzTrackerBot](%s)",
             substr($this->getProduct()->title, 0, 150) . '...',
             $this->getProduct()->stars,
             number_format($this->price, 2, ',', '.') . "€",
             number_format($this->previous_price, 2, ',', '.') . "€",
             ShortUrl::hideLink($this->getProduct()->itemDetailUrl . '?tag=' . env('AMZ_PARTNER')),
-            'https://t.me/share/url?url=https://t.me/' . env('TELEGRAM_CHANNEL', 'minimoprezzo')
+            'https://t.me/share/url?url=https://t.me/' . env('TELEGRAM_CHANNEL', 'minimoprezzo'),
+            'https://t.me/share/url?url=https://t.me/amztracker_bot&text=' . rawurlencode('Tieni sott\'occhio i prodotti su amazon e ricevi anche tu una notifica quando il prezzo scende!')
         );
 
         $tMsg = TelegramMessage::create();
