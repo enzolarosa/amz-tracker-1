@@ -140,7 +140,8 @@ namespace App\Models{
  * @property int $user_id
  * @property int $amz_product_id
  * @property bool $sent
- * @property mixed|null $price
+ * @property string|null $previous_price
+ * @property string|null $price
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\AmzProduct $product
@@ -151,6 +152,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereAmzProductId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification wherePreviousPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereSent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUpdatedAt($value)
@@ -193,6 +195,17 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|RequestLog whereUpdatedAt($value)
  */
 	class RequestLog extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\SearchList
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|SearchList newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SearchList newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SearchList query()
+ */
+	class SearchList extends \Eloquent {}
 }
 
 namespace App\Models{
