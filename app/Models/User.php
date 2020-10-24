@@ -32,7 +32,6 @@ class User extends Authenticatable
         'email',
         'tId',
         'active',
-        'batch_id',
     ];
 
     /**

@@ -3,8 +3,6 @@
 namespace App\Telegram\Commands;
 
 use App\Models\User;
-use Illuminate\Bus\Batch;
-use Illuminate\Support\Facades\Bus;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
@@ -35,12 +33,6 @@ class StartCommand extends Command
             'language_code' => $tUser->language_code,
             'active' => true,
         ]);
-
-        if (!$user->batch_id) {
-            $batch = Bus::batch([])->onQueue('telegram-batch')->name("Telegram User #$user->tId $user->first_name $user->last_name")->dispatch();
-            $user->batch_id = $batch->id;
-            $user->save();
-        }
 
         $this->replyWithMessage(['text' => sprintf('Hello %s! Welcome to our bot, Here are our available commands:', $user->first_name)]);
 

@@ -21,6 +21,10 @@ class AddFirstTeamToDatabase extends Migration
 
         $team->user_id = $user->id;
         $team->save();
+
+        $user->name = $user->first_name . ' ' . $user->last_name;
+        $user->current_team_id = $team->id;
+        $user->save();
     }
 
     /**

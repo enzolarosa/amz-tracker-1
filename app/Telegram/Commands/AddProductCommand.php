@@ -71,17 +71,7 @@ class AddProductCommand extends Command
             'enabled' => true
         ]);
 
-        if ($user->batch_id) {
-            $batch = Bus::findBatch($user->batch_id);
-            DB::statement("update job_batches set finished_at = null where id = '$user->batch_id';");
-        } else {
-            $batch = Bus::batch([])->onQueue('telegram-batch')->name("Telegram User #$user->tId $user->first_name $user->last_name")->dispatch();
-            $user->batch_id = $batch->id;
-            $user->save();
-        }
-
-        $job = new AmazonProductJob($asin, $user->batch_id);
-        $batch->add([$job]);
+        dispatch(new AmazonProductJob($asin));
 
         $this->replyWithMessage(['text' => sprintf('Your product: %s added to tracker list.', $asin)]);
     }

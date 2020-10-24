@@ -6,7 +6,6 @@ use App\Jobs\Amazon\SearchJob;
 use App\Models\SearchList;
 use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Bus;
 use Throwable;
 
 class UpdateSearchListCommand extends Command
@@ -40,17 +39,13 @@ class UpdateSearchListCommand extends Command
         $bar->start();
 
         if ($count > 0) {
-            $batch = Bus::batch([])->onQueue('check-amz-product')
-                ->name("[" . now()->format('d M h:i') . "] UpdateSearchListCommand running")
-                ->dispatch();
-
-            $searchList->each(function (SearchList $list) use ($bar, $batch) {
+            $searchList->each(function (SearchList $list) use ($bar) {
                 $list->touch();
 
                 $searchJob = new SearchJob($list->keywords);
                 $searchJob->setUser(User::findOrFail($list->user_id));
+                dispatch($searchJob);
 
-                $batch->add([$searchJob]);
                 $bar->advance();
             });
         }

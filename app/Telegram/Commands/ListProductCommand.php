@@ -37,15 +37,6 @@ class ListProductCommand extends Command
             'active' => true,
         ]);
 
-        if ($user->batch_id) {
-            $batch = Bus::findBatch($user->batch_id);
-            DB::statement("update job_batches set finished_at = null where id = '$user->batch_id';");
-        } else {
-            $batch = Bus::batch([])->onQueue('telegram-batch')->name("Telegram User #$user->tId $user->first_name $user->last_name")->dispatch();
-            $user->batch_id = $batch->id;
-            $user->save();
-        }
-
         $this->replyWithMessage(['text' => 'Following your tracker list']);
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 

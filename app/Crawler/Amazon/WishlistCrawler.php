@@ -3,17 +3,16 @@
 namespace App\Crawler\Amazon;
 
 use App\Common\Constants;
-use App\Jobs\Amazon\SearchJob;
 use App\Jobs\AmazonProductJob;
 use App\Models\AmzProduct;
 use App\Models\AmzProductUser;
-use App\Models\Setting;
 use App\Models\User;
 use DOMDocument;
 use Exception;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
 use Psr\Http\Message\ResponseInterface;
@@ -22,6 +21,8 @@ use Spatie\Crawler\CrawlObservers\CrawlObserver;
 
 class WishlistCrawler extends CrawlObserver
 {
+    const WAIT_CRAWLER = 60;
+
     protected DOMDocument $doc;
     protected ResponseInterface $response;
     protected UriInterface $uri;
@@ -35,8 +36,6 @@ class WishlistCrawler extends CrawlObserver
     {
         if (!is_null($this->batchId)) {
             $batch = Bus::findBatch($this->batchId);
-        } else {
-            $batch = Bus::batch([])->onQueue('check-amz-product')->name("Crawler")->dispatch();
         }
 
         preg_match('/([A-Z0-9]{10})/', $url->getPath(), $prod, PREG_OFFSET_CAPTURE);
@@ -65,8 +64,12 @@ class WishlistCrawler extends CrawlObserver
                 ]);
             }
 
-            $job = new AmazonProductJob($asin, $this->batchId);
-            $batch->add([$job]);
+            if (!is_null($this->batchId)) {
+                $job = new AmazonProductJob($asin, $this->batchId);
+                $batch->add([$job]);
+            } else {
+                dispatch(new AmazonProductJob($asin));
+            }
         }
 
     }
@@ -87,21 +90,25 @@ class WishlistCrawler extends CrawlObserver
         $jquery->loadStr($doc->saveHTML());
 
         $title = trim(optional(optional($jquery->find('title'))[0])->text);
+        $report = true;
         if (
-            $status !== Response::HTTP_OK
+            ($status !== Response::HTTP_OK && $status !== Response::HTTP_NOT_FOUND)
             || Str::contains($title, 'Robot Check')
             || Str::contains($title, 'CAPTCHA')
             || Str::contains($title, 'Toutes nos excuses')
             || Str::contains($title, 'Tut uns Leid!')
-            || Str::contains($title, 'Service Unavailable Error')) {
+            || Str::contains($title, 'Service Unavailable Error')
+            || Str::contains($title, 'Ci dispiace')
+        ) {
+            // $secondsRemaining = $response->header('Retry-After');
+            $secondsRemaining = self::WAIT_CRAWLER;
+            Cache::put(Constants::getAmzHttpLimitKey(), now()->addSeconds($secondsRemaining)->timestamp, $secondsRemaining);
+            $report = false;
         }
 
-        $link = "{$url->getScheme()}://{$url->getHost()}{$url->getPath()}?{$url->getQuery()}";
-        $job = new SearchJob('amz-crawler', ['IT'], $link);
-        $job->setUser($this->getUser());
-        dispatch($job)->delay(now()->addHours(1));
-
-        throw new Exception($msg);
+        if ($report) {
+            report(new Exception($msg));
+        }
     }
 
     /**

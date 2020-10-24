@@ -5,8 +5,6 @@ namespace App\Console\Commands;
 use App\Jobs\Amazon\WishlistJob;
 use App\Models\WishList;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class UpdateWishlistCommand extends Command
@@ -38,14 +36,10 @@ class UpdateWishlistCommand extends Command
         $bar->start();
 
         if ($count > 0) {
-            $batch = Bus::batch([])
-                ->onQueue('check-amz-product')
-                ->name("[" . now()->format('d M h:i') . "] UpdateWishListCommand running")
-                ->dispatch();
-
-            $wishlists->each(function (WishList $list) use ($bar, $batch) {
+            $wishlists->each(function (WishList $list) use ($bar) {
                 $list->touch();
-                $batch->add([new WishlistJob($list->url)]);
+                dispatch(new WishlistJob($list->url));
+
                 $bar->advance();
             });
         }

@@ -58,7 +58,10 @@ class SearchJob extends Amazon
         $observer = new SearchCrawler();
         $observer->setCountry(Arr::first($this->countries));
         $observer->setUser($this->getUser());
-        $observer->setBatchId($this->batch()->id);
+
+        if (!is_null($this->batch())) {
+            $observer->setBatchId($this->batch()->id);
+        }
 
         Crawler::create($this->clientOptions())
             ->setCrawlFulfilledHandlerClass(CrawlRequestFulfilled::class)

@@ -5,9 +5,7 @@ namespace App\Console\Commands;
 use App\Jobs\Amazon\SearchJob;
 use App\Models\SearchList;
 use App\Models\User;
-use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
-use Bus;
 use Throwable;
 
 class SearchProductCommand extends Command
@@ -48,8 +46,6 @@ class SearchProductCommand extends Command
             ]);
         }
 
-        Bus::batch([
-            $searchJob
-        ])->onQueue('amz-search')->name("Searching `$keyword` products")->dispatch();
+        dispatch($searchJob);
     }
 }

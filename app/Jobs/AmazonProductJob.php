@@ -56,7 +56,10 @@ class AmazonProductJob extends Job
         if ($this->batchUuid) {
             $batch = Bus::findBatch($this->batchId);
         } else {
-            $batch = Bus::batch([])->name("Check `$prod->asin` amazon product")->onQueue('check-amz-product')->dispatch();
+            $date = now()->format('M-d h:i');
+            $batch = Bus::batch([])
+                ->name("[$date] Check `$prod->asin` amazon product")->onQueue('check-amz-product')
+                ->dispatch();
         }
 
         $batch->add([$details, $offers]);

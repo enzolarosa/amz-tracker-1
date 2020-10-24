@@ -48,16 +48,12 @@ class UpdateProductCommand extends Command
         $bar->start();
 
         if ($count > 0) {
-            $batch = Bus::batch([])
-                ->onQueue('check-amz-product')
-                ->name("[" . now()->format('d M h:i') . "] UpdateProductCommand running")
-                ->dispatch();
-
-            $prod->each(function (AmzProduct $product) use ($bar, $batch) {
-                $job = new AmazonProductJob($product->asin, $batch->id);
+            $prod->each(function (AmzProduct $product) use ($bar) {
                 $product->touch();
 
-                $batch->add([$job]);
+                $job = new AmazonProductJob($product->asin);
+                dispatch($job);
+
                 $bar->advance();
             });
         }
