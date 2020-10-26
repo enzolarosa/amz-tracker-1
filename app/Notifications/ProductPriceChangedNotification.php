@@ -132,8 +132,10 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
     {
         $now = Carbon::now();
 
-        $start = Carbon::createFromTimeString('22:00');
-        $end = Carbon::createFromTimeString('08:00')->addDay();
+        //TODO get this information from the channels configuration
+
+        $start = Carbon::createFromTimeString('20:00', 'Europe/Rome');
+        $end = Carbon::createFromTimeString('09:00', 'Europe/Rome')->addDay();
 
         return $now->between($start, $end);
     }

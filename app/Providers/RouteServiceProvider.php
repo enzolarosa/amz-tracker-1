@@ -46,7 +46,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
-        //
+        $this->mapLivewireRoutes();
     }
 
     /**
@@ -61,6 +61,13 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/web.php'));
+    }
+
+    protected function mapLivewireRoutes()
+    {
+        Route::middleware('web')
+            ->namespace('App\Http\Livewire')
+            ->group(base_path('routes/livewire.php'));
     }
 
     /**

@@ -18,6 +18,9 @@
                     <x-jet-nav-link href="{{ route('tracker') }}" :active="request()->routeIs('tracker')">
                         {{ __('Tracker') }}
                     </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('channels.index') }}" :active="request()->routeIs('channels.index')">
+                        {{ __('Channels') }}
+                    </x-jet-nav-link>
                 </div>
             </div>
 

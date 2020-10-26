@@ -12,7 +12,7 @@ class Show extends Component
 {
     use WithPagination;
 
-    public $search = '';
+    public string $search = '';
 
     public function updatingSearch()
     {
@@ -38,7 +38,7 @@ class Show extends Component
     {
         $product = AmzProduct::query()->where('id', $productId)->first();
         $url = ShortUrl::hideLink($product->itemDetailUrl . '?tag=' . env('AMZ_PARTNER'));
-info("$url");
+
         return redirect()->away($url);
     }
 

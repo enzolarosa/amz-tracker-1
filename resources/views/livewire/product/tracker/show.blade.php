@@ -20,7 +20,7 @@
             <th></th>
         </tr>
         </thead>
-        <tbody wire:poll.5s>
+        <tbody wire:poll>
         @foreach($products as $product)
             <tr>
                 <td class="border px-4 py-2">
@@ -50,7 +50,7 @@
                 </td>
                 <td class="border px-4 py-2">
                     <button wire:click="showProduct({{$product->id}})"
-                        class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-2 border border-gray-400 rounded shadow">
+                            class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-2 border border-gray-400 rounded shadow">
                         Show
                     </button>
                 </td>
