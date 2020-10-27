@@ -7,7 +7,17 @@
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+            <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
+                <div>
+                    @if (session()->has('message'))
+                        <div class="alert alert-success">
+                            {{ session('message') }}
+                        </div>
+                    @endif
+                </div>
 
+                <x-jet-button wire:click="create">Add product</x-jet-button>
+            </div>
             <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                 <label>
                     <input wire:model="search" type="text" placeholder="Filter"
@@ -19,7 +29,6 @@
                     <span class="text-sm">Show disabled product</span>
                 </label>
             </div>
-
 
             <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                 <table class="table-auto">

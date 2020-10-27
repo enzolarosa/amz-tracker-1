@@ -4,9 +4,12 @@ namespace App\Http\Livewire\Teams\Channels;
 
 use App\Models\Channels;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Index extends Component
 {
+    use WithPagination;
+
     public $channels;
     public $channel;
 

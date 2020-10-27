@@ -68,4 +68,9 @@ class Index extends Component
 
         $this->resetPage();
     }
+
+    public function create()
+    {
+        return redirect()->route('products.create');
+    }
 }
