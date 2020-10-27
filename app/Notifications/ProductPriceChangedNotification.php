@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use App\Models\AmzProduct;
-use App\Models\Channels;
 use App\Models\ShortUrl;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -47,8 +46,6 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
 
     public function toTelegram($notifiable)
     {
-        dd($notifiable);
-
         $img = Arr::first($this->getProduct()->images) ?? null;
         $msg = sprintf(
             "📦 %s

@@ -60,9 +60,17 @@ class ChannelsNotification extends Notification implements ShouldQueue
 
         $shouldSound = $now->between($start, $end);
 
-
         $img = Arr::first($this->getProduct()->images) ?? null;
-        $msg = sprintf($template,
+        $msg = sprintf("📦 %s
+
+⭐️ %s
+‼️ Prezzo ribassato
+💰 *%s* invece di %s
+
+🌐 %s
+
+🗣 [Invita i tuoi amici](%s)
+🤖 [@AmzTrackerBot](%s)",
             substr($this->getProduct()->title, 0, 150) . '...',
             $this->getProduct()->stars,
             number_format($this->price, 2, ',', '.') . "€",

@@ -12,7 +12,7 @@ class Channels extends Model
     use Notifiable;
 
     protected $casts = [
-        //'configuration' => 'object',
+        //    'configuration' => 'collection',
     ];
 
     protected $fillable = [
@@ -26,6 +26,11 @@ class Channels extends Model
         return $this->belongsTo(Team::class);
     }
 
+    public function notification()
+    {
+        return $this->morphOne(Notification::class, 'notificable');
+    }
+
     /**
      * Route notifications for the Telegram channel.
      *
@@ -33,11 +38,7 @@ class Channels extends Model
      */
     public function routeNotificationForTelegram()
     {
-        return $this->configuration->route;
-    }
-
-    public function notification()
-    {
-        return $this->morphOne(Notification::class, 'notificable');
+        $config = json_decode($this->configuration);
+        return $config->destination;
     }
 }
