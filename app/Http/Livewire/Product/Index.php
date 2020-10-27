@@ -34,12 +34,17 @@ class Index extends Component
         $this->changeEnabledFlag($productId, false);
     }
 
-    public function showProduct(int $productId)
+    public function navigate(int $productId)
     {
         $product = AmzProduct::query()->where('id', $productId)->first();
         $url = ShortUrl::hideLink($product->itemDetailUrl . '?tag=' . env('AMZ_PARTNER'));
 
         return redirect()->away($url);
+    }
+
+    public function show(int $productId)
+    {
+        return redirect()->route('products.show', ['product' => AmzProduct::find($productId)]);
     }
 
     public function enable(int $productId)

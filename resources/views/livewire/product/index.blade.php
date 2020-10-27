@@ -60,10 +60,12 @@
                                 {{\Carbon\Carbon::parse($product->updated_at)->format('M-d h:i:s')}}
                             </td>
                             <td class="border px-4 py-2">
-                                <button wire:click="showProduct({{$product->id}})"
-                                        class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-2 border border-gray-400 rounded shadow">
+                                <x-jet-button wire:click="show({{$product->id}})">
                                     Show
-                                </button>
+                                </x-jet-button>
+                                <x-jet-button wire:click="navigate({{$product->id}})">
+                                    Navigate
+                                </x-jet-button>
                             </td>
                         </tr>
                     @endforeach

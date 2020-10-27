@@ -24,8 +24,7 @@
         "sass-loader": "^8.0.0",
         "tailwindcss": "^1.8.0",
         "vue": "^2.6.12",
-        "vue-template-compiler": "^2.6.12",
-        "webpack-cli": "^4.1.0"
+        "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
         "puppeteer": "^5.4.0",
