@@ -69,9 +69,9 @@ class User extends Authenticatable
         return $this->belongsToMany(AmzProduct::class);
     }
 
-    public function notifications($enabled = true)
+    public function notification()
     {
-        return $this->hasMany(Notification::class);
+        return $this->morphOne(Notification::class, 'notificable');
     }
 
     /**

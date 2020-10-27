@@ -14,7 +14,7 @@ use NotificationChannels\Telegram\TelegramChannel;
 use NotificationChannels\Telegram\TelegramFile;
 use NotificationChannels\Telegram\TelegramMessage;
 
-class ProductPriceChangedNotification extends Notification implements ShouldQueue
+class ChannelsNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -47,20 +47,22 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
 
     public function toTelegram($notifiable)
     {
-        dd($notifiable);
+        $configuration = $notifiable->configuration;
+
+        $template = $configuration->template ?? null;
+        $startTime = $configuration->start ?? '09:00';
+        $endTime = $configuration->end ?? "20:00";
+        $tz = $configuration->timezone ?? 'UTC';
+
+        $now = Carbon::now();
+        $start = Carbon::createFromTimeString($endTime, $tz);
+        $end = Carbon::createFromTimeString($startTime, $tz)->addDay();
+
+        $shouldSound = $now->between($start, $end);
+
 
         $img = Arr::first($this->getProduct()->images) ?? null;
-        $msg = sprintf(
-            "📦 %s
-
-⭐️ %s
-‼️ Prezzo ribassato
-💰 *%s* invece di %s
-
-🌐 %s
-
-🗣 [Invita i tuoi amici](%s)
-🤖 [@AmzTrackerBot](%s)",
+        $msg = sprintf($template,
             substr($this->getProduct()->title, 0, 150) . '...',
             $this->getProduct()->stars,
             number_format($this->price, 2, ',', '.') . "€",
@@ -76,7 +78,7 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
                 ->photo($img);
         }
 
-        if ($this->disableNotification($notifiable)) {
+        if ($shouldSound) {
             $tMsg->disableNotification(true);
         }
 
@@ -135,7 +137,16 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
     {
         $now = Carbon::now();
 
-        $start = Carbon::createFromTimeString('19:00', 'Europe/Rome');
+        if ($notifiable instanceof Channels) {
+            $configuration = $notifiable->configuration;
+            $startTime = $configuration->start ?? '09:00';
+            $endTime = $configuration->end ?? "20:00";
+            dd($startTime, $endTime);
+        }
+
+        //TODO get this information from the channels configuration
+
+        $start = Carbon::createFromTimeString('20:00', 'Europe/Rome');
         $end = Carbon::createFromTimeString('09:00', 'Europe/Rome')->addDay();
 
         return $now->between($start, $end);

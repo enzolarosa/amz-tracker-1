@@ -21,6 +21,6 @@ class Index extends Component
 
     public function addChannel()
     {
-        return redirect()->route('teams.channels.add');
+        return redirect()->route('channels.create');
     }
 }

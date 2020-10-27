@@ -20,9 +20,8 @@ class Notification extends Model
         'sent' => 'boolean',
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
+    public function notificable(){
+        return $this->morphTo();
     }
 
     public function product()

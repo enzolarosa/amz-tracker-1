@@ -3,8 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Models\AmzProduct;
+use App\Models\Channels;
 use App\Models\Notification;
-use App\Models\User;
+use App\Notifications\ChannelsNotification;
 use App\Notifications\ProductPriceChangedNotification;
 use Illuminate\Console\Command;
 
@@ -49,14 +50,20 @@ class ProcessNotificationCommand extends Command
 
         if ($count > 0) {
             $nots->each(function (Notification $not) use ($bar) {
-                $prod = AmzProduct::find($not->amz_product_id);
-                $user = User::find($not->user_id);
-
                 $notification = new ProductPriceChangedNotification();
+
+                $prod = AmzProduct::find($not->amz_product_id);
+                $route = $not->notificable;
+
+                if ($route instanceof Channels) {
+                    $notification = new ChannelsNotification();
+                }
+
                 $notification->setProduct($prod);
                 $notification->setPreviousPrice($not->previous_price);
                 $notification->setPrice($not->price);
-                $user->notify($notification);
+
+                $route->notify($notification);
 
                 $not->sent = true;
                 $not->save();

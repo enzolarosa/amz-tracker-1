@@ -6,7 +6,6 @@ Route::get('/', 'Guest\Index')->name('guest.index');
 
 Route::group([
     'prefix' => 'channels',
-    'name' => 'teams.'
 ], function () {
     Route::get('/', 'Teams\Channels\Index')->name('channels.index');
     Route::get('/create', 'Teams\Channels\Create')->name('channels.create');
@@ -15,9 +14,8 @@ Route::group([
 
 Route::group([
     'prefix' => 'products',
-    'name' => 'products.'
 ], function () {
-    Route::get('/', 'Product\Index')->name('index');
-    Route::get('/create', 'Product\Create')->name('create');
-    Route::get('/{product}', 'Product\Show')->name('show');
+    Route::get('/', 'Product\Index')->name('products.index');
+    Route::get('/create', 'Product\Create')->name('products.create');
+    Route::get('/{product}', 'Product\Show')->name('products.show');
 });
