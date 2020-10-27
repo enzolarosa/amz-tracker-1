@@ -5,6 +5,14 @@
 </x-slot>
 
 <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
+    <div>
+        @if (session()->has('message'))
+            <div class="alert alert-success">
+                {{ session('message') }}
+            </div>
+        @endif
+    </div>
+
     <x-jet-button wire:click="addChannel">
         Add new channel
     </x-jet-button>

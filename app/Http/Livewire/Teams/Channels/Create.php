@@ -12,12 +12,14 @@ class Create extends Component
     protected $rules = [
         'channel.name' => 'required|string|max:250',
         'channel.team_id' => 'required|exists:teams,id',
-        'channel.configuration' => 'sometimes|nullable',
+        'channel.configuration' => 'sometimes|json|nullable',
     ];
 
     public function mount()
     {
-        $this->channel = new Channels();
+        $this->channel = new Channels([
+            'team_id' => auth()->user()->current_team_id,
+        ]);
     }
 
     public function render()
@@ -29,6 +31,8 @@ class Create extends Component
     {
         $this->validate();
         $this->channel->save();
+
+        session()->flash('message', 'Channel successfully updated.');
 
         return redirect()->route('channels.index');
     }

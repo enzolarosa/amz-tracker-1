@@ -134,6 +134,35 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Channels
+ *
+ * @property int $id
+ * @property int $team_id
+ * @property string $name
+ * @property mixed|null $configuration
+ * @property int $enabled
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Notification|null $notification
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \App\Models\Team $team
+ * @method static \Illuminate\Database\Eloquent\Builder|Channels newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Channels newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Channels query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Channels whereConfiguration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Channels whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Channels whereEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Channels whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Channels whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Channels whereTeamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Channels whereUpdatedAt($value)
+ */
+	class Channels extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Membership
  *
  * @property int $id
@@ -167,14 +196,18 @@ namespace App\Models{
  * @property string|null $price
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $notificable_id
+ * @property string|null $notificable_type
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $notificable
  * @property-read \App\Models\AmzProduct $product
- * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|Notification newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Notification newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Notification query()
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereAmzProductId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereNotificableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereNotificableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification wherePreviousPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereSent($value)
@@ -293,18 +326,34 @@ namespace App\Models{
  * @property int $user_id
  * @property string $name
  * @property bool $personal_team
+ * @property \Illuminate\Support\Collection|null $configuration
+ * @property string|null $stripe_id
+ * @property string|null $card_brand
+ * @property string|null $card_last_four
+ * @property string|null $trial_ends_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Channels[] $channels
+ * @property-read int|null $channels_count
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
  * @property-read \App\Models\User $owner
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Cashier\Subscription[] $subscriptions
+ * @property-read int|null $subscriptions_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|Team newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Team newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Team query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereCardBrand($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereCardLastFour($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereConfiguration($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Team wherePersonalTeam($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereStripeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereTrialEndsAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Team whereUserId($value)
  */
@@ -327,6 +376,7 @@ namespace App\Models{
  * @property string|null $password
  * @property string|null $two_factor_secret
  * @property string|null $two_factor_recovery_codes
+ * @property int $active
  * @property string|null $remember_token
  * @property int|null $current_team_id
  * @property string|null $profile_photo_path
@@ -334,6 +384,9 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Team|null $currentTeam
  * @property-read string $profile_photo_url
+ * @property-read \App\Models\Notification|null $notification
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $ownedTeams
  * @property-read int|null $owned_teams_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AmzProduct[] $products
@@ -345,6 +398,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCurrentTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)

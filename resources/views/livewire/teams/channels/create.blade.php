@@ -10,11 +10,12 @@
             <div>
                 <form wire:submit.prevent="save">
                     <x-jet-input type="text" wire:model="channel.name" placeholder="Channel Name"/>
-                    <x-jet-input wire:model="channel.team_id" type="hidden" value="{{auth()->user()->current_team_id}}"/>
+                    @error('channel.name') <span class="error">{{ $message }}</span> @enderror
 
                     <label>
                         <textarea wire:model="channel.configuration"></textarea>
                     </label>
+                    @error('channel.configuration') <span class="error">{{ $message }}</span> @enderror
 
                     <x-jet-button type="submit">
                         Save
