@@ -33,32 +33,17 @@
                     <tbody wire:poll.5s>
                     @foreach($products as $product)
                         <tr>
-                            <td class="border px-4 py-2">
-                                <img src="{{\Illuminate\Support\Arr::first($product->images)}}"
-                                     title="{{$product->title}}"
-                                     width="50px" alt="{{$product->description}}"/>
-                            </td>
-                            <td class="border px-4 py-2">
-                                {{$product->title}}
-                            </td>
-                            <td class="border px-4 py-2">
-                                {{number_format($product->start_price ,2, ',', '.')}}€
-                            </td>
-                            <td class="border px-4 py-2">
-                                {{number_format($product->previous_price,2, ',', '.')}}€
-                            </td>
-                            <td class="border px-2 py-w">
-                                {{number_format($product->current_price,2, ',', '.')}}€
-                            </td>
-                            <td class="border px-4 py-2">
-                                {{number_format($product->min_price,2, ',', '.')}}€
-                            </td>
-                            <td class="border px-2 py-2">
-                                {{\Carbon\Carbon::parse($product->min_price_at)->format('M-d h:i:s')}}
-                            </td>
-                            <td class="border px-2 py-2">
-                                {{\Carbon\Carbon::parse($product->updated_at)->format('M-d h:i:s')}}
-                            </td>
+                            <td class="border px-4 py-2"><img src="{{\Illuminate\Support\Arr::first($product->images)}}"
+                                                              title="{{$product->title}}"
+                                                              style="max-width: 80px;max-height: 80px;"
+                                                              alt="{{$product->description}}"/></td>
+                            <td class="border px-4 py-2">{{$product->title}}</td>
+                            <td class="border px-4 py-2">{{number_format($product->start_price ,2, ',', '.')}}€</td>
+                            <td class="border px-4 py-2">{{number_format($product->previous_price,2, ',', '.')}}€</td>
+                            <td class="border px-2 py-w">{{number_format($product->current_price,2, ',', '.')}}€</td>
+                            <td class="border px-4 py-2">{{number_format($product->min_price,2, ',', '.')}}€</td>
+                            <td class="border px-2 py-2">{{\Carbon\Carbon::parse($product->min_price_at)->format('M-d h:i:s')}}</td>
+                            <td class="border px-2 py-2">{{\Carbon\Carbon::parse($product->updated_at)->format('M-d h:i:s')}}</td>
                             <td class="border px-4 py-2">
                                 <x-jet-button wire:click="show({{$product->id}})">
                                     Show
