@@ -31,6 +31,13 @@ class Channels extends Model
         return $this->morphOne(Notification::class, 'notificable');
     }
 
+    public function products($enabled = true)
+    {
+        return $this->morphToMany(AmzProduct::class, 'trackable')->using(AmzProductUser::class)->withPivot([
+            'enabled',
+        ])->wherePivot('enabled', $enabled);
+    }
+
     /**
      * Route notifications for the Telegram channel.
      *

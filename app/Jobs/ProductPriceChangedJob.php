@@ -34,17 +34,18 @@ class ProductPriceChangedJob implements ShouldQueue
         $this->product->users()->where('active', true)->each(function (User $user) {
             if ($this->shouldNotify($user)) {
                 Notification::query()->firstOrCreate([
-                    'user_id' => $user->id,
+                    'sent' => false,
+                    'notificable_type' => get_class($user),
                     'amz_product_id' => $this->product->id,
+                    'notificable_id' => $user->id,
                     'price' => $this->product->current_price,
                     'previous_price' => $this->previous_price,
-                    'sent' => false,
                 ]);
             }
         });
     }
 
-    protected function shouldNotify(User $user): bool
+    protected function shouldNotify($trackable): bool
     {
         // TODO add user custom logic
         return true;
