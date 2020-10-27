@@ -22,8 +22,8 @@ class AddPolymorphicFieldToAmzProductUserTable extends Migration
 
         /** @var AmzProductUser $record */
         foreach (AmzProductUser::query()->cursor() as $record) {
-            $record->notificable_type = User::class;
-            $record->notificable_id = $record->user_id;
+            $record->trackable_type = User::class;
+            $record->trackable_id = $record->user_id;
             $record->save();
         }
 

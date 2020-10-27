@@ -4,6 +4,7 @@ namespace App\Console;
 
 use aglipanci\ForgeTile\Commands\FetchForgeRecentEventsCommand;
 use aglipanci\ForgeTile\Commands\FetchForgeServersCommand;
+use App\Console\Commands\CleanUpFailedJobs;
 use App\Console\Commands\CleanUpSettingCommand;
 use App\Console\Commands\DispatchAmzCheckerCommand;
 use App\Console\Commands\ProcessNotificationCommand;
@@ -33,6 +34,7 @@ class Kernel extends ConsoleKernel
         ProcessNotificationCommand::class,
         CleanUpSettingCommand::class,
         TestCommand::class,
+        CleanUpFailedJobs::class,
     ];
 
     /**
@@ -70,6 +72,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('telegram:webhook', ['amztracker', '--setup'])->dailyAt('02:00');
         $schedule->command(UpdateWishlistCommand::class)->cron('15 */4 * * *'); // @link https://crontab.guru/#15_*/4_*_*_*
         $schedule->command(UpdateSearchListCommand::class)->cron('10 */6 * * *'); // @link https://crontab.guru/#10_*/6_*_*_*
+        $schedule->command(CleanUpFailedJobs::class)->dailyAt('01:00');
     }
 
     public function weekly(Schedule $schedule)
