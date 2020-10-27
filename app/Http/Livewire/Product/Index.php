@@ -27,6 +27,8 @@ class Index extends Component
             'trackers' => auth()->user()->products()
                 ->join('amz_products', 'amz_products.id', '=', 'amz_product_user.amz_product_id')
                 ->where('amz_product_user.enabled', !$this->showDisabled)
+                //  ->where('amz_product_user.trackable_type', Channels::class)
+                //  ->whereIn('amz_product_user.trackable_id', auth()->user()->current_team_id)
                 ->where('amz_products.title', 'like', '%' . $this->search . '%')
                 ->select('amz_product_user.*')
                 ->paginate($this->perPage),
