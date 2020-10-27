@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Product\Tracker;
+namespace App\Http\Livewire\Product;
 
 use App\Models\AmzProduct;
 use App\Models\AmzProductUser;
@@ -8,7 +8,7 @@ use App\Models\ShortUrl;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Show extends Component
+class Index extends Component
 {
     use WithPagination;
 
@@ -21,7 +21,7 @@ class Show extends Component
 
     public function render()
     {
-        return view('livewire.product.tracker.show', [
+        return view('livewire.product.index', [
             'products' => auth()->user()->products()
                 ->where('title', 'like', '%' . $this->search . '%')
                 //    ->orWhere('asin', 'like', '%' . $this->search . '%')

@@ -30,14 +30,4 @@ class HomeController extends Controller
     {
         return view('dashboard');
     }
-
-    public function tracker()
-    {
-        return view('tracker');
-    }
-
-    public function channels()
-    {
-
-    }
 }
