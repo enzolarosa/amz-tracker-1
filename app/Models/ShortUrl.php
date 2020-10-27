@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Hash;
 use Illuminate\Database\Eloquent\Model;
-
 use Illuminate\Support\Str;
 
 class ShortUrl extends Model

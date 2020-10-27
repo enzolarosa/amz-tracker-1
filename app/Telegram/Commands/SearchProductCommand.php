@@ -50,7 +50,8 @@ class SearchProductCommand extends Command
         }
 
         SearchList::query()->create([
-            'user_id' => $user->id,
+            'trackable_id' => $user->id,
+            'trackable_type' => User::class,
             'keywords' => $str
         ]);
 

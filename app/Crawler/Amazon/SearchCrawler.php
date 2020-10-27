@@ -7,7 +7,7 @@ use App\Jobs\Amazon\SearchJob;
 use App\Jobs\AmazonProductJob;
 use App\Models\AmzProduct;
 use App\Models\AmzProductUser;
-use App\Models\User;
+use App\Models\SearchList;
 use DOMDocument;
 use Exception;
 use GuzzleHttp\Exception\RequestException;
@@ -29,7 +29,7 @@ class SearchCrawler extends CrawlObserver
 
     protected string $currency;
     protected string $country;
-    protected ?User $user = null;
+    protected SearchList $searchList;
     protected $batchId;
 
     public function crawled(UriInterface $url, ResponseInterface $response, ?UriInterface $foundOnUrl = null)
@@ -49,10 +49,11 @@ class SearchCrawler extends CrawlObserver
 
         foreach ($asins as $k => $asin) {
             $asin = $asin->{'data-asin'};
-            if ($this->getUser()) {
+            if ($this->getSearchList()->trackable) {
                 $product = AmzProduct::query()->firstOrCreate(['asin' => $asin]);
                 AmzProductUser::query()->updateOrCreate([
-                    'user_id' => $this->getUser()->id,
+                    'trackable_id' => $this->getSearchList()->trackable->id,
+                    'trackable_type' => get_class($this->getSearchList()->trackable),
                     'amz_product_id' => $product->id
                 ], [
                     'enabled' => true
@@ -74,8 +75,7 @@ class SearchCrawler extends CrawlObserver
 
             if ($href) {
                 $link = "{$url->getScheme()}://{$url->getHost()}$href";
-                $job = new SearchJob('amz-crawler', ['IT'], $link);
-                $job->setUser($this->getUser());
+                $job = new SearchJob($this->searchList, ['IT'], $link);
 
                 if (!is_null($this->batchId)) {
                     $batch->add([$job]);
@@ -127,19 +127,19 @@ class SearchCrawler extends CrawlObserver
     }
 
     /**
-     * @return User|null
+     * @return SearchList
      */
-    public function getUser(): ?User
+    public function getSearchList(): SearchList
     {
-        return $this->user;
+        return $this->searchList;
     }
 
     /**
-     * @param User|null $user
+     * @param SearchList $searchList
      */
-    public function setUser(?User $user): void
+    public function setSearchList(SearchList $searchList): void
     {
-        $this->user = $user;
+        $this->searchList = $searchList;
     }
 
     /**

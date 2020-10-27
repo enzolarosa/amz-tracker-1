@@ -10,7 +10,13 @@ class SearchList extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'trackable_type',
+        'trackable_id',
         'keywords',
     ];
+
+    public function trackable()
+    {
+        return $this->morphTo();
+    }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\Amazon\SearchJob;
 use App\Models\SearchList;
 use App\Models\User;
 use Illuminate\Console\Command;
@@ -36,16 +35,15 @@ class SearchProductCommand extends Command
         $this->comment("I'll search $keyword product!");
         $user = $this->option('user');
 
-        $searchJob = new SearchJob($keyword);
         if ($user) {
-            $searchJob->setUser(User::findOrFail($user));
-
+            $u = User::find($user);
             SearchList::query()->create([
                 'keywords' => $keyword,
-                'user_id' => $user,
+                'trackable_id' => $u->id,
+                'trackable_type' => get_class($u),
             ]);
         }
 
-        dispatch($searchJob);
+        $this->call(UpdateSearchListCommand::class);
     }
 }

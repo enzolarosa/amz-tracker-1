@@ -31,11 +31,22 @@ class Channels extends Model
         return $this->morphOne(Notification::class, 'notificable');
     }
 
-    public function products($enabled = true)
+    public function searchList()
     {
-        return $this->morphToMany(AmzProduct::class, 'trackable')->using(AmzProductUser::class)->withPivot([
-            'enabled',
-        ])->wherePivot('enabled', $enabled);
+        return $this->morphOne(SearchList::class, 'trackable');
+    }
+
+    public function wishList()
+    {
+        return $this->morphOne(WishList::class, 'trackable');
+    }
+
+    public function products()
+    {
+        return $this->morphOne(AmzProductUser::class, 'trackable');
+        /*return $this->morphToMany(AmzProduct::class, 'trackable')->using(AmzProductUser::class)->withPivot([
+                 'enabled',
+             ])->wherePivot('enabled', $enabled);*/
     }
 
     /**

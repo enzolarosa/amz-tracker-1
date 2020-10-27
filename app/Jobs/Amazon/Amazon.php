@@ -160,14 +160,6 @@ class Amazon extends Job
             ]);
     }
 
-    /**
-     * Determine the time at which the job should timeout.
-     */
-    public function retryUntil(): DateTime
-    {
-        return now()->addDay();
-    }
-
     protected function shouldRelease(string $url): bool
     {
         if (!is_null($this->batch()) && $this->batch()->cancelled()) {

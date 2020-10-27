@@ -13,7 +13,13 @@
                     <input wire:model="search" type="text" placeholder="Filter"
                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 </label>
+
+                <label class="md:w-2/3 block text-gray-500 font-bold">
+                    <input wire:model="showDisabled" class="mr-2 leading-tight" type="checkbox">
+                    <span class="text-sm">Show disabled product</span>
+                </label>
             </div>
+
 
             <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                 <table class="table-auto">
@@ -31,33 +37,43 @@
                     </tr>
                     </thead>
                     <tbody wire:poll.5s>
-                    @foreach($products as $product)
+                    @foreach($trackers as $tracker)
                         <tr>
-                            <td class="border px-4 py-2"><img src="{{\Illuminate\Support\Arr::first($product->images)}}"
-                                                              title="{{$product->title}}"
-                                                              style="max-width: 80px;max-height: 80px;"
-                                                              alt="{{$product->description}}"/></td>
-                            <td class="border px-4 py-2">{{$product->title}}</td>
-                            <td class="border px-4 py-2">{{number_format($product->start_price ,2, ',', '.')}}€</td>
-                            <td class="border px-4 py-2">{{number_format($product->previous_price,2, ',', '.')}}€</td>
-                            <td class="border px-2 py-w">{{number_format($product->current_price,2, ',', '.')}}€</td>
-                            <td class="border px-4 py-2">{{number_format($product->min_price,2, ',', '.')}}€</td>
-                            <td class="border px-2 py-2">{{\Carbon\Carbon::parse($product->min_price_at)->format('M-d h:i:s')}}</td>
-                            <td class="border px-2 py-2">{{\Carbon\Carbon::parse($product->updated_at)->format('M-d h:i:s')}}</td>
+                            <td class="border px-4 py-2"><img
+                                    src="{{\Illuminate\Support\Arr::first($tracker->product->images)}}"
+                                    title="{{$tracker->product->title}}"
+                                    style="max-width: 80px;max-height: 80px;"
+                                    alt="{{$tracker->product->description}}"/></td>
+                            <td class="border px-4 py-2">{{$tracker->product->title}}</td>
+                            <td class="border px-4 py-2">{{number_format($tracker->product->start_price ,2, ',', '.')}}
+                                €
+                            </td>
+                            <td class="border px-4 py-2">{{number_format($tracker->product->previous_price,2, ',', '.')}}
+                                €
+                            </td>
+                            <td class="border px-2 py-w">{{number_format($tracker->product->current_price,2, ',', '.')}}
+                                €
+                            </td>
+                            <td class="border px-4 py-2">{{number_format($tracker->product->min_price,2, ',', '.')}}€
+                            </td>
+                            <td class="border px-2 py-2">{{\Carbon\Carbon::parse($tracker->product->min_price_at)->format('M-d h:i:s')}}</td>
+                            <td class="border px-2 py-2">{{\Carbon\Carbon::parse($tracker->product->updated_at)->format('M-d h:i:s')}}</td>
                             <td class="border px-4 py-2">
-                                <x-jet-button wire:click="show({{$product->id}})">
-                                    Show
-                                </x-jet-button>
-                                <x-jet-button wire:click="navigate({{$product->id}})">
-                                    Navigate
-                                </x-jet-button>
+                                @if ($tracker->enabled)
+                                    <x-jet-button wire:click="disable({{$tracker->id}})">Disable</x-jet-button>
+                                @else
+                                    <x-jet-button wire:click="enable({{$tracker->id}})">Enable</x-jet-button>
+                                @endif
+
+                                <x-jet-button wire:click="show({{$tracker->product->id}})">Show</x-jet-button>
+                                <x-jet-button wire:click="navigate({{$tracker->product->id}})">Navigate</x-jet-button>
                             </td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
                 <br/>
-                {{$products->links()}}
+                {{$trackers->links()}}
             </div>
         </div>
     </div>

@@ -6,8 +6,6 @@ use App\Jobs\AmazonProductJob;
 use App\Models\AmzProduct;
 use App\Models\AmzProductUser;
 use App\Models\User;
-use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\DB;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
@@ -65,7 +63,8 @@ class AddProductCommand extends Command
         $product = AmzProduct::query()->firstOrCreate(['asin' => $asin]);
 
         AmzProductUser::query()->updateOrCreate([
-            'user_id' => $user->id,
+            'trackable_id' => $user->id,
+            'trackable_type' => User::class,
             'amz_product_id' => $product->id
         ], [
             'enabled' => true

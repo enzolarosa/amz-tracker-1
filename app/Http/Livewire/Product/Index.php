@@ -13,6 +13,8 @@ class Index extends Component
     use WithPagination;
 
     public string $search = '';
+    public bool $showDisabled = false;
+    public int $perPage = 20;
 
     public function updatingSearch()
     {
@@ -22,16 +24,13 @@ class Index extends Component
     public function render()
     {
         return view('livewire.product.index', [
-            'products' => auth()->user()->products()
-                ->where('title', 'like', '%' . $this->search . '%')
-                //    ->orWhere('asin', 'like', '%' . $this->search . '%')
-                ->paginate(20),
+            'trackers' => auth()->user()->products()
+                ->join('amz_products', 'amz_products.id', '=', 'amz_product_user.amz_product_id')
+                ->where('amz_product_user.enabled', !$this->showDisabled)
+                ->where('amz_products.title', 'like', '%' . $this->search . '%')
+                ->select('amz_product_user.*')
+                ->paginate($this->perPage),
         ]);
-    }
-
-    public function disable(int $productId)
-    {
-        $this->changeEnabledFlag($productId, false);
     }
 
     public function navigate(int $productId)
@@ -47,18 +46,24 @@ class Index extends Component
         return redirect()->route('products.show', ['product' => AmzProduct::find($productId)]);
     }
 
-    public function enable(int $productId)
+    public function disable(int $trackerId)
     {
-        $this->changeEnabledFlag($productId);
+        $this->changeEnabledFlag($trackerId, false);
     }
 
-    public function changeEnabledFlag(int $productId, bool $flag = true)
+    public function enable(int $trackerId)
+    {
+        $this->changeEnabledFlag($trackerId);
+    }
+
+    public function changeEnabledFlag(int $trackerId, bool $flag = true)
     {
         AmzProductUser::query()->where([
-            'amz_product_id' => $productId,
-            'user_id' => auth()->user()->id,
+            'id' => $trackerId,
         ])->update([
             'enabled' => $flag,
         ]);
+
+        $this->resetPage();
     }
 }

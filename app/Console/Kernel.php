@@ -4,13 +4,14 @@ namespace App\Console;
 
 use aglipanci\ForgeTile\Commands\FetchForgeRecentEventsCommand;
 use aglipanci\ForgeTile\Commands\FetchForgeServersCommand;
-use App\Console\Commands\UpdateSearchListCommand;
-use App\Console\Commands\UpdateWishlistCommand;
 use App\Console\Commands\CleanUpSettingCommand;
 use App\Console\Commands\DispatchAmzCheckerCommand;
 use App\Console\Commands\ProcessNotificationCommand;
 use App\Console\Commands\SearchProductCommand;
+use App\Console\Commands\TestCommand;
 use App\Console\Commands\UpdateProductCommand;
+use App\Console\Commands\UpdateSearchListCommand;
+use App\Console\Commands\UpdateWishlistCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use MarcusMyers\AccuWeatherTile\Commands\FetchAccuWeatherCurrentConditionsCommand;
@@ -31,6 +32,7 @@ class Kernel extends ConsoleKernel
         SearchProductCommand::class,
         ProcessNotificationCommand::class,
         CleanUpSettingCommand::class,
+        TestCommand::class,
     ];
 
     /**

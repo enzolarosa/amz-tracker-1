@@ -42,8 +42,7 @@ class UpdateSearchListCommand extends Command
             $searchList->each(function (SearchList $list) use ($bar) {
                 $list->touch();
 
-                $searchJob = new SearchJob($list->keywords);
-                $searchJob->setUser(User::findOrFail($list->user_id));
+                $searchJob = new SearchJob($list);
                 dispatch($searchJob);
 
                 $bar->advance();
