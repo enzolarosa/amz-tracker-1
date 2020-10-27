@@ -9,9 +9,9 @@ class Show extends Component
 {
     public $channel;
 
-    public function mount($id)
+    public function mount(Channels $channel)
     {
-        $this->channel = Channels::query()->find($id);
+        $this->channel = $channel;
     }
 
     public function render()

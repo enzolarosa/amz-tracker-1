@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Teams\Channels;
 
+use App\Models\Channels;
 use Livewire\Component;
 
 class Index extends Component
@@ -19,8 +20,13 @@ class Index extends Component
         return view('livewire.teams.channels.index');
     }
 
-    public function addChannel()
+    public function create()
     {
         return redirect()->route('channels.create');
+    }
+
+    public function show(int $id)
+    {
+        return redirect()->route('channels.show', ['channel' => Channels::find($id)]);
     }
 }
