@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\AmzProduct;
+use App\Models\AmzProductUser;
 use App\Models\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -30,12 +31,12 @@ class ProductPriceChangedJob implements ShouldQueue
      */
     public function handle()
     {
-        $this->product->tracker()->where('enabled', true)->each(function ($tracker) {
-            if ($this->shouldNotify($tracker)) {
+        $this->product->tracker()->where('enabled', true)->each(function (AmzProductUser $amzProductUser) {
+            if ($this->shouldNotify($amzProductUser->trackable)) {
                 Notification::query()->firstOrCreate([
                     'sent' => false,
-                    'notificable_type' => get_class($tracker),
-                    'notificable_id' => $tracker->id,
+                    'notificable_type' => get_class($amzProductUser->trackable),
+                    'notificable_id' => $amzProductUser->trackable->id,
                     'amz_product_id' => $this->product->id,
                     'price' => $this->product->current_price,
                     'previous_price' => $this->previous_price,

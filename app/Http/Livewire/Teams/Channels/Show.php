@@ -18,4 +18,9 @@ class Show extends Component
     {
         return view('livewire.teams.channels.show');
     }
+
+    public function index()
+    {
+        return redirect()->route('channels.index');
+    }
 }
