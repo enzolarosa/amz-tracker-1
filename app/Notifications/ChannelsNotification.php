@@ -59,7 +59,7 @@ class ChannelsNotification extends Notification implements ShouldQueue
         $start = Carbon::createFromTimeString($endTime, $tz);
         $end = Carbon::createFromTimeString($startTime, $tz)->addDay();
 
-        $shouldSound = $now->between($start, $end);
+        $sound = $now->between($start, $end);
 
         $img = Arr::first($this->getProduct()->images) ?? null;
         $msg = sprintf("📦 %s
@@ -87,7 +87,7 @@ class ChannelsNotification extends Notification implements ShouldQueue
                 ->photo($img);
         }
 
-        if ($shouldSound) {
+        if (!$sound) {
             $tMsg->disableNotification(true);
         }
 

@@ -73,7 +73,7 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
                 ->photo($img);
         }
 
-        if ($this->disableNotification($notifiable)) {
+        if (!$this->disableNotification($notifiable)) {
             $tMsg->disableNotification(true);
         }
 
@@ -130,10 +130,13 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
 
     protected function disableNotification($notifiable): bool
     {
-        $now = Carbon::now();
+        $tz = 'UTC';
+        $startTime = '19:00';
+        $endTime = '09:00';
 
-        $start = Carbon::createFromTimeString('19:00', 'Europe/Rome');
-        $end = Carbon::createFromTimeString('09:00', 'Europe/Rome')->addDay();
+        $now = Carbon::now();
+        $start = Carbon::createFromTimeString($endTime, $tz);
+        $end = Carbon::createFromTimeString($startTime, $tz)->addDay();
 
         return $now->between($start, $end);
     }
