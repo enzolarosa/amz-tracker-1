@@ -55,9 +55,9 @@ class ChannelsNotification extends Notification implements ShouldQueue
         $tz = $configuration->timezone ?? 'UTC';
         $code = $configuration->affiliateCode ?? env('AMZ_PARTNER');
 
-        $now = Carbon::now();
-        $start = Carbon::createFromTimeString($endTime, $tz);
-        $end = Carbon::createFromTimeString($startTime, $tz)->addDay();
+        $now = Carbon::now($tz);
+        $start = Carbon::createFromTimeString($startTime, $tz);
+        $end = Carbon::createFromTimeString($endTime, $tz);
 
         $sound = $now->between($start, $end);
 
