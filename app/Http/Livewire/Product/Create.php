@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Product;
 
+use App\Jobs\AmazonProductJob;
 use App\Models\AmzProduct;
 use App\Models\AmzProductUser;
 use Livewire\Component;
@@ -40,6 +41,7 @@ class Create extends Component
         ]);
 
         session()->flash('message', 'Product successfully updated.');
+        dispatch(new AmazonProductJob($this->product->asin));
 
         return redirect()->route('products.index');
     }

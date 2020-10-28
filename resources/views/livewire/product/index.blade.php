@@ -17,6 +17,17 @@
                 </div>
 
                 <x-jet-button wire:click="create">Add product</x-jet-button>
+
+                <label class="md:w-2/3 block text-gray-500 font-bold">
+                    <input wire:model="trackerId" value="0" class="mr-2 leading-tight" type="radio">
+                    <span class="text-sm">Show all product</span>
+                </label>
+                @foreach($channels as $channel)
+                    <label class="md:w-2/3 block text-gray-500 font-bold">
+                        <input wire:model="trackerId" value="{{$channel->id}}" class="mr-2 leading-tight" type="radio">
+                        <span class="text-sm">Show `{{$channel->name}}` channel product</span>
+                    </label>
+                @endforeach
             </div>
             <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                 <label>
@@ -53,7 +64,13 @@
                                     title="{{$tracker->product->title}}"
                                     style="max-width: 80px;max-height: 80px;"
                                     alt="{{$tracker->product->description}}"/></td>
-                            <td class="border px-4 py-2">{{$tracker->product->title}}</td>
+                            <td class="border px-4 py-2">
+                                <span style="font-size: 12px;">
+                                    Channel: {{$tracker->trackable->name}}
+                                </span>
+                                <br/>
+                                {{$tracker->product->title}}
+                            </td>
                             <td class="border px-4 py-2">{{number_format($tracker->product->start_price ,2, ',', '.')}}
                                 €
                             </td>

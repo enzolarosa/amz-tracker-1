@@ -53,6 +53,7 @@ class ChannelsNotification extends Notification implements ShouldQueue
         $startTime = $configuration->start ?? '09:00';
         $endTime = $configuration->end ?? "20:00";
         $tz = $configuration->timezone ?? 'UTC';
+        $code = $configuration->affiliateCode ?? env('AMZ_PARTNER');
 
         $now = Carbon::now();
         $start = Carbon::createFromTimeString($endTime, $tz);
@@ -75,7 +76,7 @@ class ChannelsNotification extends Notification implements ShouldQueue
             $this->getProduct()->stars,
             number_format($this->price, 2, ',', '.') . "€",
             number_format($this->previous_price, 2, ',', '.') . "€",
-            ShortUrl::hideLink($this->getProduct()->itemDetailUrl . '?tag=' . env('AMZ_PARTNER')),
+            ShortUrl::hideLink($this->getProduct()->itemDetailUrl . '?tag=' . $code),
             'https://t.me/share/url?url=https://t.me/' . env('TELEGRAM_CHANNEL', 'minimoprezzo'),
             'https://t.me/share/url?url=https://t.me/amztracker_bot&text=' . rawurlencode('Tieni sott\'occhio i prodotti su amazon e ricevi anche tu una notifica quando il prezzo scende!')
         );
