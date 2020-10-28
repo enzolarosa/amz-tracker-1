@@ -14,7 +14,6 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
@@ -158,6 +157,14 @@ class Amazon extends Job
             ->addChromiumArguments([
                 'window-size' => '1920,1080',
             ]);
+    }
+
+    /**
+     * Determine the time at which the job should timeout.
+     */
+    public function retryUntil(): DateTime
+    {
+        return now()->addDay();
     }
 
     protected function shouldRelease(string $url): bool
