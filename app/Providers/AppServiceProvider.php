@@ -11,9 +11,17 @@ use App\Observers\AmzProductObserver;
 use App\Observers\SettingObserver;
 use ConsoleTVs\Charts\Registrar;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Cashier\Cashier;
 
 class AppServiceProvider extends ServiceProvider
 {
+    public function register()
+    {
+        parent::register();
+
+        Cashier::ignoreMigrations();
+    }
+
     /**
      * Bootstrap any application services.
      *

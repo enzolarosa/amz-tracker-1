@@ -7,22 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 class Notification extends Model
 {
     protected $fillable = [
-        'user_id',
+        'notificable_id',
+        'notificable_type',
         'amz_product_id',
         'sent',
+
         'price',
         'previous_price',
     ];
 
     protected $casts = [
-    //    'price' => 'decimal:10,4',
-    //    'previous_price' => 'decimal:10,4',
+        //    'price' => 'decimal:10,4',
+        //    'previous_price' => 'decimal:10,4',
         'sent' => 'boolean',
     ];
 
-    public function user()
+    public function notificable()
     {
-        return $this->belongsTo(User::class);
+        return $this->morphTo();
     }
 
     public function product()

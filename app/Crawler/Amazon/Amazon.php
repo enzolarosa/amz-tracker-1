@@ -112,13 +112,6 @@ class Amazon extends CrawlObserver
             }
             $prod->update($data);
         }
-
-        $queue = AmzProductQueue::query()->firstOrCreate(['amz_product_id' => $prod->id]);
-        try {
-            $queue->delete();
-        } catch (Exception $exception) {
-            report($exception);
-        }
     }
 
     public function crawlFailed(UriInterface $url, RequestException $requestException, ?UriInterface $foundOnUrl = null)
@@ -158,14 +151,6 @@ class Amazon extends CrawlObserver
             $secondsRemaining = self::WAIT_CRAWLER;
             Cache::put(Constants::getAmzHttpLimitKey(), now()->addSeconds($secondsRemaining)->timestamp, $secondsRemaining);
             $report = false;
-        }
-
-        $queue = AmzProductQueue::query()->firstOrCreate(['amz_product_id' => $prod->id]);
-
-        try {
-            $queue->delete();
-        } catch (Exception $exception) {
-            report($exception);
         }
 
         if ($report) {

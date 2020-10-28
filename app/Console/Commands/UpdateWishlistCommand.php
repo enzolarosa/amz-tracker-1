@@ -38,7 +38,7 @@ class UpdateWishlistCommand extends Command
         if ($count > 0) {
             $wishlists->each(function (WishList $list) use ($bar) {
                 $list->touch();
-                dispatch(new WishlistJob($list->url));
+                dispatch(new WishlistJob($list));
 
                 $bar->advance();
             });

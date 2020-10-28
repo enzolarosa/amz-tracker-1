@@ -21,12 +21,12 @@
         "irazasyed/telegram-bot-sdk": "^3.1",
         "laravel-notification-channels/telegram": "^0.5.0",
         "laravel-notification-channels/twilio": "^3.1",
+        "laravel/cashier": "^12.4",
         "laravel/framework": "^8.0",
         "laravel/horizon": "^5.0",
         "laravel/jetstream": "^1.5",
         "laravel/sanctum": "^2.6",
         "laravel/tinker": "^2.0",
-        "laravel/ui": "^3.0",
         "livewire/livewire": "^2.0",
         "maatwebsite/excel": "^3.1",
         "marcusmyers/laravel-dashboard-accuweather-tile": "^2.0",
@@ -81,7 +81,8 @@
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "@php artisan vendor:publish --force --tag=livewire:assets --ansi"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""

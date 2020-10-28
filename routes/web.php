@@ -1,37 +1,16 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ShortUrlController;
+use App\Http\Controllers\TelegramController;
+use App\Http\Controllers\WebhookController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-Route::group([
-    'middleware' => 'log-request:web-in',
-], function () {
+Route::get('/go/{shortUrl}', [ShortUrlController::class, 'go'])->name('short-url-go')->middleware('log-request:short-url-in');
+Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
-    Auth::routes(['register' => false]);
-
-    Route::get('/', function () {
-        return view('welcome');
-    });
-
-    Route::post('amztracker/telegram', function () {
-        $update = Telegram\Bot\Laravel\Facades\Telegram::commandsHandler(true);
-        return 'ok';
-    })->withoutMiddleware('log-request:web-in')->middleware('log-request:telegram-in');
-
-    Route::get('/home', 'HomeController@index')->name('home');
-    Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard')->withoutMiddleware('log-request:web-in');
-
-
-    Route::get('/go/{shortUrl}', 'ShortUrlController@go')->name('short-url-go')
-        ->withoutMiddleware('log-request:web-in')
-        ->middleware('log-request:short-url-in');
-});
+/**
+ * Webhook Section
+ */
+Route::post('amztracker/telegram', [TelegramController::class, 'handleWebhook'])->middleware('log-request:telegram-in');
+Route::post('stripe/webhook', [WebhookController::class, 'handleWebhook'])->middleware('log-request:stipe-in');

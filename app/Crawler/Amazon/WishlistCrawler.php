@@ -29,7 +29,7 @@ class WishlistCrawler extends CrawlObserver
 
     protected string $currency;
     protected string $country;
-    protected ?User $user = null;
+    protected $tracker;
     protected $batchId;
 
     public function crawled(UriInterface $url, ResponseInterface $response, ?UriInterface $foundOnUrl = null)
@@ -54,10 +54,11 @@ class WishlistCrawler extends CrawlObserver
             preg_match('/([A-Z0-9]{10})/', $link, $prod, PREG_OFFSET_CAPTURE);
             $asin = optional(optional($prod)[0])[0];
 
-            if ($this->getUser()) {
+            if ($this->getTracker()) {
                 $product = AmzProduct::query()->firstOrCreate(['asin' => $asin]);
                 AmzProductUser::query()->updateOrCreate([
-                    'user_id' => $this->getUser()->id,
+                    'trackable_id' => $this->getTracker()->id,
+                    'trackable_type' => get_class($this->getTracker()),
                     'amz_product_id' => $product->id
                 ], [
                     'enabled' => true
@@ -71,7 +72,6 @@ class WishlistCrawler extends CrawlObserver
                 dispatch(new AmazonProductJob($asin));
             }
         }
-
     }
 
     public function crawlFailed(UriInterface $url, RequestException $requestException, ?UriInterface $foundOnUrl = null)
@@ -112,19 +112,19 @@ class WishlistCrawler extends CrawlObserver
     }
 
     /**
-     * @return User|null
+     * @return
      */
-    public function getUser(): ?User
+    public function getTracker()
     {
-        return $this->user;
+        return $this->tracker;
     }
 
     /**
-     * @param User|null $user
+     * @param $tracker
      */
-    public function setUser(?User $user): void
+    public function setTracker($tracker): void
     {
-        $this->user = $user;
+        $this->tracker = $tracker;
     }
 
     /**
@@ -158,5 +158,4 @@ class WishlistCrawler extends CrawlObserver
     {
         $this->country = $country;
     }
-
 }

@@ -31,7 +31,7 @@ class User extends Authenticatable
         'language_code',
         'email',
         'tId',
-        'active',
+        'enabled',
     ];
 
     /**
@@ -66,12 +66,23 @@ class User extends Authenticatable
 
     public function products()
     {
-        return $this->belongsToMany(AmzProduct::class);
+        //return $this->belongsToMany(AmzProduct::class);
+        return $this->morphOne(AmzProductUser::class, 'trackable');
     }
 
-    public function notifications($enabled = true)
+    public function notification()
     {
-        return $this->hasMany(Notification::class);
+        return $this->morphOne(Notification::class, 'notificable');
+    }
+
+    public function searchList()
+    {
+        return $this->morphOne(SearchList::class, 'trackable');
+    }
+
+    public function wishList()
+    {
+        return $this->morphOne(WishList::class, 'trackable');
     }
 
     /**

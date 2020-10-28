@@ -51,7 +51,8 @@ class AddWishlistCommand extends Command
         }
 
         WishList::query()->firstOrCreate([
-            'user_id' => $user->id,
+            'trackable_id' => $user->id,
+            'trackable_type' => User::class,
             'url' => $str,
         ]);
 

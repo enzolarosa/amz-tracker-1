@@ -2,11 +2,8 @@
 
 namespace App\Telegram\Commands;
 
-use App\Jobs\Amazon\SearchJob;
 use App\Models\SearchList;
 use App\Models\User;
-use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\DB;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
@@ -35,7 +32,6 @@ class SearchProductCommand extends Command
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $tUser = $this->getUpdate()->getMessage()->getFrom();
-        $args = $this->arguments;
 
         $user = User::query()->updateOrCreate([
             'tId' => $tUser->id
@@ -46,16 +42,16 @@ class SearchProductCommand extends Command
             'language_code' => $tUser->language_code,
             'active' => true,
         ]);
-        info("args: " . json_encode($args));
 
-        $str = $args['keyword'] ?? null;
+        $str = trim(str_replace('/search', '', $this->getUpdate()->getMessage()->text)) ?? null;
         if (is_null($str) || empty($str)) {
             $this->replyWithMessage(['text' => 'Please give me a valid `keyword`']);
             return;
         }
 
         SearchList::query()->create([
-            'user_id' => $user->id,
+            'trackable_id' => $user->id,
+            'trackable_type' => User::class,
             'keywords' => $str
         ]);
 

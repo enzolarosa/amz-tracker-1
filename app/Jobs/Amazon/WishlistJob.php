@@ -3,16 +3,16 @@
 namespace App\Jobs\Amazon;
 
 use App\Crawler\Amazon\WishlistCrawler;
-use App\Crawler\Amazon\SearchCrawler;
 use App\Crawler\CrawlRequestFulfilled;
 use App\Models\User;
+use App\Models\WishList;
 use Illuminate\Support\Arr;
 use Spatie\Crawler\Crawler;
 
 class WishlistJob extends Amazon
 {
-    protected ?User $user = null;
-    protected ?string $url;
+    protected $tracker;
+    protected WishList $list;
     protected array $countries;
 
     /**
@@ -20,23 +20,24 @@ class WishlistJob extends Amazon
      */
     public function tags()
     {
-        return [get_class($this), 'product-list'];
+        return [get_class($this), 'product-list', 'url:' . $this->list->url];
     }
 
     /**
      * Create a new job instance.
      *
+     * @param WishList $list
      * @param array $countries
-     * @param string|null $url
      */
-    public function __construct(string $url = null, array $countries = ['IT'])
+    public function __construct(WishList $list, array $countries = ['IT'])
     {
         parent::__construct('');
 
         $this->onQueue('amz-search');
 
         $this->countries = $countries;
-        $this->url = $url;
+        $this->list = $list;
+        $this->tracker = $list->trackable();
     }
 
     /**
@@ -46,14 +47,14 @@ class WishlistJob extends Amazon
      */
     public function handle()
     {
-        if ($this->shouldRelease($this->url)) {
+        if ($this->shouldRelease($this->list->url)) {
             return;
         }
 
         // Get Product Details
         $observer = new WishlistCrawler();
         $observer->setCountry(Arr::first($this->countries));
-        $observer->setUser($this->getUser());
+        $observer->setTracker($this->getTracker());
 
         if (!is_null($this->batch())) {
             $observer->setBatchId($this->batch()->id);
@@ -69,22 +70,14 @@ class WishlistJob extends Amazon
             ->setDelayBetweenRequests($this->delayBtwRequest)
             ->setBrowsershot($this->browsershot())
             ->executeJavaScript()
-            ->startCrawling($this->url);
+            ->startCrawling($this->list);
     }
 
     /**
-     * @return User|null
+     * @return
      */
-    public function getUser(): ?User
+    public function getTracker()
     {
-        return $this->user;
-    }
-
-    /**
-     * @param User|null $user
-     */
-    public function setUser(?User $user): void
-    {
-        $this->user = $user;
+        return $this->tracker;
     }
 }

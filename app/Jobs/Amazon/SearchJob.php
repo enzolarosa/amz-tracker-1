@@ -4,14 +4,13 @@ namespace App\Jobs\Amazon;
 
 use App\Crawler\Amazon\SearchCrawler;
 use App\Crawler\CrawlRequestFulfilled;
-use App\Models\User;
+use App\Models\SearchList;
 use Illuminate\Support\Arr;
 use Spatie\Crawler\Crawler;
 
 class SearchJob extends Amazon
 {
-    protected ?User $user = null;
-    protected ?string $keyword;
+    protected SearchList $searchList;
     protected ?string $url;
     protected array $countries;
 
@@ -20,23 +19,23 @@ class SearchJob extends Amazon
      */
     public function tags()
     {
-        return [get_class($this), 'keyword:' . $this->keyword];
+        return [get_class($this), 'keyword:' . $this->searchList->keywords, 'url:' . $this->url];
     }
 
     /**
      * Create a new job instance.
      *
-     * @param string $keyword
+     * @param SearchList $searchList
      * @param array $countries
      * @param string|null $url
      */
-    public function __construct(string $keyword, array $countries = ['IT'], string $url = null)
+    public function __construct(SearchList $searchList, array $countries = ['IT'], string $url = null)
     {
         parent::__construct('');
 
         $this->onQueue('amz-search');
 
-        $this->keyword = $keyword;
+        $this->searchList = $searchList;
         $this->countries = $countries;
         $this->url = $url;
     }
@@ -48,7 +47,7 @@ class SearchJob extends Amazon
      */
     public function handle()
     {
-        $search = $this->url ?? sprintf("https://www.amazon.it/s?k=%s", urlencode($this->keyword));
+        $search = $this->url ?? sprintf("https://www.amazon.it/s?k=%s", urlencode($this->searchList->keywords));
 
         if ($this->shouldRelease($search)) {
             return;
@@ -57,7 +56,7 @@ class SearchJob extends Amazon
         // Get Product Details
         $observer = new SearchCrawler();
         $observer->setCountry(Arr::first($this->countries));
-        $observer->setUser($this->getUser());
+        $observer->setSearchList($this->searchList);
 
         if (!is_null($this->batch())) {
             $observer->setBatchId($this->batch()->id);
@@ -74,21 +73,5 @@ class SearchJob extends Amazon
             ->setBrowsershot($this->browsershot())
             ->executeJavaScript()
             ->startCrawling($search);
-    }
-
-    /**
-     * @return User|null
-     */
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User|null $user
-     */
-    public function setUser(?User $user): void
-    {
-        $this->user = $user;
     }
 }
