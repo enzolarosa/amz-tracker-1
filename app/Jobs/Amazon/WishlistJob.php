@@ -4,7 +4,6 @@ namespace App\Jobs\Amazon;
 
 use App\Crawler\Amazon\WishlistCrawler;
 use App\Crawler\CrawlRequestFulfilled;
-use App\Models\User;
 use App\Models\WishList;
 use Illuminate\Support\Arr;
 use Spatie\Crawler\Crawler;
@@ -37,7 +36,6 @@ class WishlistJob extends Amazon
 
         $this->countries = $countries;
         $this->list = $list;
-        $this->tracker = $list->trackable();
     }
 
     /**
@@ -54,7 +52,7 @@ class WishlistJob extends Amazon
         // Get Product Details
         $observer = new WishlistCrawler();
         $observer->setCountry(Arr::first($this->countries));
-        $observer->setTracker($this->getTracker());
+        $observer->setTracker($this->list->trackable());
 
         if (!is_null($this->batch())) {
             $observer->setBatchId($this->batch()->id);
@@ -71,13 +69,5 @@ class WishlistJob extends Amazon
             ->setBrowsershot($this->browsershot())
             ->executeJavaScript()
             ->startCrawling($this->list);
-    }
-
-    /**
-     * @return
-     */
-    public function getTracker()
-    {
-        return $this->tracker;
     }
 }
