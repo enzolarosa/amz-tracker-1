@@ -48,13 +48,13 @@ class ProductPriceChangedNotification extends Notification implements ShouldQueu
         $found = false;
         do {
             $img = array_shift($this->getProduct()->images) ?? null;
-            if (!is_null($img)) {
+            if (!is_null($img) || !empty($img)) {
                 $checking = getimagesize($img);
                 if ($checking != false) {
                     $found = true;
                 }
             }
-        } while (!is_null($img) && !$found);
+        } while ((!is_null($img) || !empty($img)) && !$found);
 
         $msg = sprintf(
             "📦 %s
