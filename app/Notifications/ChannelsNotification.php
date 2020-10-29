@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Arr;
 use NotificationChannels\Telegram\TelegramChannel;
 use NotificationChannels\Telegram\TelegramFile;
 use NotificationChannels\Telegram\TelegramMessage;
@@ -62,7 +61,17 @@ class ChannelsNotification extends Notification implements ShouldQueue
 
         $sound = $now->between($start, $end);
 
-        $img = Arr::first($this->getProduct()->images) ?? null;
+        $found = false;
+        do {
+            $img = array_shift($arr) ?? null;
+            if ($img) {
+                $checking = getimagesize($img);
+                if ($checking != false) {
+                    $found = true;
+                }
+            }
+        } while (!is_null($img) && !$found);
+
         $msg = sprintf("📦 %s
 
 ⭐️ %s
