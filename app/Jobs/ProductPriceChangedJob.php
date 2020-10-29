@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\AmzProduct;
 use App\Models\AmzProductUser;
 use App\Models\Notification;
+use DateTime;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -49,5 +50,13 @@ class ProductPriceChangedJob implements ShouldQueue
     {
         // TODO add user custom logic
         return true;
+    }
+
+    /**
+     * Determine the time at which the job should timeout.
+     */
+    public function retryUntil(): DateTime
+    {
+        return now()->addHour();
     }
 }

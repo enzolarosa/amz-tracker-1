@@ -92,13 +92,6 @@
       0 => 'NotificationChannels\\Telegram\\TelegramServiceProvider',
     ),
   ),
-  'laravel-notification-channels/twilio' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'NotificationChannels\\Twilio\\TwilioProvider',
-    ),
-  ),
   'laravel/cashier' => 
   array (
     'providers' => 

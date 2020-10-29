@@ -36,6 +36,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AmzProductLog[] $logs
  * @property-read int|null $logs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AmzProductUser[] $tracker
+ * @property-read int|null $tracker_count
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProduct query()
@@ -87,38 +89,17 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\AmzProductQueue
- *
- * @property int $id
- * @property int $amz_product_id
- * @property \Illuminate\Support\Carbon|null $reserved_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\AmzProduct $product
- * @method static \Illuminate\Database\Eloquent\Builder|AmzProductQueue newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|AmzProductQueue newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|AmzProductQueue query()
- * @method static \Illuminate\Database\Eloquent\Builder|AmzProductQueue whereAmzProductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AmzProductQueue whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AmzProductQueue whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AmzProductQueue whereReservedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AmzProductQueue whereUpdatedAt($value)
- */
-	class AmzProductQueue extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
  * App\Models\AmzProductUser
  *
  * @property int $id
- * @property int $user_id
+ * @property string|null $trackable_id
+ * @property string|null $trackable_type
  * @property int $amz_product_id
  * @property int $enabled
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\AmzProduct $product
- * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $trackable
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProductUser newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProductUser newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProductUser query()
@@ -126,8 +107,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProductUser whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProductUser whereEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProductUser whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AmzProductUser whereTrackableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AmzProductUser whereTrackableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AmzProductUser whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AmzProductUser whereUserId($value)
  */
 	class AmzProductUser extends \Eloquent {}
 }
@@ -146,7 +128,10 @@ namespace App\Models{
  * @property-read \App\Models\Notification|null $notification
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
+ * @property-read \App\Models\AmzProductUser $products
+ * @property-read \App\Models\SearchList|null $searchList
  * @property-read \App\Models\Team $team
+ * @property-read \App\Models\WishList|null $wishList
  * @method static \Illuminate\Database\Eloquent\Builder|Channels newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Channels newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Channels query()
@@ -189,15 +174,14 @@ namespace App\Models{
  * App\Models\Notification
  *
  * @property int $id
- * @property int $user_id
+ * @property string|null $notificable_id
+ * @property string|null $notificable_type
  * @property int $amz_product_id
  * @property bool $sent
  * @property string|null $previous_price
  * @property string|null $price
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $notificable_id
- * @property string|null $notificable_type
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $notificable
  * @property-read \App\Models\AmzProduct $product
  * @method static \Illuminate\Database\Eloquent\Builder|Notification newModelQuery()
@@ -212,7 +196,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Notification wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereSent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUserId($value)
  */
 	class Notification extends \Eloquent {}
 }
@@ -221,9 +204,21 @@ namespace App\Models{
 /**
  * App\Models\ProxyServer
  *
+ * @property int $id
+ * @property string $proxy
+ * @property bool $active
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
  * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer whereProxy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProxyServer whereUpdatedAt($value)
  */
 	class ProxyServer extends \Eloquent {}
 }
@@ -258,11 +253,13 @@ namespace App\Models{
  * App\Models\SearchList
  *
  * @property int $id
- * @property int $user_id
+ * @property string|null $trackable_id
+ * @property string|null $trackable_type
  * @property string $keywords
  * @property int $enabled
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $trackable
  * @method static \Illuminate\Database\Eloquent\Builder|SearchList newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SearchList newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SearchList query()
@@ -270,8 +267,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SearchList whereEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SearchList whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SearchList whereKeywords($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SearchList whereTrackableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SearchList whereTrackableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SearchList whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SearchList whereUserId($value)
  */
 	class SearchList extends \Eloquent {}
 }
@@ -376,7 +374,7 @@ namespace App\Models{
  * @property string|null $password
  * @property string|null $two_factor_secret
  * @property string|null $two_factor_recovery_codes
- * @property int $active
+ * @property int $enabled
  * @property string|null $remember_token
  * @property int|null $current_team_id
  * @property string|null $profile_photo_path
@@ -389,20 +387,21 @@ namespace App\Models{
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $ownedTeams
  * @property-read int|null $owned_teams_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AmzProduct[] $products
- * @property-read int|null $products_count
+ * @property-read \App\Models\AmzProductUser|null $products
+ * @property-read \App\Models\SearchList|null $searchList
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $teams
  * @property-read int|null $teams_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
  * @property-read int|null $tokens_count
+ * @property-read \App\Models\WishList|null $wishList
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
- * @method static \Illuminate\Database\Eloquent\Builder|User whereActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCurrentTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLanguageCode($value)
@@ -425,20 +424,23 @@ namespace App\Models{
  * App\Models\WishList
  *
  * @property int $id
- * @property int $user_id
+ * @property string|null $trackable_id
+ * @property string|null $trackable_type
  * @property string $url
  * @property int $enabled
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $trackable
  * @method static \Illuminate\Database\Eloquent\Builder|WishList newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|WishList newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|WishList query()
  * @method static \Illuminate\Database\Eloquent\Builder|WishList whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|WishList whereEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|WishList whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WishList whereTrackableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WishList whereTrackableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|WishList whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|WishList whereUrl($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WishList whereUserId($value)
  */
 	class WishList extends \Eloquent {}
 }

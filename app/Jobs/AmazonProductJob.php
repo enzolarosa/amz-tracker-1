@@ -5,7 +5,7 @@ namespace App\Jobs;
 use App\Jobs\Amazon\ProductDetailsJob;
 use App\Jobs\Amazon\ProductOffersJob;
 use App\Models\AmzProduct;
-use App\Models\AmzProductQueue;
+use DateTime;
 use Illuminate\Support\Facades\Bus;
 use Throwable;
 
@@ -63,4 +63,13 @@ class AmazonProductJob extends Job
 
         $batch->add([$details, $offers]);
     }
+
+    /**
+     * Determine the time at which the job should timeout.
+     */
+    public function retryUntil(): DateTime
+    {
+        return now()->addHours(2);
+    }
+
 }
