@@ -1,16 +1,16 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It is a breeze. Simply tell Lumen the URIs it should respond to
-| and give it the Closure to call when that URI is requested.
-|
-*/
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ShortUrlController;
+use App\Http\Controllers\TelegramController;
+use App\Http\Controllers\WebhookController;
+use Illuminate\Support\Facades\Route;
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
+Route::get('/go/{shortUrl}', [ShortUrlController::class, 'go'])->name('short-url-go')->middleware('log-request:short-url-in');
+Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+
+/**
+ * Webhook Section
+ */
+Route::post('amztracker/telegram', [TelegramController::class, 'handleWebhook'])->middleware('log-request:telegram-in');
+Route::post('stripe/webhook', [WebhookController::class, 'handleWebhook'])->middleware('log-request:stipe-in');

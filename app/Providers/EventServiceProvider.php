@@ -2,8 +2,18 @@
 
 namespace App\Providers;
 
-use Laravel\Lumen\Providers\EventServiceProvider as ServiceProvider;
+use App\Events\Common\WriteLogEvent;
+use App\Events\ProductPriceChangedEvent;
+use App\Listeners\Common\WriteLogListener;
+use App\Listeners\ProductPriceChangedListener;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
+/**
+ * Class EventServiceProvider
+ * @package App\Providers
+ */
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -12,8 +22,30 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        \App\Events\ExampleEvent::class => [
-            \App\Listeners\ExampleListener::class,
+        Registered::class => [
+            SendEmailVerificationNotification::class,
         ],
+
+        // Common
+        WriteLogEvent::class => [
+            WriteLogListener::class,
+        ],
+
+        // Product Price changed
+        ProductPriceChangedEvent::class => [
+            ProductPriceChangedListener::class,
+        ]
     ];
+
+    /**
+     * Register any events for your application.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        parent::boot();
+
+        //
+    }
 }
