@@ -63,7 +63,7 @@ class ChannelsNotification extends Notification implements ShouldQueue
 
         $found = false;
         do {
-            $array = $this->getProduct()->images->toArray();
+            $array = optional($this->getProduct()->images)->toArray();
             $img = array_shift($array) ?? null;
             if (!is_null($img) || !empty($img)) {
                 $checking = getimagesize($img);
