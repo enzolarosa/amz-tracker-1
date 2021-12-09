@@ -12,6 +12,7 @@
         "ext-dom": "*",
         "ext-json": "*",
         "aglipanci/laravel-dashboard-forge-tile": "^2.2",
+        "aws/aws-sdk-php-laravel": "^3.6",
         "barryvdh/laravel-ide-helper": "^2.7",
         "fideloper/proxy": "^4.2",
         "fidum/laravel-dashboard-chart-tile": "^4.0",

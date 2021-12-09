@@ -7,7 +7,10 @@ use aglipanci\ForgeTile\Commands\FetchForgeServersCommand;
 use App\Console\Commands\CleanUpFailedJobs;
 use App\Console\Commands\CleanUpSettingCommand;
 use App\Console\Commands\DispatchAmzCheckerCommand;
+use App\Console\Commands\HorizonWorkload;
+use App\Console\Commands\ManageEc2IstanceCommand;
 use App\Console\Commands\ProcessNotificationCommand;
+use App\Console\Commands\RedisCommand;
 use App\Console\Commands\SearchProductCommand;
 use App\Console\Commands\TestCommand;
 use App\Console\Commands\UpdateProductCommand;
@@ -35,6 +38,9 @@ class Kernel extends ConsoleKernel
         CleanUpSettingCommand::class,
         TestCommand::class,
         CleanUpFailedJobs::class,
+        RedisCommand::class,
+        HorizonWorkload::class,
+        ManageEc2IstanceCommand::class,
     ];
 
     /**
@@ -56,8 +62,7 @@ class Kernel extends ConsoleKernel
 
     public function hourly(Schedule $schedule)
     {
-        $schedule->command(CleanUpSettingCommand::class)->everyMinute();
-
+        $schedule->command(CleanUpSettingCommand::class)->withoutOverlapping()->everyMinute();
         $schedule->command(ProcessNotificationCommand::class)->withoutOverlapping()->everyMinute();
         $schedule->command('server-monitor:run-checks')->withoutOverlapping()->everyMinute();
 
@@ -65,6 +70,8 @@ class Kernel extends ConsoleKernel
         $schedule->command(UpdateProductCommand::class)->withoutOverlapping()->everyMinute();
 
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
+
+        $schedule->command(ManageEc2IstanceCommand::class)->everyFifteenMinutes()->withoutOverlapping();
     }
 
     public function daily(Schedule $schedule)

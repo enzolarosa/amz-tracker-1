@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\AmzProductUser;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Spatie\GoogleCalendar\Event;
 
 class TestCommand extends Command
 {
@@ -24,7 +25,6 @@ class TestCommand extends Command
 
     /**
      * Execute the console command.
-     *
      */
     public function handle()
     {

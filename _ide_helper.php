@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 8.11.2.
+ * Generated for Laravel 8.15.0.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -1224,6 +1224,19 @@
         {            //Method inherited from \Illuminate\Container\Container         
                         /** @var \Illuminate\Foundation\Application $instance */
                         return $instance->build($concrete);
+        }
+                    /**
+         * Register a new before resolving callback for all types.
+         *
+         * @param \Closure|string $abstract
+         * @param \Closure|null $callback
+         * @return void 
+         * @static 
+         */ 
+        public static function beforeResolving($abstract, $callback = null)
+        {            //Method inherited from \Illuminate\Container\Container         
+                        /** @var \Illuminate\Foundation\Application $instance */
+                        $instance->beforeResolving($abstract, $callback);
         }
                     /**
          * Register a new resolving callback.
@@ -11344,7 +11357,7 @@
                     /**
          * Get the currently dispatched route instance.
          *
-         * @return \Illuminate\Routing\Route 
+         * @return \Illuminate\Routing\Route|null 
          * @static 
          */ 
         public static function getCurrentRoute()
@@ -12664,13 +12677,14 @@
          * Assert that the given file exists.
          *
          * @param string|array $path
+         * @param string|null $content
          * @return \Illuminate\Filesystem\FilesystemAdapter 
          * @static 
          */ 
-        public static function assertExists($path)
+        public static function assertExists($path, $content = null)
         {
                         /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
-                        return $instance->assertExists($path);
+                        return $instance->assertExists($path, $content);
         }
                     /**
          * Assert that the given file does not exist.
@@ -14629,7 +14643,70 @@
      
 }
 
-        namespace Facade\Ignition\Facades { 
+        namespace Aws\Laravel { 
+            /**
+     * Facade for the AWS service
+     *
+     */ 
+        class AwsFacade {
+                    /**
+         * Get a client by name using an array of constructor options.
+         *
+         * @param string $name Service name or namespace (e.g., DynamoDb, s3).
+         * @param array $args Arguments to configure the client.
+         * @return \Aws\AwsClientInterface 
+         * @throws \InvalidArgumentException if any required options are missing or
+         *                                   the service is not supported.
+         * @see Aws\AwsClient::__construct for a list of available options for args.
+         * @static 
+         */ 
+        public static function createClient($name, $args = [])
+        {
+                        /** @var \Aws\Sdk $instance */
+                        return $instance->createClient($name, $args);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function createMultiRegionClient($name, $args = [])
+        {
+                        /** @var \Aws\Sdk $instance */
+                        return $instance->createMultiRegionClient($name, $args);
+        }
+                    /**
+         * Clone existing SDK instance with ability to pass an associative array
+         * of extra client settings.
+         *
+         * @param array $args
+         * @return self 
+         * @static 
+         */ 
+        public static function copy($args = [])
+        {
+                        /** @var \Aws\Sdk $instance */
+                        return $instance->copy($args);
+        }
+                    /**
+         * Determine the endpoint prefix from a client namespace.
+         *
+         * @param string $name Namespace name
+         * @return string 
+         * @internal 
+         * @deprecated Use the `\Aws\manifest()` function instead.
+         * @static 
+         */ 
+        public static function getEndpointPrefix($name)
+        {
+                        return \Aws\Sdk::getEndpointPrefix($name);
+        }
+         
+    }
+     
+}
+
+    namespace Facade\Ignition\Facades { 
             /**
      * Class Flare.
      *
@@ -15781,6 +15858,16 @@
                         /** @var \Livewire\LivewireManager $instance */
                         return $instance->isOnVapor();
         }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function withQueryParams($queryParams)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->withQueryParams($queryParams);
+        }
          
     }
      
@@ -15801,7 +15888,7 @@
          * @param array $headers
          * @throws \PhpOffice\PhpSpreadsheet\Exception
          * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
-         * @return \Maatwebsite\Excel\BinaryFileResponse 
+         * @return \Symfony\Component\HttpFoundation\BinaryFileResponse 
          * @static 
          */ 
         public static function download($export, $fileName, $writerType = null, $headers = [])
@@ -15835,7 +15922,7 @@
          * @param string|null $disk
          * @param string $writerType
          * @param mixed $diskOptions
-         * @return \Maatwebsite\Excel\PendingDispatch 
+         * @return \Illuminate\Foundation\Bus\PendingDispatch 
          * @static 
          */ 
         public static function queue($export, $filePath, $disk = null, $writerType = null, $diskOptions = [])
@@ -15860,10 +15947,10 @@
          * 
          *
          * @param object $import
-         * @param string|\Maatwebsite\Excel\UploadedFile $filePath
+         * @param string|\Symfony\Component\HttpFoundation\File\UploadedFile $filePath
          * @param string|null $disk
          * @param string|null $readerType
-         * @return \Maatwebsite\Excel\Reader|\Maatwebsite\Excel\PendingDispatch 
+         * @return \Maatwebsite\Excel\Reader|\Illuminate\Foundation\Bus\PendingDispatch 
          * @static 
          */ 
         public static function import($import, $filePath, $disk = null, $readerType = null)
@@ -15875,7 +15962,7 @@
          * 
          *
          * @param object $import
-         * @param string|\Maatwebsite\Excel\UploadedFile $filePath
+         * @param string|\Symfony\Component\HttpFoundation\File\UploadedFile $filePath
          * @param string|null $disk
          * @param string|null $readerType
          * @return array 
@@ -15890,7 +15977,7 @@
          * 
          *
          * @param object $import
-         * @param string|\Maatwebsite\Excel\UploadedFile $filePath
+         * @param string|\Symfony\Component\HttpFoundation\File\UploadedFile $filePath
          * @param string|null $disk
          * @param string|null $readerType
          * @return \Maatwebsite\Excel\Collection 
@@ -15905,10 +15992,10 @@
          * 
          *
          * @param \Maatwebsite\Excel\ShouldQueue $import
-         * @param string|\Maatwebsite\Excel\UploadedFile $filePath
+         * @param string|\Symfony\Component\HttpFoundation\File\UploadedFile $filePath
          * @param string|null $disk
          * @param string $readerType
-         * @return \Maatwebsite\Excel\PendingDispatch 
+         * @return \Illuminate\Foundation\Bus\PendingDispatch 
          * @static 
          */ 
         public static function queueImport($import, $filePath, $disk = null, $readerType = null)
@@ -17432,7 +17519,7 @@ namespace  {
                 /**
              * Add a polymorphic relationship count / exists condition to the query.
              *
-             * @param string $relation
+             * @param \Illuminate\Database\Eloquent\Relations\MorphTo|string $relation
              * @param string|array $types
              * @param string $operator
              * @param int $count
@@ -17450,7 +17537,7 @@ namespace  {
                 /**
              * Add a polymorphic relationship count / exists condition to the query with an "or".
              *
-             * @param string $relation
+             * @param \Illuminate\Database\Eloquent\Relations\MorphTo|string $relation
              * @param string|array $types
              * @param string $operator
              * @param int $count
@@ -17466,7 +17553,7 @@ namespace  {
                 /**
              * Add a polymorphic relationship count / exists condition to the query.
              *
-             * @param string $relation
+             * @param \Illuminate\Database\Eloquent\Relations\MorphTo|string $relation
              * @param string|array $types
              * @param string $boolean
              * @param \Closure|null $callback
@@ -17482,7 +17569,7 @@ namespace  {
                 /**
              * Add a polymorphic relationship count / exists condition to the query with an "or".
              *
-             * @param string $relation
+             * @param \Illuminate\Database\Eloquent\Relations\MorphTo|string $relation
              * @param string|array $types
              * @return \Illuminate\Database\Eloquent\Builder|static 
              * @static 
@@ -17496,7 +17583,7 @@ namespace  {
                 /**
              * Add a polymorphic relationship count / exists condition to the query with where clauses.
              *
-             * @param string $relation
+             * @param \Illuminate\Database\Eloquent\Relations\MorphTo|string $relation
              * @param string|array $types
              * @param \Closure|null $callback
              * @param string $operator
@@ -17513,7 +17600,7 @@ namespace  {
                 /**
              * Add a polymorphic relationship count / exists condition to the query with where clauses and an "or".
              *
-             * @param string $relation
+             * @param \Illuminate\Database\Eloquent\Relations\MorphTo|string $relation
              * @param string|array $types
              * @param \Closure|null $callback
              * @param string $operator
@@ -17530,7 +17617,7 @@ namespace  {
                 /**
              * Add a polymorphic relationship count / exists condition to the query with where clauses.
              *
-             * @param string $relation
+             * @param \Illuminate\Database\Eloquent\Relations\MorphTo|string $relation
              * @param string|array $types
              * @param \Closure|null $callback
              * @return \Illuminate\Database\Eloquent\Builder|static 
@@ -17545,7 +17632,7 @@ namespace  {
                 /**
              * Add a polymorphic relationship count / exists condition to the query with where clauses and an "or".
              *
-             * @param string $relation
+             * @param \Illuminate\Database\Eloquent\Relations\MorphTo|string $relation
              * @param string|array $types
              * @param \Closure|null $callback
              * @return \Illuminate\Database\Eloquent\Builder|static 
@@ -17555,6 +17642,21 @@ namespace  {
             {
                                 /** @var \Illuminate\Database\Eloquent\Builder $instance */
                                 return $instance->orWhereDoesntHaveMorph($relation, $types, $callback);
+            }
+             
+                /**
+             * Add subselect queries to include an aggregate value for a relationship.
+             *
+             * @param mixed $relations
+             * @param string $column
+             * @param string $function
+             * @return \Illuminate\Database\Eloquent\Builder|static 
+             * @static 
+             */ 
+            public static function withAggregate($relations, $column, $function = null)
+            {
+                                /** @var \Illuminate\Database\Eloquent\Builder $instance */
+                                return $instance->withAggregate($relations, $column, $function);
             }
              
                 /**
@@ -17571,6 +17673,62 @@ namespace  {
             }
              
                 /**
+             * Add subselect queries to include the max of the relation's column.
+             *
+             * @param string $relation
+             * @param string $column
+             * @return \Illuminate\Database\Eloquent\Builder|static 
+             * @static 
+             */ 
+            public static function withMax($relation, $column)
+            {
+                                /** @var \Illuminate\Database\Eloquent\Builder $instance */
+                                return $instance->withMax($relation, $column);
+            }
+             
+                /**
+             * Add subselect queries to include the min of the relation's column.
+             *
+             * @param string $relation
+             * @param string $column
+             * @return \Illuminate\Database\Eloquent\Builder|static 
+             * @static 
+             */ 
+            public static function withMin($relation, $column)
+            {
+                                /** @var \Illuminate\Database\Eloquent\Builder $instance */
+                                return $instance->withMin($relation, $column);
+            }
+             
+                /**
+             * Add subselect queries to include the sum of the relation's column.
+             *
+             * @param string $relation
+             * @param string $column
+             * @return \Illuminate\Database\Eloquent\Builder|static 
+             * @static 
+             */ 
+            public static function withSum($relation, $column)
+            {
+                                /** @var \Illuminate\Database\Eloquent\Builder $instance */
+                                return $instance->withSum($relation, $column);
+            }
+             
+                /**
+             * Add subselect queries to include the average of the relation's column.
+             *
+             * @param string $relation
+             * @param string $column
+             * @return \Illuminate\Database\Eloquent\Builder|static 
+             * @static 
+             */ 
+            public static function withAvg($relation, $column)
+            {
+                                /** @var \Illuminate\Database\Eloquent\Builder $instance */
+                                return $instance->withAvg($relation, $column);
+            }
+             
+                /**
              * Merge the where constraints from another query to the current query.
              *
              * @param \Illuminate\Database\Eloquent\Builder $from
@@ -17581,6 +17739,18 @@ namespace  {
             {
                                 /** @var \Illuminate\Database\Eloquent\Builder $instance */
                                 return $instance->mergeConstraintsFrom($from);
+            }
+             
+                /**
+             * Explains the query.
+             *
+             * @return \Illuminate\Support\Collection 
+             * @static 
+             */ 
+            public static function explain()
+            {
+                                /** @var \Illuminate\Database\Eloquent\Builder $instance */
+                                return $instance->explain();
             }
              
                 /**
@@ -17599,7 +17769,7 @@ namespace  {
                 /**
              * Add a subselect expression to the query.
              *
-             * @param \Closure|$this|string $query
+             * @param \Closure|\Illuminate\Database\Query\Builder|string $query
              * @param string $as
              * @return \Illuminate\Database\Query\Builder 
              * @throws \InvalidArgumentException
@@ -19521,6 +19691,7 @@ namespace  {
             class URL extends \Illuminate\Support\Facades\URL {}
             class Validator extends \Illuminate\Support\Facades\Validator {}
             class View extends \Illuminate\Support\Facades\View {}
+            class AWS extends \Aws\Laravel\AwsFacade {}
             class Flare extends \Facade\Ignition\Facades\Flare {}
             class Image extends \Intervention\Image\Facades\Image {}
             class Telegram extends \Telegram\Bot\Laravel\Facades\Telegram {}

@@ -1,0 +1,23 @@
+server {
+    listen 443 ssl;
+
+    server_name mailhog.amz.local;
+
+	client_max_body_size 100M;
+
+    location / {
+        proxy_pass       http://localhost:8025;
+        proxy_set_header Upgrade    $http_upgrade;
+        proxy_set_header Connection $http_connection;
+        proxy_set_header Host       $host;
+    }
+
+    ssl_certificate     /etc/nginx/ssl/star.amz.local.crt;
+    ssl_certificate_key /etc/nginx/ssl/star.amz.local.key;
+}
+
+server {
+    listen 80;
+    server_name mailhog.amz.local;
+    return 301 https://$host$request_uri;
+}
