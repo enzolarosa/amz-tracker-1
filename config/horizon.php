@@ -1,6 +1,5 @@
 <?php
 
-use App\Common\Constants;
 use Illuminate\Support\Str;
 
 return [
@@ -16,7 +15,7 @@ return [
     |
     */
 
-    'domain' => null,
+    'domain' => env('HORIZON_DOMAIN', null),
 
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +28,7 @@ return [
     |
     */
 
-    'path' => 'horizon',
+    'path' => env('HORIZON_PATH', 'horizon'),
 
     /*
     |--------------------------------------------------------------------------
@@ -86,11 +85,6 @@ return [
 
     'waits' => [
         'redis:default' => 60,
-        'redis:logging' => 60,
-        'redis:notify-telegram' => 60,
-        'redis:amz-product' => 60 * 5,
-        'redis:check-amz-product' => 60 * 5,
-        'redis:amz-search' => 60 * 5,
     ],
 
     /*
@@ -151,9 +145,9 @@ return [
     | Memory Limit (MB)
     |--------------------------------------------------------------------------
     |
-    | This value describes the maximum amount of memory the Horizon worker
-    | may consume before it is terminated and restarted. You should set
-    | this value according to the resources available to your server.
+    | This value describes the maximum amount of memory the Horizon master
+    | supervisor may consume before it is terminated and restarted. For
+    | configuring these limits on your workers, see the next section.
     |
     */
 
@@ -171,71 +165,30 @@ return [
     */
 
     'defaults' => [
-        'default' => [
+        'supervisor-1' => [
             'connection' => 'redis',
-            'queue' => [
-                'default',
-                'logging',
-            ],
+            'queue' => ['default'],
             'balance' => 'auto',
-            'maxProcesses' => 5,
-            'tries' => 3,
-            'timeout' => 60,
-        ],
-        'notification' => [
-            'connection' => 'redis',
-            'queue' => [
-                'notify-telegram',
-            ],
-            'balance' => 'auto',
-            'maxProcesses' => 5,
+            'maxProcesses' => 1,
+            'memory' => 128,
             'tries' => 1,
-            'timeout' => 60 * 3,
-        ],
-        'tracker' => [
-            'connection' => 'redis',
-            'queue' => [
-                'amz-product',
-                'check-amz-product',
-                'amz-search',
-                'telegram-batch',
-            ],
-            'balance' => 'auto',
-            'maxProcesses' => 3,
-            'tries' => 1,
-            'timeout' => 60 * Constants::$TRACKER_TIMEOUT,
+            'nice' => 0,
         ],
     ],
 
     'environments' => [
         'production' => [
-            'default' => [
-                'balanceMaxShift' => 5,
-                'balanceCooldown' => 2,
+            'supervisor-1' => [
+                'maxProcesses' => 10,
+                'balanceMaxShift' => 1,
+                'balanceCooldown' => 3,
             ],
-            'notification' => [
-                'balanceMaxShift' => 5,
-                'balanceCooldown' => 2,
-            ],
-            'tracker' => [
-                'balanceMaxShift' => 5,
-                'balanceCooldown' => 2,
-                'maxProcesses' => 5,
-            ]
         ],
+
         'local' => [
-            'default' => [
-                'balanceMaxShift' => 2,
-                'balanceCooldown' => 2,
+            'supervisor-1' => [
+                'maxProcesses' => 3,
             ],
-            'notification' => [
-                'balanceMaxShift' => 2,
-                'balanceCooldown' => 2,
-            ],
-            'tracker' => [
-                'balanceMaxShift' => 2,
-                'balanceCooldown' => 2,
-            ]
         ],
     ],
 ];

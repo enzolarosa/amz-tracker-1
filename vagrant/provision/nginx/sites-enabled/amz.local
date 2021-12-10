@@ -1,5 +1,5 @@
 server {
-    listen 443 ssl;
+    listen 443 ssl default_server;
     server_name api.amz.local admin.amz.local horizon.amz.local wss.amz.local amz.local;
     root /home/vagrant/amz-api/public;
 
@@ -45,7 +45,7 @@ server {
 }
 
 server {
-    listen 80;
+    listen 80 default_server;
     server_name api.amz.local admin.amz.local horizon.amz.local wss.amz.local amz.local;
     return 301 https://$host$request_uri;
 }

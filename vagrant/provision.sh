@@ -13,7 +13,8 @@ sudo dpkg-reconfigure -f noninteractive tzdata
 sudo add-apt-repository ppa:ondrej/php
 sudo add-apt-repository ppa:ondrej/nginx
 sudo apt update -y
-sudo apt install -y vim git curl wget unzip zip supervisor build-essential libssl-dev software-properties-common ca-certificates apt-transport-https gnupg-agent
+sudo apt install -y vim git curl wget unzip zip supervisor build-essential libssl-dev software-properties-common \
+                    ca-certificates apt-transport-https gnupg-agent chromium-browser
 
 # MySql
 echo "mysql-server mysql-server/root_password password secret" | sudo debconf-set-selections
@@ -31,7 +32,9 @@ sudo mysql -u root -psecret -e "CREATE DATABASE IF NOT EXISTS amz_logs DEFAULT C
 sudo mysql -u root -psecret -e "FLUSH PRIVILEGES"
 
 # PHP
-sudo apt install -y php8.0-cli php8.0-fpm php8.0-mysqlnd php8.0-dom php8.0-mbstring php8.0-curl php-json php8.0-cgi php8.0-gd php8.0-bz2 php8.0-zip php8.0-bcmath php8.0-ctype php8.0-intl php8.0-soap php8.0-xml php8.0-gmp php-imagick php-redis php8.0-xdebug php8.0-imap
+sudo apt install -y php8.0-cli php8.0-fpm php8.0-mysqlnd php8.0-dom php8.0-mbstring php8.0-curl php-json php8.0-cgi \
+                    php8.0-gd php8.0-bz2 php8.0-zip php8.0-bcmath php8.0-ctype php8.0-intl php8.0-soap php8.0-xml \
+                    php8.0-gmp php8.0-imagick php8.0-redis php8.0-xdebug php8.0-imap
 #sudo apt install -y memcached libmemcached-tools libxmlsec1 sendmail
 
 # Xdebug
@@ -62,6 +65,7 @@ cat /home/vagrant/provision/crontab.conf | crontab -
 # Nginx
 sudo apt install -y python redis-server nginx ffmpeg
 sudo mkdir /etc/nginx/ssl
+sudo rm /etc/nginx/sites-enabled/default
 sudo cp -r /home/vagrant/provision/nginx/ssl/* /etc/nginx/ssl/
 sudo cp -r /home/vagrant/provision/nginx/sites-enabled/* /etc/nginx/sites-enabled/
 sudo cp -r /home/vagrant/provision/supervisor/* /etc/supervisor/conf.d/
